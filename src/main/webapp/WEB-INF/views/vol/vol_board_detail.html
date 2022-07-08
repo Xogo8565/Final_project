@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            :root {
+                --sil: #d5d5d5;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .container {
+                width: 100%;
+                min-height: 1800px;
+                height: 1px;
+            }
+
+            .header {
+                height: 10%;
+            }
+
+            .footer {
+                height: 10%;
+            }
+
+            /* .content {
+                height: 80%;
+            } */
+
+            button {
+                background-color: white;
+                border: 1px solid var(--sil);
+                color: var(--sil);
+                border-radius: 5px;
+            }
+
+            button:hover {
+                background-color: var(--sil);
+                color:white;
+            }
+
+            .content_header {
+                border-bottom: 1px solid var(--sil);
+            }
+
+            .board {
+                height: 95%;
+            }
+
+            /* 게시판 제목 */
+
+            .board_header {
+                height: 65px;
+                display: grid;
+                grid-template-columns: repeat(10,1fr);
+                grid-template-rows: repeat(2,1fr);
+                gap : 5px;
+                margin-top : 15px;
+                margin-bottom : 10px;
+                border-bottom : 1px solid var(--sil);
+                padding-bottom : 10px;
+            }
+
+            .board_header span {
+                display: flex;
+                align-items: center;
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .board_header .area {
+                grid-area : 1/1/2/2;
+            }
+            .board_header .title {
+                grid-area : 1/2/2/11;
+            }
+            .board_header .nickname {
+                grid-area : 2/1/3/2;
+                font-size: 0.8em;
+            }
+            .board_header .vol_date {
+                grid-area : 2/2/3/3;
+                color: var(--sil);
+                font-size: 0.8em;
+            }
+            .board_header .written_date {
+                grid-area : 2/3/3/4;
+                color: var(--sil);
+                font-size: 0.8em;
+            }
+            .board_header .view_count {
+                grid-area : 2/4/3/5;
+                color: var(--sil);
+                font-size: 0.8em;
+            }
+
+            .board_header #modify{
+                grid-area : 2/9/3/10;
+                border: none;
+            }
+
+            .board_header #delete {
+                grid-area : 2/10/3/11;
+                border: none;
+            }
+
+            .board_header button {
+                border: none;
+            }
+            .board_header button:hover {
+                background-color: var(--sil);
+                color: #ffffff;
+            }
+
+            /* 게시판 내용물 */
+
+            .board_content {
+                min-height: 300px;
+            }
+
+
+            /* 봉사자 */
+            .volunteer {
+                height: 65px;
+            }
+            .volunteer form {
+                margin-top : 3px;
+                padding-top: 12px;
+                border-top: 1px solid var(--sil);
+                display: flex;
+                gap: 10px;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .volunteer #tel {
+                flex-basis: 90%;
+                height : 30px;
+            }
+            .volunteer #submit {
+                flex-basis: 60px;
+                height: 30px;
+            }
+
+
+            /* 목록 */
+            .boardList {
+                border-top: 1px solid var(--sil);
+                padding-left : 0px;
+                margin-bottom: 20px;
+                border-bottom: 1px solid var(--sil);
+            }
+
+            .boardList li {
+                margin-top: 5px;
+                margin-bottom: 5px;
+                list-style: none;
+                display: flex;
+                gap: 20px;
+            }
+
+            .boardList li button {
+                flex-basis: 45px;
+            }
+            .boardList a {
+                color: black;
+                text-decoration: none;
+            }
+
+            /* 글쓰기 글목록 버튼 */
+            .board_footer {
+                height: 30px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .board_footer button {
+                width: 60px;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">HEADER</div>
+            <div class="content">
+                <div class="content_header">
+                    <h3>봉사 게시판</h3>
+                </div>
+                <div class="board">
+                    <div class="board_header">
+                        <span class="area">[지역]</span>
+                        <span class="title">title</span>
+                        <span class="nickname">nickname</span>
+                        <span class="vol_date">vol_date</span>
+                        <span class="written_date">written_date</span>
+                        <span class="view_count">view_count</span>
+                        <button type="button" id="modify">수정</button>
+                        <button type="button" id="delete">삭제</button>
+                    </div>
+                    <div class="board_content"></div>
+                    <div class="volunteer">
+                        <span>♥ 총인원 xxx / 현재 인원 xxx</span>
+                        <form action="">
+                            <input type="tel" name="tel" placeholder="전화 번호 입력" id="tel">
+                            <button type="submit" id ="submit">submit</button>
+                        </form>
+                    </div>
+                    <ul class="boardList">
+                        <a href=""><li><button>Up</button><span>t112111</span></li></a>
+                        <a href=""><li><button>down</button><span>22222</span></li></a>
+                    </ul>
+                    <div class="board_footer">
+                        <button id="list" type="button">목록</button><button id="write" type="button">글쓰기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">FOOTER</div>
+        </div>
+    </body>
+</html>
+<html>
+    <head>
