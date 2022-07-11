@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.comme.shelterAnimal_board.ShelterAnimalDAO">
+	<insert id="insert" parameterType="ShelterAnimalDTO">
+		insert into shelterAnimal_board (desertionNo, popfile, happenDt, kindCd, orgNm, happenPlace, specialMark, careNm, careTel, careAddr, processState)
+    	select #{desertionNo}, #{popfile}, #{happenDt}, #{kindCd}, #{orgNm}, 
+				#{happenPlace}, #{specialMark}, #{careNm}, #{careTel}, #{careAddr}, #{processState}
+    	from dual
+    	where not exists(select * from shelterAnimal_board where desertionNo = #{desertionNo})
+	</insert>
+	<select id="selectDetail" resultType="String" parameterType="ShelterAnimalDTO">
+		select * from shelterAnimal_board where desertionNo=#{desertionNo}
+	</select>
+</mapper>
