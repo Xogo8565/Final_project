@@ -3,5 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.vol.VolBoardDAO">
+    <select id="selectTotalCnt" resultType="int">
+        select count(*)
+        from VOL_BOARD
+    </select>
 
+    <select id="selectList" resultType="VolBoardDTO" parameterType="int">
+        <![CDATA[
+        select *
+        from (select a.*, rownum as num
+              from (select * from VOL_BOARD order by 1 desc) a
+              where rownum <= #{end})
+        where num >= #{start}
+        ]]>
+    </select>
+
+    <insert id="insert" parameterType="VolBoardDTO">
+        <selectKey order="BEFORE" keyProperty="seq_board" resultType="int">
+            select seq_board.nextval from dual
+        </selectKey>
+        insert into vol_board values (#{seq_board},#{board_title},#{board_content},#{member_id},#{writer_nickname},sysdate,0,#{vol_deadLine},#{vol_count})
+    </insert>
 </mapper>

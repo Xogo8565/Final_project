@@ -9,7 +9,18 @@ import java.util.List;
 public class VolBoardService implements VolBoardDAO {
     @Autowired
     VolBoardDAO volBoardDAO;
-    public List<VolBoardDTO> selectList() {
-        return  volBoardDAO.selectList();
+
+    @Override
+    public List<VolBoardDTO> selectList(int start, int end) throws Exception {
+        return  volBoardDAO.selectList(start, end);
+    }
+
+    @Override
+    public int selectTotalCnt() throws Exception {
+        return volBoardDAO.selectTotalCnt();
+    }
+    @Override
+    public int insert(VolBoardDTO volBoardDTO) throws Exception {
+        return volBoardDAO.insert(volBoardDTO);
     }
 }

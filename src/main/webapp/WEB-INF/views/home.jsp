@@ -4,6 +4,11 @@
     <title>Home</title>
   </head>
   <body>
-  $END$
+  <button id ="volBoard">b</button>
+  <script>
+    document.querySelector("#volBoard").addEventListener("click",()=>{
+      location.href = "/volBoard/lists";
+    })
+  </script>
   </body>
 </html>
