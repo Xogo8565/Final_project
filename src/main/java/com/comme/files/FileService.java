@@ -1,22 +1,33 @@
 package com.comme.files;
 
+import com.comme.utils.ConvertFileUrlToPath;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.UUID;
+import java.util.*;
 
 @Service
-public class FileService {
+public class FileService implements FileDAO {
     @Autowired
-    FileDAO fileDAO;
+    private FileDAO fileDAO;
 
-    public JsonObject upload_volFile(String path, MultipartFile file) {
+    @Autowired
+    private ConvertFileUrlToPath convertFileUrlToPath;
+
+    Logger logger = LoggerFactory.getLogger(FileService.class);
+
+    public JsonObject upload_volFile(String path, MultipartFile file) throws Exception {
+
         JsonObject jsonObject = new JsonObject();
         File dir = new File(path);
         if (!dir.exists()) dir.mkdir();
@@ -35,8 +46,44 @@ public class FileService {
             e.printStackTrace();
         }
 
+
         return jsonObject;
     }
 
 
+    public void insert_volFile(int seq_board, List<String> files_name, String[] temp_files, String path) throws Exception {
+        List<Map<String, String>> list = convertFileUrlToPath.convert(files_name);
+        List<String> list2 = convertFileUrlToPath.convertToStrList(files_name);
+
+        for(Map<String, String> map : list){
+            String filename = map.get("files_sys");
+            insert_volFile(new FileDTO(0,seq_board, "/files/vol",null, filename));
+        }
+
+        for(String temp : temp_files){
+            if(!list2.contains(temp)){
+                File file = new File(path+File.separator+temp);
+                if(file.exists()) {
+                    file.delete();
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void insert_volFile(FileDTO fileDTO) throws Exception {
+        fileDAO.insert_volFile(fileDTO);
+    }
+
+    public void delete_volFile(List<String> file_name, String path) throws Exception {
+        List<String> list = convertFileUrlToPath.convertToStrList(file_name);
+        for(String temp : list){
+            File file = new File(path+File.separator+temp);
+            logger.info("삭제파일" + file);
+            if(file.exists()) {
+                file.delete();
+            }
+        }
+    }
 }

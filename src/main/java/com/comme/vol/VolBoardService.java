@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class VolBoardService implements VolBoardDAO {
@@ -11,7 +12,7 @@ public class VolBoardService implements VolBoardDAO {
     VolBoardDAO volBoardDAO;
 
     @Override
-    public List<VolBoardDTO> selectList(int start, int end) throws Exception {
+    public List<Map<String, Object>> selectList(int start, int end) throws Exception {
         return  volBoardDAO.selectList(start, end);
     }
 
@@ -21,6 +22,22 @@ public class VolBoardService implements VolBoardDAO {
     }
     @Override
     public int insert(VolBoardDTO volBoardDTO) throws Exception {
-        return volBoardDAO.insert(volBoardDTO);
+        volBoardDAO.insert(volBoardDTO);
+        return volBoardDTO.getSeq_board();
+    }
+
+    @Override
+    public Map<String, Object> select(int seq_board) throws Exception {
+        return volBoardDAO.select(seq_board);
+    }
+
+    @Override
+    public int delete(int seq_board) throws Exception {
+       return volBoardDAO.delete(seq_board);
+    }
+
+    @Override
+    public int plusViewCount(int seq_board) throws Exception {
+        return volBoardDAO.plusViewCount(seq_board);
     }
 }

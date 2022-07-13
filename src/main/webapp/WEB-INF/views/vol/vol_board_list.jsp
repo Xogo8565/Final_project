@@ -308,17 +308,17 @@
         </div>
         <div class="boardList">
             <c:forEach items="${list}" var="i">
-                <a href="">
+                <a href="/volBoard/view?seq_board=${i.seq_board}">
                     <div class="board">
                         <div class="board_img">
                             <img src="/resources/images/No_image.png">
                         </div>
                         <div class="board_content">
-                            <span class="title">${i.board_title}</span>
-                            <span class="count">0 / ${i.vol_count}</span>
-                            <span class="nickname">${i.writer_nickname}</span>
-                            <span class="vol_date">${i.vol_deadLine}</span>
-                            <span class="written_date">${i.written_date}</span>
+                            <span class="title"><c:out value="${i.board_title}"/></span>
+                            <span class="count"><c:out value="${i.cur}"/> / <c:out value="${i.vol_count}"/> </span>
+                            <span class="nickname"><c:out value="${i.writer_nickname}"/></span>
+                            <span class="vol_date"><c:out value="${i.vol_deadLine}"/></span>
+                            <span class="written_date"><c:out value="${i.written_date}"/></span>
                         </div>
                     </div>
                 </a>

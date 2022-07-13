@@ -3,8 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.files.FileDAO">
-    <insert id="insert_volFiles" parameterType="FileDTO">
+    <insert id="insert_volFile" parameterType="FileDTO">
         insert into VOL_FILES
-        values (seq_file.nextval , #{board_seq}, #{files_upload}, #{files_ori}, #{files_sys})
+        values (seq_file.nextval , #{seq_board}, #{files_upload}, #{files_ori}, #{files_sys})
     </insert>
 </mapper>
