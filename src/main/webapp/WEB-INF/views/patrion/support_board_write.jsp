@@ -1,14 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
-  Created by IntelliJ IDEA.
-  User: jangseoksu
-  Date: 2022/07/11
-  Time: 12:01 PM
-  To change this template use File | Settings | File Templates.
+Created by IntelliJ IDEA.
+User: jangseoksu
+Date: 2022/07/11
+Time: 12:01 PM
+To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    request.setCharacterEncoding("UTF-8");
+request.setCharacterEncoding("UTF-8");
 %>
 
 <html lang="en">
@@ -206,8 +206,8 @@
                     <input type="hidden" name="temp_files[]" id="temp_files">
                     <input type="hidden" name="files_name" id="files_name">
                     <input type="text" name="board_title" id="board_title" placeholder="제목을 입력해주세요" required
-                    oninvalid="this.setCustomValidity('제목을 입력해주세요')"
-                    oninput="this.setCustomValidity('')">
+                           oninvalid="this.setCustomValidity('제목을 입력해주세요')"
+                           oninput="this.setCustomValidity('')">
                 </div>
                 <div class="board_content">
                     <label for="vol_deadLine"><span>봉사 날짜를 입력해주세요</span>
@@ -332,8 +332,8 @@
                 callbacks: {
                     onImageUpload: function (files) {
                         for (let i = 0; i < files.length; i++) {
-                            if (files[0].size > 1024 * 1024 * 1) {
-                                alert("1MB 이상은 업로드할 수 없습니다.");
+                            if (files[0].size > 1024 * 1024 * 5) {
+                                alert("5MB 이상은 업로드할 수 없습니다.");
                                 return;
                             }
                             uploadSummernoteImageFile(files[i], this);

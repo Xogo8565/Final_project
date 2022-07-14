@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 
 <!DOCTYPE html>
@@ -86,12 +87,6 @@
             font-size: 0.8em;
         }
 
-        .board_header .vol_date {
-            grid-area: 2/2/3/3;
-            color: var(--sil);
-            font-size: 0.8em;
-        }
-
         .board_header .written_date {
             grid-area: 2/3/3/4;
             color: var(--sil);
@@ -133,6 +128,8 @@
         /* 봉사자 */
         .volunteer {
             height: 65px;
+            display: flex;
+            flex-direction: column;
         }
 
         .volunteer>div {
@@ -206,8 +203,7 @@
             <div class="board_header">
                 <span class="title"><c:out value="${map.board_title}"/></span>
                 <span class="nickname"><c:out value="${map.writer_nickname}"/></span>
-                <span class="vol_date"><c:out value="${map.vol_date}"/></span>
-                <span class="written_date"><c:out value="${map.written_date}"/></span>
+                <span class="written_date"><fmt:formatDate value="${map.written_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
                 <span class="view_count"><c:out value="${map.view_count}"/></span>
                 <c:if test="${loginSession.member_id eq map.member_id}">
                     <button type="button" id="modify">수정</button>
@@ -218,7 +214,7 @@
                 <c:out value="${map.board_content}" escapeXml="false"/>
             </div>
             <div class="volunteer">
-                <span>♥ 총인원 <c:out value="${map.vol_count}"/> / 현재 인원 <c:out value="${map.cur}"/></span>
+                <span>♥ 총인원 <c:out value="${map.vol_count}"/> / 현재 인원 <c:out value="${map.cur}"/> / 날짜 <fmt:formatDate value="${map.written_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
                 <div>
                     <input type="hidden" name="seq_board" value="${map.seq_board}" id="seq_board">
                     <input type="tel" name="writer_phone" placeholder="전화 번호 입력(형식 : 010-1234-1234)" id="tel">
@@ -345,9 +341,7 @@
                     getCurrentVolCount();
                 } else if (data === "duplicated"){
                     alert("이미 봉사활동에 등록하셨습니다.")
-                }
-
-                else {
+                } else {
                     alert("봉사활동 등록에 실패했습니다. 관리자에게 문의하세요")
                 }
             },

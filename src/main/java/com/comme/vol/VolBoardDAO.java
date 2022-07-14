@@ -21,4 +21,6 @@ public interface VolBoardDAO {
     int plusViewCount(int seq_board) throws Exception;
 
     int update(VolBoardDTO volBoardDTO) throws Exception;
+
+    List<Map<String, Object>> search(Map<String, Object> map) throws Exception;
 }

@@ -11,4 +11,5 @@ public interface FileDAO {
     List<FileDTO> get_volFileList(int seq_board) throws Exception;
 
     int delete_volFile(int seq_file) throws Exception;
+
 }

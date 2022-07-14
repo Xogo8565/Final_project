@@ -45,4 +45,9 @@ public class VolBoardService implements VolBoardDAO {
     public int update(VolBoardDTO volBoardDTO) throws Exception {
         return volBoardDAO.update(volBoardDTO);
     }
+
+    @Override
+    public List<Map<String, Object>> search(Map<String, Object> map) throws Exception {
+        return volBoardDAO.search(map);
+    }
 }

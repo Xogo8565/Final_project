@@ -84,7 +84,6 @@
             width: 100%;
             height: 40px;
             z-index: 1;
-            padding-left: 50px;
             border-radius: 10px;
         }
 
@@ -128,14 +127,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100%;
-            width: 100%;
             gap: 20px;
             padding: 10px;
         }
 
         .board_img {
-            flex-basis: 280px;
+            flex-basis: 65%;
             width: 80%;
             display: flex;
             border-radius: 20px;
@@ -227,7 +224,7 @@
 
             .boardList {
                 grid-template-columns: none;
-                grid-template-rows: repeat(12, 250px);
+                grid-template-rows: repeat(12, 200px);
                 gap: 10px;
             }
 
@@ -291,42 +288,33 @@
     <div class="header">HEADER</div>
     <div class="content">
         <div class="content_header">
-            <h3>봉사 게시판</h3>
-            <form action="/volBoard/search" id="search_form">
+            <h3>후원 게시판</h3>
+            <form action="" id="search_form">
                 <label for="category"></label>
                 <select name="category" id="category">
-                    <option value="board_title">제목</option>
-                    <option value="board_content">내용</option>
-                    <option value="writer_nickname">작성자</option>
+                    <option value="제목">제목</option>
+                    <option value="내용">내용</option>
+                    <option value="작성자">작성자</option>
                 </select>
                 <div class="search">
-                    <button type="submit" id="searchBtn"><img src="/resources/images/search.png"></button>
+                    <button type="button" id="searchBtn"><img src="/resources/images/search.png"></button>
                     <label for="search">
-                        <input type="text" id="search" name="search" required
-                        oninvalid="this.setCustomValidity('검색어를 입력해주세요')"
-                        oninput="this.setCustomValidity('')">
+                        <input type="text" id="search">
                     </label>
                 </div>
             </form>
         </div>
         <div class="boardList">
             <c:forEach items="${list}" var="i">
-                <a href="/volBoard/view?seq_board=${i.seq_board}">
+                <a href="/supportBoard/view?seq_board=${i.seq_board}">
                     <div class="board">
                         <div class="board_img">
-                            <c:if test="${empty i.files_sys}">
-                                <img src="/resources/images/No_image.png">
-                            </c:if>
-                            <c:if test="${not empty i.files_sys}">
-                                <img src="/files/vol/${i.files_sys}">
-                            </c:if>
+                            <img src="/resources/images/No_image.png">
                         </div>
                         <div class="board_content">
                             <span class="title"><c:out value="${i.board_title}"/></span>
-                            <span class="count"><c:out value="${i.cur}"/> / <c:out value="${i.vol_count}"/> </span>
                             <span class="nickname"><c:out value="${i.writer_nickname}"/></span>
-                            <span class="vol_date"><fmt:formatDate value="${i.deadLine}" pattern="yyyy-MM-dd HH:mm:ss"/> </span>
-                            <span class="written_date"><fmt:formatDate value="${i.written_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+                            <span class="written_date"><fmt:formatDate value="${i.written_date}" pattern="yyyy-MM-dd HH:mm:ss"/> /span>
                         </div>
                     </div>
                 </a>
@@ -342,7 +330,7 @@
 </body>
 <script>
     document.querySelector("#write").addEventListener("click",()=>{
-        location.href = "/volBoard/write"
+        location.href = "/supportBoard/write"
     })
 </script>
 </html>

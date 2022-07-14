@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class VolBoardController {
     @PostMapping("/write")
     public String write(VolBoardDTO volBoardDTO, String area, @RequestParam(value = "files_name") List<String> files_name, @RequestParam(value = "temp_files[]") String[] temp_files) throws Exception {
         String path = httpSession.getServletContext().getRealPath("");
-        volBoardDTO.setBoard_title("["+area+"]"+volBoardDTO.getBoard_title());
+        volBoardDTO.setBoard_title("["+area+"] "+volBoardDTO.getBoard_title());
         volBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
         volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
 
@@ -90,7 +91,7 @@ public class VolBoardController {
 
         Map<String, Object> map = volBoardService.select(seq_board);
         String title = (String) map.get("board_title");
-        int idx = title.indexOf("]");
+        int idx = title.indexOf("] ");
         String area = title.substring(1, idx);
         String board_title = title.substring(idx+1);
         map.put("area", area);
@@ -118,5 +119,23 @@ public class VolBoardController {
 
 
         return "redirect:/volBoard/lists";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "curPage", defaultValue = "1") int curPage,
+                           @RequestParam(value = "category") String category,
+                           @RequestParam(value = "search") String search, Model model) throws Exception {
+        int start = 1;
+        int end = 12;
+
+        logger.info("검색요청  category" + category + "/    val" + search);
+        Map<String, Object> map = new HashMap<>();
+        map.put("start", start);
+        map.put("end", end);
+        map.put("category", category);
+        map.put("search", search);
+        List<Map<String, Object>> list = volBoardService.search(map);
+        model.addAttribute("list", list);
+        return "vol/vol_board_list";
     }
 }
