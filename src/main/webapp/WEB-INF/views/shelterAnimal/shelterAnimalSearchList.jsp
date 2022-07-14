@@ -38,8 +38,7 @@ body{
 	background-color: rgb(207, 185, 136);
 	color: rgb(207, 147, 111);
 }
-
-/*축종탭*/
+/* 축종탭 */
 .nav-tabs {
 	border-color: rgb(207, 185, 136);
 }
@@ -86,7 +85,6 @@ body{
 	color: white;
 	background-color: rgb(207, 185, 136);
 }
-
 #logoImg {
 	width: 50px;
 }
@@ -94,6 +92,8 @@ body{
 /* 카드 */
 .cardImg {
 	height: 300px;
+	display: flex;
+    align-items: center;
 }
 #liPlace{
 	height: 65px;
@@ -121,13 +121,11 @@ body{
 	color: white;
 	background-color: rgb(207, 185, 136);
 }
-
 .page-item>.page-link:hover {
 	color: rgb(207, 147, 111);
 	background-color: rgb(231, 214, 176);
 	cursor: pointer;
 }
-
 .page-item>.page-link:focus {
 	color: rgb(207, 147, 111);
 	background-color: rgb(231, 214, 176);
@@ -138,85 +136,110 @@ body{
 <body>
 	<div class="container">
 		<div class="header d-flex justify-content-center align-items-center">
-			<a class="btn m-2 btn-secondary"
-				href="/shelterAnimal/toShelterAnimalList?curPage=1">DB</a> <a
-				class="btn m-2 btn-secondary"
-				href="/shelterAnimal/toShelterAnimal?curPage=1">API</a>
-		</div>
+		<a class="btn m-2 btn-secondary" href="/shelterAnimal/toShelterAnimalList?curPage=1">DB</a>
+		<a class="btn m-2 btn-secondary" href="/shelterAnimal/toShelterAnimal?curPage=1">API</a></div>
 		<div class="col mt-5">
 			<ul class="nav nav-tabs justify-content-center">
 				<li class="nav-item"><a class="nav-link active"
 					href="/shelterAnimal/toShelterAnimal?curPage=1">전체</a></li>
-				<li class="nav-item"><a class="nav-link linkAjax" id="dogList">개</a> <input
-					class="linkAjax d-none" type="text" value="417000">
+				<li class="nav-item"><a class="nav-link linkAjax">개</a> <input
+					class="linkAjax d-none" type="text" id="dogList" value="417000">
 				</li>
-				<li class="nav-item"><a class="nav-link linkAjax" id="catList">고양이</a> <input
-					class="linkAjax d-none" type="text" value="422400">
+				<li class="nav-item"><a class="nav-link linkAjax">고양이</a> <input
+					class="linkAjax d-none" type="text" id="catList" value="422400">
 				</li>
-				<li class="nav-item"><a class="nav-link linkAjax" id="etcList">기타</a> <input
-					class="linkAjax d-none" type="text" value="429900">
+				<li class="nav-item"><a class="nav-link linkAjax">기타</a> <input
+					class="linkAjax d-none" type="text" id="etcList" value="429900">
 				</li>
 			</ul>
 		</div>
 		<div class="row">
-			<h5>
+			<h4>
 				<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
-				<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물
-				소식
-			</h5>
+				<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물 소식</h5>
+			</h4>
 		</div>
 		<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
 			<div class="row justify-content-end mt-5">
 				<div class="input-group mb-3">
-					<span class="input-group-text material-symbols-outlined"
-						id="iconSearch">search</span> <input type="text" id="inputSearch"
-						name="keyword" class="form-control" placeholder="검색"
-						aria-describedby="btnSearch">
+					<span class="input-group-text material-symbols-outlined" id="iconSearch">search</span> 
+					<input type="search" id="inputSearch" name="keyword" class="form-control" placeholder="검색" aria-describedby="btnSearch">
 					<button class="btn" type="submit" id="btnSearch">검색</button>
-					<input class="d-none" type="text" name="curPage" value="1">
 				</div>
+				<input class="d-none" type="text" name="curPage" value="1">
 			</div>
 		</form>
 		<%-- 목록 출력 --%>
-		<div class="card-group justify-content-center">
-			<c:forEach items="${data.response.body.items.item}" var="item">
-				<a class="apiLink d-flex justify-content-center"
-					href="/shelterAnimal/toDetail?desertionNo=${item.desertionNo}&curPage=${pageNum}">
-					<div class="card col-3 m-2" style="width: 18rem;">
-						<img src="${item.popfile}" class="cardImg">
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item" id="liPlace">발견장소 :
-								${item.orgNm}&nbsp;${item.happenPlace}</li>
-							<li class="list-group-item" id="liKind">품종 : ${item.kindCd}</li>
-							<li class="list-group-item" id="liMark">특징 :
-								${item.specialMark}</li>
-							<li class="list-group-item" id="liDt">보호시작일 :
-								${item.happenDt}</li>
-						</ul>
-					</div>
-				</a>
-			</c:forEach>
-		</div>
+		<c:choose>
+			<c:when test="${empty list && not empty data}"></c:when>
+			<c:when test="${not empty list}"></c:when>
+			<c:otherwise>
+				<div class="col notFoundSpace mt-5 text-center">
+					<img src="/resources/images/comme-sm.png" id="notFoundImg">
+					<h3 class="mt-3">찾으시는 검색 결과가 없어요!</h3>
+				</div>
+			</c:otherwise>
+		</c:choose>
+		<c:choose>
+			<c:when test="${empty data}">
+				<div class="card-group justify-content-center">
+					<c:forEach items="${list}" var="item">
+						<a class="apiLink d-flex justify-content-center"
+							href="/shelterAnimal/toDetail?desertionNo=${item.desertionNo}&keyword=${keyword}&curPage=${pageNum}">
+							<div class="card col-3 m-2" style="width: 18rem;">
+								<img src="${item.popfile}" class="cardImg">
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item" id="liPlace">발견장소 :
+										${item.orgNm}&nbsp;${item.happenPlace}</li>
+									<li class="list-group-item" id="liKind">품종 : ${item.kindCd}</li>
+									<li class="list-group-item" id="liMark">특징 : ${item.specialMark}</li>
+									<li class="list-group-item" id="liDt">보호시작일 : ${item.happenDt}</li>
+								</ul>
+							</div>
+						</a>
+					</c:forEach>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<div class="card-group justify-content-center">
+					<c:forEach items="${data}" var="item">
+						<a class="apiLink d-flex justify-content-center"
+							href="/shelterAnimal/toDetail?desertionNo=${item.desertionNo}&curPage=${pageNum}">
+							<div class="card col-3 m-2" style="width: 18rem;">
+								<img src="${item.popfile}" class="cardImg">
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item" id="liPlace">발견장소 :
+										${item.orgNm}&nbsp;${item.happenPlace}</li>
+									<li class="list-group-item" id="liKind">품종 : ${item.kindCd}</li>
+									<li class="list-group-item" id="liMark">특징 : ${item.specialMark}</li>
+									<li class="list-group-item" id="liDt">보호시작일 : ${item.happenDt}</li>
+								</ul>
+							</div>
+						</a>
+					</c:forEach>
+				</div>
+			</c:otherwise>
+		</c:choose>
 		<%-- 페이징 --%>
 		<c:choose>
-			<c:when test="${empty upkind}">
+			<c:when test="${empty data}">
 				<div class="paging">
 					<nav aria-label="Page navigation example">
 						<ul class="pagination justify-content-center mt-5">
-							<c:if test="${curPageMap.needPrev eq true}">
+							<c:if test="${searchCurPage.needPrev eq true}">
 								<li class="page-item" id="navLeft"><a class="page-link"
-									href="/shelterAnimal/toShelterAnimal?curPage=${curPageMap.startNavi-1}" aria-label="Previous">
+									href="/shelterAnimal/toSearch?keyword=${keyword}&curPage=${searchCurPage.startNavi-1}" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
 								</a></li>
 							</c:if>
-							<c:forEach var="pageNum" begin="${curPageMap.startNavi}"
-								end="${curPageMap.endNavi}" step="1">
+							<c:forEach var="pageNum" begin="${searchCurPage.startNavi}"
+								end="${searchCurPage.endNavi}" step="1">
 								<li class="page-item navCenter"><a class="page-link"
-									href="/shelterAnimal/toShelterAnimal?curPage=${pageNum}">${pageNum}</a></li>
+									href="/shelterAnimal/toSearch?keyword=${keyword}&curPage=${pageNum}">${pageNum}</a></li>
 							</c:forEach>
-							<c:if test="${curPageMap.needNext eq true}">
+							<c:if test="${searchCurPage.needNext eq true}">
 								<li class="page-item" id="navRight"><a class="page-link"
-									href="/shelterAnimal/toShelterAnimal?curPage=${curPageMap.endNavi+1}" aria-label="Next">
+									href="/shelterAnimal/toSearch?keyword=${keyword}&curPage=${searchCurPage.endNavi+1}" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 								</a></li>
 							</c:if>
@@ -230,17 +253,18 @@ body{
 						<ul class="pagination justify-content-center mt-5">
 							<c:if test="${curPageMap.needPrev eq true}">
 								<li class="page-item" id="navLeft"><a class="page-link"
-									href="/shelterAnimal/toSelectUpkind2?upkind=${upkind}&curPage=${curPageMap.startNavi-1}" aria-label="Previous">
+									href="/shelterAnimal/toShelterAnimalList?curPage=${curPageMap.startNavi-1}" aria-label="Previous"> 
 								<span aria-hidden="true">&laquo;</span>
 								</a></li>
 							</c:if>
-							<c:forEach var="pageNum" begin="${curPageMap.startNavi}" end="${curPageMap.endNavi}" step="1">
+							<c:forEach var="pageNum" begin="${curPageMap.startNavi}"
+								end="${curPageMap.endNavi}" step="1">
 								<li class="page-item navCenter"><a class="page-link"
-									href="/shelterAnimal/toSelectUpkind2?upkind=${upkind}&curPage=${pageNum}">${pageNum}</a></li>
+									href="/shelterAnimal/toShelterAnimalList?curPage=${pageNum}">${pageNum}</a></li>
 							</c:forEach>
 							<c:if test="${curPageMap.needNext eq true}">
 								<li class="page-item" id="navRight"><a class="page-link"
-									href="/shelterAnimal/toSelectUpkind2?upkind=${upkind}&curPage=${curPageMap.endNavi+1}" aria-label="Next">
+									href="/shelterAnimal/toShelterAnimalList?curPage=${curPageMap.endNavi+1}" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 								</a></li>
 							</c:if>
@@ -250,31 +274,14 @@ body{
 			</c:otherwise>
 		</c:choose>
 	</div>
-	<script>
-		window.onload = function(){
-			console.log("${upkind}")
-			if("${upkind}" == ""){
-				console.log("none")
-			}else if("${upkind}" == "417000"){
-				$(".nav-link").removeClass("active");
-				$("#dogList").addClass("active");
-			}else if("${upkind}" == "422400"){
-				$(".nav-link").removeClass("active");
-	        	$("#catList").addClass("active");
-			}else if("${upkind}" == "429900"){
-				$(".nav-link").removeClass("active");
-	        	$("#etcList").addClass("active");
-			}
-		}
-		
-    	$(".nav-link").on("click", function(e){ // 충족탭 이벤트
+	<script>	
+    	$(".nav-link").on("click", function(){ // 축종탭 이벤트
         	$(".nav-link").removeClass("active");
         	$(this).addClass("active");
     	})
     	
     	$(".linkAjax").on("click", function(){
     		const upkind = $(this).next().val();
-    		console.log("this",$(this).next().val());
     		getAjax(1, upkind);
     	})
     	
@@ -284,7 +291,6 @@ body{
 			type: "get",
 			dataType: "Json",
 			success: function(data){
-				console.log("data", data);
 				let curPage = pageNum;
 				let totalCount = (data.response.body.totalCount);
 				console.log("total",totalCount);
@@ -311,8 +317,8 @@ body{
 					lastNo = pageTotalCnt;
 				}
 				
-				cardAjax(data, upkind, pageNum);
-				
+				cardAjax(data);
+				$(".notFoundSpace").empty();
 				$(".paging").empty();
 				let nav = $("<nav aria-label='Page navigation example'>");
 				let ul = $("<ul class='pagination justify-content-center mt-5'>");
@@ -356,20 +362,19 @@ body{
 		})
 		}
     	
-    	function cardAjax(data, upkind, pageNum){
+    	function cardAjax(data){
     		const dataList = (data.response.body.items.item);
-			console.log(dataList);
     		$(".card-group").empty();
 			for(let item of dataList){
 				
-				let a = $("<a class='apiLink d-flex justify-content-center' href=''>").attr("href", "/shelterAnimal/toDetail?desertionNo="+(item.desertionNo)+"&upkind="+upkind+"&curPage="+pageNum);
+				let a = $("<a class='apiLink d-flex justify-content-center' href=''>").attr("href", "/shelterAnimal/toDetail?desertionNo="+(item.desertionNo));
 				let div = $("<div class='card col-3 m-2' style='width: 18rem;'>");
 				let img = $("<img class='cardImg'>").attr("src", (item.popfile));
 				let ul = $("<ul class='list-group list-group-flush'>");
-				let li1 = $("<li class='list-group-item'>").html('발견장소 : '+(item.orgNm)+'&nbsp;'+(item.happenPlace));
-				let li2 = $("<li class='list-group-item'>").html('품종 : '+(item.kindCd));
-				let li3 = $("<li class='list-group-item'>").html('특징 : '+(item.specialMark));
-				let li4 = $("<li class='list-group-item'>").html('보호시작일 : '+(item.happenDt));
+				let li1 = $("<li class='list-group-item' id='liPlace'>").html('발견장소 : '+(item.orgNm)+'&nbsp;'+(item.happenPlace));
+				let li2 = $("<li class='list-group-item' id='liKind'>").html('품종 : '+(item.kindCd));
+				let li3 = $("<li class='list-group-item' id='liMark'>").html('특징 : '+(item.specialMark));
+				let li4 = $("<li class='list-group-item' id='liDt'>").html('보호시작일 : '+(item.happenDt));
 				let input = $("<input type='text' name='desertionNo'>").addClass("d-none").attr("value",(item.desertionNo));
 				ul.append(li1, li2, li3, li4);
 				div.append(img, ul);

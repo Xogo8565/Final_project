@@ -4,14 +4,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ShelterAnimalDTO {
-	private String desertionNo, popfile, happenDt, kindCd, orgNm, happenPlace, specialMark, careNm,
-					careTel, careAddr, processState;
+	private String desertionNo, popfile, happenDt, kindCd, orgNm, happenPlace, colorCd, age, weight, sexCd,
+					specialMark, careNm, careTel, careAddr, processState;
 	
 	public ShelterAnimalDTO() {}
 
 	public ShelterAnimalDTO(String desertionNo, String popfile, String happenDt, String kindCd, String orgNm,
-			String happenPlace, String specialMark, String careNm, String careTel, String careAddr,
-			String processState) {
+			String happenPlace, String colorCd, String age, String weight, String sexCd, String specialMark,
+			String careNm, String careTel, String careAddr, String processState) {
 		super();
 		this.desertionNo = desertionNo;
 		this.popfile = popfile;
@@ -19,6 +19,10 @@ public class ShelterAnimalDTO {
 		this.kindCd = kindCd;
 		this.orgNm = orgNm;
 		this.happenPlace = happenPlace;
+		this.colorCd = colorCd;
+		this.age = age;
+		this.weight = weight;
+		this.sexCd = sexCd;
 		this.specialMark = specialMark;
 		this.careNm = careNm;
 		this.careTel = careTel;
@@ -74,6 +78,38 @@ public class ShelterAnimalDTO {
 		this.happenPlace = happenPlace;
 	}
 
+	public String getColorCd() {
+		return colorCd;
+	}
+
+	public void setColorCd(String colorCd) {
+		this.colorCd = colorCd;
+	}
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public String getWeight() {
+		return weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+
+	public String getSexCd() {
+		return sexCd;
+	}
+
+	public void setSexCd(String sexCd) {
+		this.sexCd = sexCd;
+	}
+
 	public String getSpecialMark() {
 		return specialMark;
 	}
@@ -117,8 +153,11 @@ public class ShelterAnimalDTO {
 	@Override
 	public String toString() {
 		return desertionNo + " : " + popfile + " : " + happenDt
-				+ " : " + kindCd + " : " + orgNm + " : " + happenPlace + " : "
-				+ specialMark + " : " + careNm + " : " + careTel + " : " + careAddr
-				+ " : " + processState;
+				+ " : " + kindCd + " : " + orgNm + " : " + happenPlace + " : " + colorCd
+				+ " : " + age + " : " + weight + " : " + sexCd + " : " + specialMark
+				+ " : " + careNm + " : " + careTel + " : " + careAddr + " : "
+				+ processState;
 	}
+
+	
 }
