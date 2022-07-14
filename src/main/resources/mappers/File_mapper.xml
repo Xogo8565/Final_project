@@ -7,4 +7,11 @@
         insert into VOL_FILES
         values (seq_file.nextval , #{seq_board}, #{files_upload}, #{files_ori}, #{files_sys})
     </insert>
+    <select id="get_volFileList" parameterType="int" resultType="FileDTO">
+        select * from VOL_FILES
+        where SEQ_BOARD = #{seq_board}
+    </select>
+    <delete id="delete_volFile" parameterType="int">
+        delete from VOL_FILES where SEQ_FILE = #{seq_File}
+    </delete>
 </mapper>

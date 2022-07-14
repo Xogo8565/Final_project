@@ -19,4 +19,6 @@ public interface VolBoardDAO {
     int delete(int seq_board) throws Exception;
 
     int plusViewCount(int seq_board) throws Exception;
+
+    int update(VolBoardDTO volBoardDTO) throws Exception;
 }

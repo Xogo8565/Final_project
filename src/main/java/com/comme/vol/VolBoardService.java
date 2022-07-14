@@ -40,4 +40,9 @@ public class VolBoardService implements VolBoardDAO {
     public int plusViewCount(int seq_board) throws Exception {
         return volBoardDAO.plusViewCount(seq_board);
     }
+
+    @Override
+    public int update(VolBoardDTO volBoardDTO) throws Exception {
+        return volBoardDAO.update(volBoardDTO);
+    }
 }

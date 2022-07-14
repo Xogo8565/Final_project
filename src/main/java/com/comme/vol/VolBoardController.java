@@ -86,14 +86,37 @@ public class VolBoardController {
     }
 
     @GetMapping("/modify")
-    public String modify(int seq_board, Model model) throws Exception {
+    public String toModify(int seq_board, Model model) throws Exception {
+
         Map<String, Object> map = volBoardService.select(seq_board);
+        String title = (String) map.get("board_title");
+        int idx = title.indexOf("]");
+        String area = title.substring(1, idx);
+        String board_title = title.substring(idx+1);
+        map.put("area", area);
+        map.put("board_title", board_title);
         model.addAttribute("map", map);
+
+
 
         int total = volBoardService.selectTotalCnt();
         List<Map<String, Object>> list = volBoardService.selectList(total-1,total);
         model.addAttribute("list", list);
 
         return "vol/vol_board_modify";
+    }
+
+    @PostMapping("/modify")
+    public String modify(VolBoardDTO volBoardDTO, String area, @RequestParam(value = "files_name") List<String> files_name, @RequestParam(value = "temp_files[]") String[] temp_files) throws Exception {
+        String path = httpSession.getServletContext().getRealPath("");
+        volBoardDTO.setBoard_title("["+area+"]"+volBoardDTO.getBoard_title());
+        volBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+
+        volBoardService.update(volBoardDTO);
+        fileService.update_volFile(volBoardDTO.getSeq_board(), files_name, temp_files, path);
+
+
+        return "redirect:/volBoard/lists";
     }
 }

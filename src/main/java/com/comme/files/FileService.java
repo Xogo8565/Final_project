@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,13 +50,53 @@ public class FileService implements FileDAO {
 
 
     public void insert_volFile(int seq_board, List<String> files_name, String[] temp_files, String path) throws Exception {
-        List<Map<String, String>> list = convertFileUrlToPath.convert(files_name);
-        List<String> list2 = convertFileUrlToPath.convertToStrList(files_name);
+        List<String> list = convertFileUrlToPath.convertToFilename(files_name);
+        List<String> list2 = convertFileUrlToPath.convertTofullPath(files_name);
 
-        for(Map<String, String> map : list){
-            String filename = map.get("files_sys");
+        for(String filename : list){
             insert_volFile(new FileDTO(0,seq_board, "/files/vol",null, filename));
         }
+
+        for(String temp : temp_files){
+            if(!list2.contains(temp)){
+                File file = new File(path+File.separator+temp);
+                if(file.exists()) {
+                    file.delete();
+                }
+            }
+        }
+    }
+
+    public void delete_volFile(List<String> file_name, String path) throws Exception {
+        List<String> list = convertFileUrlToPath.convertTofullPath(file_name);
+        for(String temp : list){
+            File file = new File(path+File.separator+temp);
+            logger.info("삭제파일" + file);
+            if(file.exists()) {
+                file.delete();
+            }
+        }
+    }
+
+    public void update_volFile(int seq_board, List<String> files_name, String[] temp_files, String path) throws Exception {
+        List<String> list = convertFileUrlToPath.convertToFilename(files_name);
+        List<String> list2 = convertFileUrlToPath.convertTofullPath(files_name);
+        List<FileDTO> fileList = fileDAO.get_volFileList(seq_board);
+
+
+
+        for(FileDTO fileDTO : fileList){
+            if(!list.contains(fileDTO.getFiles_sys())) {
+                delete_volFile(fileDTO.getSeq_file());
+
+                File file = new File(path+File.separator+fileDTO.getFiles_sys());
+                if(file.exists()) {
+                    file.delete();
+                }
+            }
+        }
+
+
 
         for(String temp : temp_files){
             if(!list2.contains(temp)){
@@ -76,14 +114,13 @@ public class FileService implements FileDAO {
         fileDAO.insert_volFile(fileDTO);
     }
 
-    public void delete_volFile(List<String> file_name, String path) throws Exception {
-        List<String> list = convertFileUrlToPath.convertToStrList(file_name);
-        for(String temp : list){
-            File file = new File(path+File.separator+temp);
-            logger.info("삭제파일" + file);
-            if(file.exists()) {
-                file.delete();
-            }
-        }
+    @Override
+    public List<FileDTO> get_volFileList(int seq_board) throws Exception {
+        return fileDAO.get_volFileList(seq_board);
+    }
+
+    @Override
+    public int delete_volFile(int seq_file) throws Exception {
+        return fileDAO.delete_volFile(seq_file);
     }
 }

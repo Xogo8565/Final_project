@@ -263,8 +263,9 @@
     </div>
     <div class="footer">FOOTER</div>
 </div>
-</body>
 <script>
+
+
     let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
     document.querySelector("#vol_deadLine").value = date;
     document.querySelector("#vol_deadLine").min = date;
@@ -393,6 +394,5 @@
 
 
 </script>
+</body>
 </html>
-<html>
-<head>
