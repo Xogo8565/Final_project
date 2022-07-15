@@ -22,5 +22,6 @@
 		<typeAlias alias="SupportBoardDTO" type="com.comme.support_board.SupportBoardDTO" />
 		<typeAlias alias="VolBoardDTO" type="com.comme.vol.VolBoardDTO" />
 		<typeAlias alias="VolSubmitDTO" type="com.comme.vol.VolSubmitDTO" />
+		<typeAlias alias="PagingVO" type="com.comme.utils.PagingVO" />
 	</typeAliases>
 </configuration>

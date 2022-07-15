@@ -2,6 +2,253 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.comme.board.boardDAO">
+<mapper namespace="com.comme.board.BoardDAO">
 
+	<!-- 큰 카테고리 총 게시물 갯수 -->
+	<select id="countBoard" parameterType="map" resultType="int">
+		<if test="small_category == 0 and category_name == null">
+			SELECT COUNT(*) FROM BOARD B WHERE B.SEQ_CATEGORY in
+    		(SELECT
+		        SEQ_CATEGORY FROM CATEGORY C
+		        WHERE CATEGORY_PK = #{seq_category})
+		</if>
+		<if test="small_category != 0 and category_name == null">
+			SELECT COUNT(*) FROM BOARD where seq_category = #{small_category}
+		</if>
+		<if test="small_category == 0 and category_name != null">
+			SELECT COUNT(*) FROM BOARD B WHERE B.SEQ_CATEGORY in
+    		(SELECT
+		        SEQ_CATEGORY FROM CATEGORY C
+		        WHERE CATEGORY_PK = #{seq_category})
+            and b.member_id = #{member_id}
+		</if>
+		<if test="small_category != 0 and category_name != null">
+			SELECT COUNT(*) FROM BOARD where seq_category = #{small_category} and member_id = #{member_id}
+		</if>
+	</select>
+	
+ 	<!-- 검색 한 게시물이 총 몇개나 있는지 -->
+ 	<select id="countBySearch" parameterType="map" resultType="int">
+ 		SELECT COUNT(*) FROM BOARD B WHERE B.SEQ_CATEGORY in
+    		(SELECT
+		        SEQ_CATEGORY FROM CATEGORY C
+ 		<if test="small_category == 0 and category_name == null">
+	        WHERE CATEGORY_PK = #{seq_category})
+            	AND b.${search_type} LIKE '%'|| #{search_keyword} ||'%'		
+ 		</if>
+ 		<if test="small_category != 0 and category_name == null">
+	        WHERE SEQ_CATEGORY = #{small_category})
+               AND b.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+ 		</if>
+ 		<if test="small_category == 0 and category_name != null">
+ 			WHERE CATEGORY_PK = #{seq_category})
+	        	AND b.member_id = #{member_id}
+            	AND b.${search_type} LIKE '%'|| #{search_keyword} ||'%'	
+ 		</if>
+ 		<if test="small_category != 0 and category_name != null">
+ 			WHERE SEQ_CATEGORY = #{small_category})
+	        	and b.member_id = #{member_id}
+               AND b.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+ 		</if>
+	</select>
+	
+	<!-- 검색 후 게시글 조회 -->
+	<select id="searchBoard" parameterType="map" resultType="map">
+		SELECT * 
+		FROM (
+		SELECT A.*,
+		       (SELECT COUNT(*) FROM BOARD_COMMENT cm WHERE cm.seq_board = A.seq_board) cm_count, ROWNUM RN
+		FROM  (
+		    SELECT /*+ INDEX_DESC(U SEQ_BOARD) */ u.seq_board ,u.board_title, u.board_content, u.writer_nickname, u.written_date, u.view_count, c.category_name, u.seq_category 
+		    FROM BOARD U, category C 
+		        WHERE u.seq_category = c.seq_category
+		<if test="search_keyword == '' and category_name == null ">
+		        AND c.category_pk = #{seq_category}
+		        OR u.seq_category = c.seq_category
+		        AND U.NOTICE = 'y'
+		        AND u.seq_category = #{seq_category}
+		        ORDER BY DECODE(U.SEQ_CATEGORY, #{seq_category}, 1)
+		    ) A
+		)
+		</if>
+		<if test="search_keyword != '' and small_category != 0 and category_name == null">
+		        and u.seq_category = #{small_category}
+		        AND u.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+		    ) A
+		)
+ 		</if>
+ 		<if test="search_keyword != '' and small_category == 0 and category_name == null">
+		        and c.category_pk = #{seq_category}
+		        AND u.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+		    ) A
+		)
+ 		</if>
+ 		
+ 		<if test="search_keyword == '' and category_name != null ">
+		        AND c.category_pk = #{seq_category}
+		        and u.member_id = #{member_id}
+		        OR u.seq_category = c.seq_category
+		        AND U.NOTICE = 'y'
+		        AND u.seq_category = #{seq_category}
+		        ORDER BY DECODE(U.SEQ_CATEGORY, #{seq_category}, 1)
+		    ) A
+		)
+		</if>
+		<if test="search_keyword != '' and small_category != 0 and category_name != null">
+		        and u.seq_category = #{small_category}
+		        and u.member_id = #{member_id}
+		        AND u.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+		    ) A
+		)
+ 		</if>
+ 		<if test="search_keyword != '' and small_category == 0 and category_name != null">
+		        and c.category_pk = #{seq_category}
+		        and u.member_id = #{member_id}
+		        AND u.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+		    ) A
+		)
+ 		</if>
+ 		 WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 페이징 처리 후 게시글 조회 -->
+	<select id="selectAllBoard" parameterType="map" resultType="map">
+		<if test="small_category == 0 and category_name == null">
+		SELECT * 
+		FROM (
+		SELECT A.*,
+		       (SELECT COUNT(*) FROM BOARD_COMMENT cm WHERE cm.seq_board = A.seq_board) cm_count, ROWNUM RN
+		FROM  (
+		    SELECT /*+ INDEX_DESC(U SEQ_BOARD) */ u.seq_board ,u.board_title, u.board_content, u.writer_nickname, u.written_date, u.view_count, c.category_name, u.seq_category 
+		    FROM BOARD U, category C 
+		        WHERE u.seq_category = c.seq_category
+		        AND c.category_pk = #{seq_category}
+		        OR u.seq_category = c.seq_category
+		        AND U.NOTICE = 'y'
+		        AND u.seq_category = #{seq_category}
+		        ORDER BY DECODE(U.SEQ_CATEGORY, #{seq_category}, 1)
+		    ) A
+		)
+		</if>
+		<if test="small_category != 0 and category_name == null">
+ 		SELECT A.*, (SELECT COUNT(*) FROM BOARD_COMMENT cm WHERE cm.seq_board = A.seq_board) cm_count
+    	FROM (
+        	SELECT /*+ INDEX_DESC(U SEQ_BOARD) */ ROWNUM RN, u.seq_board ,u.board_title, u.board_content, u.writer_nickname, u.written_date, u.view_count, c.category_name , u.seq_category
+        	FROM BOARD U, category C 
+            	WHERE u.seq_category = c.seq_category AND u.seq_category = #{small_category}
+            ) A
+ 		</if>
+ 		
+ 		<if test="small_category == 0 and category_name != null">
+		SELECT * 
+		FROM (
+		SELECT A.*,
+		       (SELECT COUNT(*) FROM BOARD_COMMENT cm WHERE cm.seq_board = A.seq_board) cm_count, ROWNUM RN
+		FROM  (
+		    SELECT /*+ INDEX_DESC(U SEQ_BOARD) */ u.seq_board ,u.board_title, u.board_content, u.writer_nickname, u.written_date, u.view_count, c.category_name, u.seq_category 
+		    FROM BOARD U, category C 
+		        WHERE u.seq_category = c.seq_category
+		        AND c.category_pk = #{seq_category}
+		        and u.member_id = #{member_id}
+		        OR u.seq_category = c.seq_category
+		        AND U.NOTICE = 'y'
+		        AND u.seq_category = #{seq_category}
+		        ORDER BY DECODE(U.SEQ_CATEGORY, #{seq_category}, 1)
+		    ) A
+		)
+		</if>
+		<if test="small_category != 0 and category_name != null">
+ 		SELECT A.*, (SELECT COUNT(*) FROM BOARD_COMMENT cm WHERE cm.seq_board = A.seq_board) cm_count
+    	FROM (
+        	SELECT /*+ INDEX_DESC(U SEQ_BOARD) */ ROWNUM RN, u.seq_board ,u.board_title, u.board_content, u.writer_nickname, u.written_date, u.view_count, c.category_name , u.seq_category
+        	FROM BOARD U, category C 
+            	WHERE u.seq_category = c.seq_category AND u.seq_category = #{small_category} and u.member_id = #{member_id}
+            ) A
+ 		</if>
+ 		WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 소분류 카테고리 전체 가져오기 -->
+	<select id="selectCategory" parameterType="int" resultType="CategoryDTO">
+		select * from category where category_pk = #{seq_category}
+	</select>
+	
+	<!-- 글 작성 insert -->
+	<insert id="insertBoard" parameterType="BoardDTO">
+		<selectKey order="BEFORE" keyProperty="seq_board" resultType="int">
+			select seq_board.nextval from dual
+		</selectKey>
+		insert into board values(#{seq_board}, #{board_title}, #{board_content}, #{member_id}, #{writer_nickname}, sysdate, default, #{seq_category}, default)
+	</insert>
+	
+	<!-- 정보 보기용 매퍼객체, clob 타입을 매핑하기 위해서는 일반 Map형태로는 잘 되지 않는다. -->
+	<resultMap id="vo" type="com.comme.board.Board_CLOB">
+		<result property="board_content" column="board_content" jdbcType="CLOB" javaType="java.lang.String" />
+		<result property="board_title" column="board_title" />
+		<result property="seq_board" column="seq_board" />
+		<result property="member_id" column="member_id" />
+		<result property="writer_nickname" column="writer_nickname" />
+		<result property="written_date" column="written_date" />
+		<result property="view_count" column="view_count" />
+		<result property="seq_category" column="seq_category" />
+		<result property="notice" column="notice" />
+		<result property="category_name" column="category_name" />
+		<result property="cm_count" column="cm_count" />
+	</resultMap>
+	
+	<!-- 게시물 상세보기 -->
+	<select id="detailPost" parameterType="int" resultMap="vo">
+		select 
+		    u.*, c.category_name, 
+		    (SELECT COUNT(*) FROM BOARD_COMMENT cm WHERE cm.seq_board = u.seq_board) cm_count
+		FROM BOARD U, category C WHERE u.seq_category = c.seq_category and seq_board = #{seq_board}
+	</select>
+	
+	<!-- 댓글 등록하기 -->
+	<insert id="commentInsert" parameterType="CommentDTO">
+		<selectKey order="BEFORE" keyProperty="seq_comment" resultType="int">
+			select seq_comment.nextval from dual
+		</selectKey>
+		insert into board_comment values( #{seq_comment}, #{seq_board}, #{comment_content}, #{comment_id}, #{comment_nickname}, sysdate)
+	</insert>
+	
+	<!-- 해당하는 글에 대한 댓글목록 불러오기 -->
+	<select id="selectComment" parameterType="int" resultType="CommentDTO">
+		select * from board_comment where seq_board = #{seq_board} order by seq_comment asc
+	</select>
+	
+	<!-- 상단 큰 카테고리 이름 물고오기 -->
+	<select id="bigCategory" parameterType="int" resultType="string">
+		select category_name from category where seq_category = #{seq_category}
+	</select>
+	
+	<!-- 조회 수 증가 -->
+	<update id="updateView" parameterType="int">
+		update board set view_count= view_count+1 where seq_board = #{seq_board}
+	</update>
+	
+	<!-- 게시물 삭제 -->
+	<delete id="deletePost" parameterType="int">
+		delete from board where seq_board = #{seq_board}
+	</delete>
+	
+	<!-- 수정 할 게시물의 정보 불러오기 -->
+	<select id="selectByModify" parameterType="int" resultType="BoardDTO">
+		select * from board where seq_board = #{seq_board}
+	</select>
+	
+	<!-- 게시물 수정 내용 업데이트 처리 -->
+	<update id="updateBoard" parameterType="BoardDTO">
+		update board set board_title = #{board_title}, board_content = #{board_content}, seq_category = #{seq_category} where seq_board = #{seq_board}
+	</update>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="int">
+		delete from board_comment where seq_comment = #{seq_comment}
+	</delete>
+	
+	<!-- 댓글 업데이트 -->
+	<update id="updateComment" parameterType="CommentDTO">
+		update board_comment set comment_content = #{comment_content} where seq_comment = #{seq_comment}
+	</update>
 </mapper>
