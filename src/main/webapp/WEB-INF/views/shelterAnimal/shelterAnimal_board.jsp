@@ -96,7 +96,7 @@ body{
 	height: 300px;
 }
 #liPlace{
-	height: 65px;
+	height: 80px;
 	display: flex;
     align-items: center;
 }
@@ -143,6 +143,12 @@ body{
 				class="btn m-2 btn-secondary"
 				href="/shelterAnimal/toShelterAnimal?curPage=1">API</a>
 		</div>
+		<div class="col d-flex justify-content-center mt-5">
+			<h4>
+				<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
+				<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물 소식
+			</h4>
+		</div>
 		<div class="col mt-5">
 			<ul class="nav nav-tabs justify-content-center">
 				<li class="nav-item"><a class="nav-link active"
@@ -157,26 +163,17 @@ body{
 					class="linkAjax d-none" type="text" value="429900">
 				</li>
 			</ul>
-		</div>
-		<div class="row">
-			<h5>
-				<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
-				<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물
-				소식
-			</h5>
-		</div>
-		<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
+			<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
 			<div class="row justify-content-end mt-5">
 				<div class="input-group mb-3">
-					<span class="input-group-text material-symbols-outlined"
-						id="iconSearch">search</span> <input type="text" id="inputSearch"
-						name="keyword" class="form-control" placeholder="검색"
-						aria-describedby="btnSearch">
+					<span class="input-group-text material-symbols-outlined" id="iconSearch">search</span> 
+					<input type="search" id="inputSearch" name="keyword" class="form-control" placeholder="검색" aria-describedby="btnSearch">
 					<button class="btn" type="submit" id="btnSearch">검색</button>
-					<input class="d-none" type="text" name="curPage" value="1">
 				</div>
+				<input class="d-none" type="text" name="curPage" value="1">
 			</div>
 		</form>
+		</div>
 		<%-- 목록 출력 --%>
 		<div class="card-group justify-content-center">
 			<c:forEach items="${data.response.body.items.item}" var="item">
@@ -314,6 +311,7 @@ body{
 				cardAjax(data, upkind, pageNum);
 				
 				$(".paging").empty();
+				$(".notFoundSpace").empty();
 				let nav = $("<nav aria-label='Page navigation example'>");
 				let ul = $("<ul class='pagination justify-content-center mt-5'>");
 				

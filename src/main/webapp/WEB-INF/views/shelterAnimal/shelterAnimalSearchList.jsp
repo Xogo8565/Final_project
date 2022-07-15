@@ -96,7 +96,7 @@ body{
     align-items: center;
 }
 #liPlace{
-	height: 65px;
+	height: 80px;
 	display: flex;
     align-items: center;
 }
@@ -138,28 +138,27 @@ body{
 		<div class="header d-flex justify-content-center align-items-center">
 		<a class="btn m-2 btn-secondary" href="/shelterAnimal/toShelterAnimalList?curPage=1">DB</a>
 		<a class="btn m-2 btn-secondary" href="/shelterAnimal/toShelterAnimal?curPage=1">API</a></div>
+		<div class="col d-flex justify-content-center mt-5">
+			<h4>
+				<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
+				<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물 소식
+			</h4>
+		</div>
 		<div class="col mt-5">
 			<ul class="nav nav-tabs justify-content-center">
 				<li class="nav-item"><a class="nav-link active"
 					href="/shelterAnimal/toShelterAnimal?curPage=1">전체</a></li>
-				<li class="nav-item"><a class="nav-link linkAjax">개</a> <input
-					class="linkAjax d-none" type="text" id="dogList" value="417000">
+				<li class="nav-item"><a class="nav-link linkAjax" id="dogList">개</a> <input
+					class="linkAjax d-none" type="text" value="417000">
 				</li>
-				<li class="nav-item"><a class="nav-link linkAjax">고양이</a> <input
-					class="linkAjax d-none" type="text" id="catList" value="422400">
+				<li class="nav-item"><a class="nav-link linkAjax" id="catList">고양이</a> <input
+					class="linkAjax d-none" type="text" value="422400">
 				</li>
-				<li class="nav-item"><a class="nav-link linkAjax">기타</a> <input
-					class="linkAjax d-none" type="text" id="etcList" value="429900">
+				<li class="nav-item"><a class="nav-link linkAjax" id="etcList">기타</a> <input
+					class="linkAjax d-none" type="text" value="429900">
 				</li>
 			</ul>
-		</div>
-		<div class="row">
-			<h4>
-				<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
-				<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물 소식</h5>
-			</h4>
-		</div>
-		<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
+			<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
 			<div class="row justify-content-end mt-5">
 				<div class="input-group mb-3">
 					<span class="input-group-text material-symbols-outlined" id="iconSearch">search</span> 
@@ -169,6 +168,7 @@ body{
 				<input class="d-none" type="text" name="curPage" value="1">
 			</div>
 		</form>
+		</div>
 		<%-- 목록 출력 --%>
 		<c:choose>
 			<c:when test="${empty list && not empty data}"></c:when>
@@ -291,6 +291,7 @@ body{
 			type: "get",
 			dataType: "Json",
 			success: function(data){
+				console.log("data", data);
 				let curPage = pageNum;
 				let totalCount = (data.response.body.totalCount);
 				console.log("total",totalCount);
@@ -317,9 +318,10 @@ body{
 					lastNo = pageTotalCnt;
 				}
 				
-				cardAjax(data);
-				$(".notFoundSpace").empty();
+				cardAjax(data, upkind, pageNum);
+				
 				$(".paging").empty();
+				$(".notFoundSpace").empty();
 				let nav = $("<nav aria-label='Page navigation example'>");
 				let ul = $("<ul class='pagination justify-content-center mt-5'>");
 				
@@ -362,19 +364,20 @@ body{
 		})
 		}
     	
-    	function cardAjax(data){
+    	function cardAjax(data, upkind, pageNum){
     		const dataList = (data.response.body.items.item);
+			console.log(dataList);
     		$(".card-group").empty();
 			for(let item of dataList){
 				
-				let a = $("<a class='apiLink d-flex justify-content-center' href=''>").attr("href", "/shelterAnimal/toDetail?desertionNo="+(item.desertionNo));
+				let a = $("<a class='apiLink d-flex justify-content-center' href=''>").attr("href", "/shelterAnimal/toDetail?desertionNo="+(item.desertionNo)+"&upkind="+upkind+"&curPage="+pageNum);
 				let div = $("<div class='card col-3 m-2' style='width: 18rem;'>");
 				let img = $("<img class='cardImg'>").attr("src", (item.popfile));
 				let ul = $("<ul class='list-group list-group-flush'>");
-				let li1 = $("<li class='list-group-item' id='liPlace'>").html('발견장소 : '+(item.orgNm)+'&nbsp;'+(item.happenPlace));
-				let li2 = $("<li class='list-group-item' id='liKind'>").html('품종 : '+(item.kindCd));
-				let li3 = $("<li class='list-group-item' id='liMark'>").html('특징 : '+(item.specialMark));
-				let li4 = $("<li class='list-group-item' id='liDt'>").html('보호시작일 : '+(item.happenDt));
+				let li1 = $("<li class='list-group-item'>").html('발견장소 : '+(item.orgNm)+'&nbsp;'+(item.happenPlace));
+				let li2 = $("<li class='list-group-item'>").html('품종 : '+(item.kindCd));
+				let li3 = $("<li class='list-group-item'>").html('특징 : '+(item.specialMark));
+				let li4 = $("<li class='list-group-item'>").html('보호시작일 : '+(item.happenDt));
 				let input = $("<input type='text' name='desertionNo'>").addClass("d-none").attr("value",(item.desertionNo));
 				ul.append(li1, li2, li3, li4);
 				div.append(img, ul);
