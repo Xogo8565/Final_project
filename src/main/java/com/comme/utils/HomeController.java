@@ -11,6 +11,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() throws Exception {
+
         logger.info("home");
         return "home";
     }

@@ -1,14 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
-Created by IntelliJ IDEA.
-User: jangseoksu
-Date: 2022/07/11
-Time: 12:01 PM
-To change this template use File | Settings | File Templates.
+  Created by IntelliJ IDEA.
+  User: jangseoksu
+  Date: 2022/07/11
+  Time: 12:01 PM
+  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-request.setCharacterEncoding("UTF-8");
+    request.setCharacterEncoding("UTF-8");
 %>
 
 <html lang="en">
@@ -87,6 +87,7 @@ request.setCharacterEncoding("UTF-8");
 
         .board_content label {
             display: flex;
+            gap : 20px
         }
 
         .board_content label span {
@@ -94,7 +95,7 @@ request.setCharacterEncoding("UTF-8");
         }
 
         .board_content label input {
-            flex-basis: 200px;
+            flex-basis: 60%;
         }
 
         /* 게시판 내용물 */
@@ -104,12 +105,6 @@ request.setCharacterEncoding("UTF-8");
             display: flex;
             flex-direction: column;
             gap: 20px;
-        }
-
-        .board_content #vol_count {
-        }
-
-        .board_content #vol_date {
         }
 
         .board_content textarea {
@@ -177,47 +172,31 @@ request.setCharacterEncoding("UTF-8");
     <div class="header">HEADER</div>
     <div class="content">
         <div class="content_header">
-            <h3>봉사 게시판</h3>
+            <h3>후원 게시판</h3>
         </div>
         <div class="board">
-            <form action="/volBoard/write" id="form" method="post">
+            <form action="/supportBoard/write" id="form" method="post">
                 <div class="board_header">
-                    <select name="area" id="area">
-                        <optgroup label="광역시/자치시/특별시">
-                            <option value="서울">서울</option>
-                            <option value="부산">부산</option>
-                            <option value="대구">대구</option>
-                            <option value="인천">인천</option>
-                            <option value="광주">광주</option>
-                            <option value="대전">대전</option>
-                            <option value="울산">울산</option>
-                            <option value="세종">세종</option>
-                        </optgroup>
-                        <optgroup label="도">
-                            <option value="경기도">경기도</option>
-                            <option value="강원도">강원도</option>
-                            <option value="충청북도">충청북도</option>
-                            <option value="충청남도">충청남도</option>
-                            <option value="전라북도">전라남도</option>
-                            <option value="경상북도">경상북도</option>
-                            <option value="제주도">제주도</option>
-                        </optgroup>
-                    </select>
                     <input type="hidden" name="temp_files[]" id="temp_files">
                     <input type="hidden" name="files_name" id="files_name">
                     <input type="text" name="board_title" id="board_title" placeholder="제목을 입력해주세요" required
-                           oninvalid="this.setCustomValidity('제목을 입력해주세요')"
-                           oninput="this.setCustomValidity('')">
+                    oninvalid="this.setCustomValidity('제목을 입력해주세요')"
+                    oninput="this.setCustomValidity('')">
                 </div>
                 <div class="board_content">
-                    <label for="vol_deadLine"><span>봉사 날짜를 입력해주세요</span>
-                        <input type="date" name="vol_deadLine" id="vol_deadLine" placeholder="봉사 날짜를 입력해주세요" required
-                               oninvalid="this.setCustomValidity('봉사활동 날짜를 입력해주세요')"
-                               oninput="this.setCustomValidity('')">
-                    </label>
-                    <label for="vol_count"><span>봉사 인원을 입력해주세요</span>
-                        <input type="number" name="vol_count" id="vol_count" placeholder="봉사 최대 정원을 입력해주세요" required
-                               oninvalid="this.setCustomValidity('봉사활동 인원을 입력해주세요')"
+                    <label for="support_bank"><span>은행 이름을 입력해주세요</span>
+                        <select name="bank_category" id="bank_category">
+                            <option value="농협">농협</option>
+                            <option value="신한은행">신한은행</option>
+                            <option value="우리은행">우리은행</option>
+                            <option value="KEB하나은행">KEB하나은행</option>
+                            <option value="KB국민은행">KB국민은행</option>
+                            <option value="IBK기업은행">IBK기업은행</option>
+                            <option value="카카오뱅크">카카오뱅크</option>
+                        </select>
+                        <input type="text" name="support_bank" id="support_bank" placeholder="계좌 번호를 입력해주세요" required
+                               pattern="[0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-]"
+                               oninvalid="this.setCustomValidity('계좌 번호를 입력해주세요')"
                                oninput="this.setCustomValidity('')">
                     </label>
                     <textarea name="board_content" id="board_content"></textarea>
@@ -226,19 +205,19 @@ request.setCharacterEncoding("UTF-8");
             </form>
             <ul class="boardList">
                 <c:if test="${list.size()==2}}">
-                    <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
+                    <a href="/supportBoard/view?seq_board=${list.get(0).seq_board}">
                         <li>
                             <button>Up</button>
                             <span>${list.get(0).board_title}</span></li>
                     </a>
-                    <a href="/volBoard/view?seq_board=${list.get(1).seq_board}">
+                    <a href="/supportBoard/view?seq_board=${list.get(1).seq_board}">
                         <li>
                             <button>down</button>
                             <span>${list.get(1).board_title}</span></li>
                     </a>
                 </c:if>
                 <c:if test="${list.size()==1}">
-                    <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
+                    <a href="/supportBoard/view?seq_board=${list.get(0).seq_board}">
                         <li>
                             <button>Up</button>
                             <span>${list.get(0).board_title}</span></li>
@@ -271,29 +250,26 @@ request.setCharacterEncoding("UTF-8");
 </div>
 <script>
 
-
-    let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-    document.querySelector("#vol_deadLine").value = date;
-    document.querySelector("#vol_deadLine").min = date;
-
     document.querySelector("#form").addEventListener("submit",(e) => {
         const content = document.querySelector(".board_content .note-editable>p");
+        let check = confirm("계좌 번호 등 등록 정보를 한 번 더 확인해주세요. 잘못된 등록정보로 인한 사건 / 사고의 책임은 본인에게 있습니다.");
 
-        if (content.innerHTML === "<br>") {
-            e.preventDefault();
-            alert("내용을 입력해주세요");
-            return;
-        }
+        if(check){
+            if (content.innerHTML === "<br>") {
+                e.preventDefault();
+                alert("내용을 입력해주세요");
+                return;
+            }
 
-        let imgs = document.querySelectorAll(".board_content img");
-        let arr = [];
-        imgs.forEach(e => {
-            let uri = decodeURI(e.src);
-            arr.push(uri);
-        });
-        document.querySelector("#files_name").value = arr;
-        document.querySelector("#temp_files").value = tempImg;
-
+            let imgs = document.querySelectorAll(".board_content img");
+            let arr = [];
+            imgs.forEach(e => {
+                let uri = decodeURI(e.src);
+                arr.push(uri);
+            });
+            document.querySelector("#files_name").value = arr;
+            document.querySelector("#temp_files").value = tempImg;
+        } else e.preventDefault();
     })
 
 
@@ -332,8 +308,8 @@ request.setCharacterEncoding("UTF-8");
                 callbacks: {
                     onImageUpload: function (files) {
                         for (let i = 0; i < files.length; i++) {
-                            if (files[0].size > 1024 * 1024 * 5) {
-                                alert("5MB 이상은 업로드할 수 없습니다.");
+                            if (files[0].size > 1024 * 1024 * 1) {
+                                alert("1MB 이상은 업로드할 수 없습니다.");
                                 return;
                             }
                             uploadSummernoteImageFile(files[i], this);
@@ -359,7 +335,7 @@ request.setCharacterEncoding("UTF-8");
                 $.ajax({
                     data: data,
                     type: "POST",
-                    url: "/file/vol_img",
+                    url: "/file/support_img",
                     enctype: "multipart/form-data",
                     contentType: false,
                     processData: false,

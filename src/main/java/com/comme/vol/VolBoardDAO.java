@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Mapper
 public interface VolBoardDAO {
-    List<Map<String, Object>> selectList(@Param("start") int start,@Param("end") int end) throws Exception;
+    List<Map<String, Object>> selectList(@Param("start") int start, @Param("end") int end) throws Exception;
 
     int selectTotalCnt() throws Exception;
 
@@ -23,4 +23,5 @@ public interface VolBoardDAO {
     int update(VolBoardDTO volBoardDTO) throws Exception;
 
     List<Map<String, Object>> search(Map<String, Object> map) throws Exception;
+
 }

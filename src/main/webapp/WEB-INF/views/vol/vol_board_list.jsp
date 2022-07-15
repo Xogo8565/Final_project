@@ -20,7 +20,7 @@
 
         .container {
             width: 100%;
-            min-height: 2800px;
+            min-height: 1500px;
             height: 1px;
         }
 
@@ -115,7 +115,7 @@
             margin-top: 30px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 70px;
+            gap: 30px;
             padding: 10px;
             margin-bottom: 50px;
         }
@@ -135,18 +135,20 @@
         }
 
         .board_img {
-            flex-basis: 280px;
+            flex-basis: 50%;
             width: 80%;
             display: flex;
             border-radius: 20px;
+            justify-content: center;
+            align-items: center;
         }
 
         .board_img img {
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
             width: 100%;
-            height: 100%;
+            max-width: 180px;
+            max-height: 180px;
+            height: auto;
         }
 
         .board_content {
@@ -209,7 +211,7 @@
 
         @media screen and (max-width: 640px) {
             .container {
-                min-height: 3600px;
+                min-height: 5500px;
             }
 
             .content_header {
@@ -281,6 +283,9 @@
                 grid-row: 4/5;
                 text-align: start;
                 color: black;
+            }
+            .boardList > a:last-child > .board {
+                border-bottom: none;
             }
 
         }

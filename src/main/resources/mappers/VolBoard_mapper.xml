@@ -23,14 +23,14 @@
 
     <select id="selectList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="int">
         <![CDATA[
-        select *
-        from (select b.*, rownum as num
-              from (select a.*,
-                           (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = a.SEQ_BOARD) as cur,
-                           (select FILES_SYS from VOL_FILES where SEQ_BOARD = a.SEQ_BOARD and ROWNUM = 1)  as files_sys
-                    from VOL_BOARD a
-                    order by 1 desc) b
-              where rownum <= #{end})
+        select b.*,
+               (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = b.SEQ_BOARD) as cur,
+               (select FILES_SYS from VOL_FILES where SEQ_BOARD = b.SEQ_BOARD and ROWNUM = 1)  as files_sys
+        from (select a.*, rownum as num
+              from (select *
+                    from VOL_BOARD
+                    order by 1 desc) a
+              where rownum <= #{end}) b
         where num >= #{start}
         ]]>
     </select>
@@ -51,17 +51,17 @@
     </select>
 
     <select id="search" parameterType="map" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap">
-        select *
-        from (select b.*, rownum as num
-        from (select a.*,
-        (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = a.SEQ_BOARD) as cur,
-        (select FILES_SYS from VOL_FILES where SEQ_BOARD = a.SEQ_BOARD and ROWNUM = 1) as files_sys
-        from VOL_BOARD a where
-        <if test="category!=null">
-            ${category} like '%' || #{search} || '%'
-        </if>
-        order by 1 desc) b
-        where rownum <![CDATA[<=]]> #{end})
+        select b.*,
+               (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = b.SEQ_BOARD) as cur,
+               (select FILES_SYS from VOL_FILES where SEQ_BOARD = b.SEQ_BOARD and ROWNUM = 1)  as files_sys
+        from (select a.*, rownum as num
+              from (select *
+                    from VOL_BOARD where
+                                       <if test="category!=null">
+                                       ${category} like '%' || #{search} || '%'
+                                       </if>
+                                   order by 1 desc) a
+              where rownum <![CDATA[<=]]> #{end}) b
         where num <![CDATA[>=]]> #{start}
     </select>
 

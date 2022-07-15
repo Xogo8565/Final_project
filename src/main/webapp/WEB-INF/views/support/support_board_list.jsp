@@ -20,7 +20,7 @@
 
         .container {
             width: 100%;
-            min-height: 2800px;
+            min-height: 1500px;
             height: 1px;
         }
 
@@ -84,6 +84,7 @@
             width: 100%;
             height: 40px;
             z-index: 1;
+            padding-left: 50px;
             border-radius: 10px;
         }
 
@@ -114,7 +115,7 @@
             margin-top: 30px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 70px;
+            gap: 30px;
             padding: 10px;
             margin-bottom: 50px;
         }
@@ -127,23 +128,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 100%;
+            width: 100%;
             gap: 20px;
             padding: 10px;
         }
-
         .board_img {
-            flex-basis: 65%;
+            flex-basis: 50%;
             width: 80%;
             display: flex;
             border-radius: 20px;
+            justify-content: center;
+            align-items: center;
         }
 
         .board_img img {
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
             width: 100%;
-            height: 100%;
+            max-width: 180px;
+            max-height: 180px;
+            height: auto;
         }
 
         .board_content {
@@ -164,17 +168,11 @@
 
         }
 
-        .board_content .count,
         .board_content .title {
             color: black;
             font-size: 1.0em;
         }
 
-        .board_content .count,
-        .board_content .vol_date,
-        .board_content .written_date {
-            text-align: end;
-        }
 
         .board_content span:nth-child(5) {
             grid-column: 2/3;
@@ -206,7 +204,7 @@
 
         @media screen and (max-width: 640px) {
             .container {
-                min-height: 3600px;
+                min-height: 5500px;
             }
 
             .content_header {
@@ -224,7 +222,7 @@
 
             .boardList {
                 grid-template-columns: none;
-                grid-template-rows: repeat(12, 200px);
+                grid-template-rows: repeat(12, 250px);
                 gap: 10px;
             }
 
@@ -267,17 +265,8 @@
                 grid-row: 2/3;
             }
 
-            .board_content .count {
-                grid-column: 1/3;
-                grid-row: 3/4;
-                text-align: start;
-            }
-
-            .board_content .vol_date {
-                grid-column: 1/3;
-                grid-row: 4/5;
-                text-align: start;
-                color: black;
+            .boardList > a:last-child > .board {
+                border-bottom: none;
             }
 
         }
@@ -288,18 +277,20 @@
     <div class="header">HEADER</div>
     <div class="content">
         <div class="content_header">
-            <h3>후원 게시판</h3>
-            <form action="" id="search_form">
+            <h3>봉사 게시판</h3>
+            <form action="/volBoard/search" id="search_form">
                 <label for="category"></label>
                 <select name="category" id="category">
-                    <option value="제목">제목</option>
-                    <option value="내용">내용</option>
-                    <option value="작성자">작성자</option>
+                    <option value="board_title">제목</option>
+                    <option value="board_content">내용</option>
+                    <option value="writer_nickname">작성자</option>
                 </select>
                 <div class="search">
-                    <button type="button" id="searchBtn"><img src="/resources/images/search.png"></button>
+                    <button type="submit" id="searchBtn"><img src="/resources/images/search.png"></button>
                     <label for="search">
-                        <input type="text" id="search">
+                        <input type="text" id="search" name="search" required
+                               oninvalid="this.setCustomValidity('검색어를 입력해주세요')"
+                               oninput="this.setCustomValidity('')">
                     </label>
                 </div>
             </form>
@@ -309,12 +300,17 @@
                 <a href="/supportBoard/view?seq_board=${i.seq_board}">
                     <div class="board">
                         <div class="board_img">
-                            <img src="/resources/images/No_image.png">
+                            <c:if test="${empty i.files_sys}">
+                                <img src="/resources/images/No_image.png">
+                            </c:if>
+                            <c:if test="${not empty i.files_sys}">
+                                <img src="/files/vol/${i.files_sys}">
+                            </c:if>
                         </div>
                         <div class="board_content">
                             <span class="title"><c:out value="${i.board_title}"/></span>
                             <span class="nickname"><c:out value="${i.writer_nickname}"/></span>
-                            <span class="written_date"><fmt:formatDate value="${i.written_date}" pattern="yyyy-MM-dd HH:mm:ss"/> /span>
+                            <span class="written_date"><fmt:formatDate value="${i.written_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
                         </div>
                     </div>
                 </a>

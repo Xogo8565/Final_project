@@ -32,7 +32,9 @@ public class VolBoardController {
     @GetMapping("/lists")
     public String volBoard(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
         // test 용
-        httpSession.setAttribute("loginSession", new MemberDTO("test","test","test","test","test","0100000000","n","1",null));
+        logger.info("테스트 중 세션 발생");
+        httpSession.setAttribute("loginSession", new MemberDTO("test","test","test","test","test","0100000000","n","1","사업자"));
+
         int start = 1;
         int end = 12;
         List<Map<String, Object>> list = volBoardService.selectList(start, end);
@@ -57,7 +59,7 @@ public class VolBoardController {
 
         int seq_board = volBoardService.insert(volBoardDTO);
 
-        fileService.insert_volFile(seq_board, files_name, temp_files, path);
+        fileService.insert_file(seq_board, files_name, temp_files, path, "vol_files");
 
         return "redirect:/volBoard/lists";
     }
@@ -115,7 +117,7 @@ public class VolBoardController {
         volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
 
         volBoardService.update(volBoardDTO);
-        fileService.update_volFile(volBoardDTO.getSeq_board(), files_name, temp_files, path);
+        fileService.update_volFile(volBoardDTO.getSeq_board(), files_name, temp_files, path,"vol_files");
 
 
         return "redirect:/volBoard/lists";
