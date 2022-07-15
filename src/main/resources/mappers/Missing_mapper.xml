@@ -3,5 +3,55 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.missing_board.MissingBoardDAO">
-
+	
+	<!-- 전체조회 -->
+	<select id="selectAllMissing" resultType="MissingBoardDTO">
+		select * from missing_board order by 1 desc
+	</select>
+	
+	<!-- 검색 요청 -->
+	<select id="search" parameterType="map" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap">
+		select * from missing_board where
+		<if test="category == 'title'">
+			board_title like '%'||#{keywordMissing} || '%'
+		</if>
+		<if test="category == 'content'">
+			board_content like '%' || #{keywordMissing} || '%'
+		</if>
+		<if test="category == 'writerNickname'">
+			writer_nickname like '%' || #{keywordMissing} || '%'
+		</if>
+		<if test="category == 'area'">
+			miss_area like '%' || #{keywordMissing} || '%'
+		</if>
+	</select>
+	
+	<!-- 조회수 +1 -->
+	<update id="updateView_count">
+		update missing_board set view_count = view_count+1 where seq_board = #{seq_board}
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from missing_board where seq_board = #{seq_board}
+	</delete>
+	
+	
+	<!-- 글 작성 -->
+	<insert id="insert" parameterType="MissingBoardDTO">
+		<!-- 시퀀스 번호 뽑아내기 -->
+		<selectKey order="BEFORE" keyProperty="no" resultType="int">
+			select seq_board.nextval from dual
+		</selectKey>
+		insert into missing_board values(seq_board.nextval, #{board_title}, #{board_content}, #{member_id},
+			#{member_nickname}, sysdate, #{miss_area}, to_date(#{miss_date}), #{animal_kind}, 0)
+		)
+	</insert>
+	
+	<!-- 상세보기 글조회 -->
+	<select id="selectOne" parameterType="int" resultType="MissingBoardDTO">
+		select * from missing_board where seq_board = #{seq_board}
+	</select>
+	
+	
 </mapper>
