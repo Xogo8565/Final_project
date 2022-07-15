@@ -5,10 +5,17 @@
     <title>Home</title>
   </head>
   <body>
+  <button id ="supportBoard">s</button>
+  <button id ="volBoard">b</button>
+  <script>
+    document.querySelector("#volBoard").addEventListener("click",()=>{
+      location.href = "/volBoard/lists";
+    });
 
-  <button type="button" id="board">board</button>
-  <button type="button" id="boardWrite">boardWrite</button>
-
+    document.querySelector("#supportBoard").addEventListener("click",()=>{
+      location.href = "/supportBoard/lists";
+    })
+  </script>
   </body>
   <script>
     document.getElementById('board').addEventListener('click', function(){

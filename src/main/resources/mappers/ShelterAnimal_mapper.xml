@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.comme.shelterAnimal_board.ShelterAnimalDAO">
+	<insert id="insert" parameterType="ShelterAnimalDTO">
+		insert into shelterAnimal_board (seq_shelterAnimal_board, desertionNo, popfile, happenDt, kindCd, orgNm, happenPlace, colorCd, age, weight, sexCd, specialMark, careNm, careTel, careAddr, processState)
+    	select seq_shelterAnimal_board.nextval, #{desertionNo}, #{popfile}, #{happenDt}, #{kindCd}, #{orgNm}, 
+				#{happenPlace}, #{colorCd}, #{age}, #{weight}, #{sexCd}, #{specialMark}, #{careNm}, #{careTel}, #{careAddr}, #{processState}
+    	from dual
+    	where not exists(select * from shelterAnimal_board where desertionNo = #{desertionNo})
+	</insert>
+	<select id="selectAll" resultType="ShelterAnimalDTO" parameterType="map">
+		select * from (select shelterAnimal_board.*, row_number() over (order by seq_shelterAnimal_board desc) as num from shelterAnimal_board)
+			where num between #{start} and #{end}
+	</select>
+	<select id="selectDetail" resultType="ShelterAnimalDTO" parameterType="String">
+		select * from shelterAnimal_board where desertionNo=#{desertionNo}
+	</select>
+	<select id="selectKeyword" resultType="ShelterAnimalDTO" parameterType="map">
+		select * from 
+			(select shelterAnimal_board.*, row_number() over (order by seq_shelterAnimal_board desc) 
+            	as num from shelterAnimal_board 
+            where 
+            	kindCd like '%'||#{keyword}||'%' or
+				orgNm like '%'||#{keyword}||'%' or
+				happenPlace like '%'||#{keyword}||'%' or
+				specialMark like '%'||#{keyword}||'%' or
+				careNm like '%'||#{keyword}||'%' or
+				happenDt like '%'||#{keyword}||'%')
+			where num between #{start} and #{end}
+	</select>
+	<select id="selectKeywordCount" resultType="int" parameterType="String">
+		select count(*) as totalCnt from shelterAnimal_board where 
+			kindCd like '%'||#{keyword}||'%' or
+			orgNm like '%'||#{keyword}||'%' or
+			happenPlace like '%'||#{keyword}||'%' or
+			specialMark like '%'||#{keyword}||'%' or
+			careNm like '%'||#{keyword}||'%' or
+			happenDt like '%'||#{keyword}||'%'
+	</select>
+	<select id="selectTotalCnt" resultType="int">
+		select count(*) as totalCnt from shelterAnimal_board
+	</select>
+</mapper>

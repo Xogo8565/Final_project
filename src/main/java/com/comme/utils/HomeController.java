@@ -1,7 +1,5 @@
 package com.comme.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -11,6 +9,8 @@ public class HomeController {
 
     @RequestMapping(value =  "/")
     public String home() throws Exception {
+
+        logger.info("home");
         return "home";
     }
 }

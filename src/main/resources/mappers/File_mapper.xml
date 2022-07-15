@@ -3,8 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.files.FileDAO">
-	
-	<!-- fileDTO insert -->
+    <insert id="insert_volFile">
+        insert into ${table_name}
+        values (seq_file.nextval , #{fileDTO.seq_board}, #{fileDTO.files_upload}, #{fileDTO.files_ori}, #{fileDTO.files_sys})
+    </insert>
+    <select id="get_volFileList" resultType="FileDTO">
+        select * from ${table_name}
+        where SEQ_BOARD = #{seq_board}
+    </select>
+    <delete id="delete_volFile">
+        delete from ${table_name} where SEQ_FILE = #{seq_file}
+    </delete>
+
+    <!-- fileDTO insert -->
 	<insert id="insertFile" parameterType="FileDTO">
 		insert into board_files values(seq_file.nextval, #{seq_board}, #{files_upload}, #{files_ori}, #{files_sys})
 	</insert>
