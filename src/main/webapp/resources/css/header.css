@@ -1,0 +1,151 @@
+@charset "UTF-8";
+
+@font-face {
+	font-family: 'IBMPlexSansKR-Regular';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+* {
+	box-sizing: border-box;
+	font-family: 'IBMPlexSansKR-Regular';
+}
+/*메인 헤더*/
+.mainP-Header {
+	padding: 10px;
+}
+/*비반응형 로고*/
+.Header-logo-md img {
+	width: 100px;
+	margin-left: 20px;
+}
+/*비반응형 네비바*/
+.mainP-nav {
+	display: flex;
+	justify-content: center;
+}
+
+.mainP-nav li {
+	font-size: larger;
+	margin-top: 30px;
+	list-style: none;
+	float: left;
+	margin-right: 50px;
+	color: black;
+}
+
+/*비반응형 인스타그램,유튜브,유저 로고*/
+.Header-Img-md img {
+	margin-top: 30px;
+	width: 30px;
+	float: right;
+	margin-right: 20px;
+}
+
+/*반응형 헤더 영역*/
+/*상단바 sm에서 생기는 navbar*/
+.sidenav {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: rgba(255, 255, 255, 0.863);
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+	text-align: center;
+}
+
+#mySidenav a {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	color: #111;
+	display: block;
+	transition: 0.3s;
+}
+
+.sidenav .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+}
+
+
+@media screen and (max-height: 450px) {
+	.sidenav {
+		padding-top: 15px;
+	}
+	.sidenav a {
+		font-size: 18px;
+		text-decoration:none;
+		color:black;
+	}
+}
+
+/* 상단 네비바의 검색창 */
+.search-menuH a {
+	padding: 0px;
+	margin-top: 15px;
+}
+
+.search-menuH>span {
+	padding: 0px;
+	margin-top: 10px;
+	font-size: 20px;
+	font-weight: bold;
+	margin-right:10px;
+}
+
+.search-menuH a span {
+	color: #000;
+	display: inline-block;
+	margin: 0;
+	text-transform: uppercase;
+}
+
+.search-menuH a span:after {
+	display: block;
+	content: '';
+	border-bottom: solid 2px #cf936f;
+	transform: scaleX(0);
+	transition: transform 250ms ease-in-out;
+}
+
+.search-menuH a span:hover:after {
+	transform: scaleX(1);
+}
+
+.fromLeft:after {
+	transform-origin: 0% 50%;
+}
+
+.search-menuH .bottom {
+	margin-top: 20px;
+}
+
+/*반응형 로고*/
+.header-small-logo {
+	text-align: center;
+}
+
+.header-small-logo img {
+	width: 150px;
+}
+
+/*반응형 유저 아이콘*/
+.header-myIcon{
+	padding-left:0px;
+	padding-right:20px;
+}
+
+.header-myIcon img {
+	width: 25px;
+	
+}

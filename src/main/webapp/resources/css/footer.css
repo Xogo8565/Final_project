@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+/*풋터*/
+    /*P태그*/
+    .mainFt{
+      padding: 30px;
+    }
+    .mainFt a{
+      text-decoration: none;
+      color: black;
+    }
+    .mainFt nav span{
+      cursor: pointer;
+    }
+    /*풋터 소셜아이콘*/
+    
+    .mainFt-social > a img{
+      float: right;
+      width: 30px;
+      margin-right: 10px;
+    }
