@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.comme.files.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class MissingBoardService {
 	@Autowired
 	MissingBoardDAO dao;
 	@Autowired
-	FileDAO filedao;
+	FileService fileService;
 	@Autowired
 	CommentDAO commentdao;
 	
@@ -39,7 +40,7 @@ public class MissingBoardService {
 	public Map<String, Object> selectOne(int seq_board) throws Exception{
 		Map<String, Object> map = new HashMap<>();
 		map.put("MissingBoardDTO", dao.selectOne(seq_board));
-		map.put("FileDTO", filedao.selectByMissing(seq_board));
+		map.put("FileDTO", fileService.selectByMissing(seq_board));
 		map.put("commentDTO", commentdao.selectByMc(seq_board));
 		return map;
 	}

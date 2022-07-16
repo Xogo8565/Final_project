@@ -122,6 +122,7 @@
 
         .boardList a {
             text-decoration: none;
+            max-height: 600px;
         }
 
         .board {

@@ -137,6 +137,11 @@ public class FileService implements FileDAO {
 	}
 
     @Override
+    public List<FileDTO> selectByMissing(int seq_board) {
+        return fileDAO.selectByMissing(seq_board);
+    }
+
+    @Override
     public void insert_volFile(FileDTO fileDTO, String table_name) throws Exception {
         fileDAO.insert_volFile(fileDTO, table_name);
     }
