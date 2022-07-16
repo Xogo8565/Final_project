@@ -3,5 +3,86 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.vol.VolBoardDAO">
+    <resultMap id="BoardResult" type="HashMap">
+        <result property="seq_board" column="seq_board"/>
+        <result property="board_title" column="board_title"/>
+        <result property="board_content" column="board_content" jdbcType="CLOB" javaType="java.lang.String"/>
+        <result property="member_id" column="member_id"/>
+        <result property="writer_nickname" column="writer_nickname"/>
+        <result property="written_date" column="written_date"/>
+        <result property="view_count" column="view_count"/>
+        <result property="vol_deadLine" column="vol_deadLine"/>
+        <result property="vol_count" column="vol_count"/>
+        <result property="cur" column="cur"/>
+    </resultMap>
 
+    <select id="selectTotalCnt" resultType="int">
+        select count(*)
+        from VOL_BOARD
+    </select>
+
+    <select id="selectList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="int">
+        <![CDATA[
+        select b.*,
+               (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = b.SEQ_BOARD) as cur,
+               (select FILES_SYS from VOL_FILES where SEQ_BOARD = b.SEQ_BOARD and ROWNUM = 1)  as files_sys
+        from (select a.*, rownum as num
+              from (select *
+                    from VOL_BOARD
+                    order by 1 desc) a
+              where rownum <= #{end}) b
+        where num >= #{start}
+        ]]>
+    </select>
+
+    <insert id="insert" parameterType="VolBoardDTO">
+        <selectKey order="BEFORE" keyProperty="seq_board" resultType="int">
+            select seq_board.nextval from dual
+        </selectKey>
+        insert into vol_board values
+        (#{seq_board},#{board_title},#{board_content},#{member_id},#{writer_nickname},sysdate,0,#{vol_deadLine},#{vol_count})
+    </insert>
+
+    <select id="select" parameterType="int" resultMap="BoardResult">
+        select a.*,
+               (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = a.SEQ_BOARD) as cur
+        from VOL_BOARD a
+        where SEQ_BOARD = #{seq_board}
+    </select>
+
+    <select id="search" parameterType="map" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap">
+        select b.*,
+               (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = b.SEQ_BOARD) as cur,
+               (select FILES_SYS from VOL_FILES where SEQ_BOARD = b.SEQ_BOARD and ROWNUM = 1)  as files_sys
+        from (select a.*, rownum as num
+              from (select *
+                    from VOL_BOARD where
+                                       <if test="category!=null">
+                                       ${category} like '%' || #{search} || '%'
+                                       </if>
+                                   order by 1 desc) a
+              where rownum <![CDATA[<=]]> #{end}) b
+        where num <![CDATA[>=]]> #{start}
+    </select>
+
+    <delete id="delete" parameterType="int">
+        delete
+        from vol_board
+        where seq_board = #{seq_board}
+    </delete>
+
+    <update id="plusViewCount" parameterType="int">
+        update VOL_BOARD
+        set VIEW_COUNT = VIEW_COUNT + 1
+        where seq_board = #{seq_board}
+    </update>
+
+    <update id="update" parameterType="VolBoardDTO">
+        update VOL_BOARD
+        set board_title   = #{board_title},
+            board_content = #{board_content},
+            VOL_DEADLINE  = #{vol_deadLine},
+            vol_count     = #{vol_count}
+        where SEQ_BOARD = #{seq_board}
+    </update>
 </mapper>
