@@ -124,6 +124,18 @@ public class FileService implements FileDAO {
 
     }
 
+    public void insertFile(FileDTO dto){
+		fileDAO.insertFile(dto);
+	}
+	
+	public List<FileDTO> deleteFileList(int seq_board){
+		return fileDAO.deleteFileList(seq_board);
+	}
+	
+	public void deleteByFileSys(String files_sys){
+		fileDAO.deleteByFileSys(files_sys);
+	}
+
     @Override
     public void insert_volFile(FileDTO fileDTO, String table_name) throws Exception {
         fileDAO.insert_volFile(fileDTO, table_name);

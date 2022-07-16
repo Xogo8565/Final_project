@@ -1,6 +1,7 @@
 package com.comme.files;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,9 @@ public interface FileDAO {
 
     int delete_volFile(@Param("seq_file") int seq_file, @Param("table_name") String table_name) throws Exception;
 
+	void insertFile(FileDTO dto);
+	
+	List<FileDTO> deleteFileList(int seq_board);
+	
+	void deleteByFileSys(String files_sys);
 }

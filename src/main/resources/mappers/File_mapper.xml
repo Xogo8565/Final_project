@@ -19,4 +19,19 @@
     <delete id="delete_volFile">
         delete from ${table_name} where SEQ_FILE = #{seq_file}
     </delete>
+
+    <!-- fileDTO insert -->
+	<insert id="insertFile" parameterType="FileDTO">
+		insert into board_files values(seq_file.nextval, #{seq_board}, #{files_upload}, #{files_ori}, #{files_sys})
+	</insert>
+	
+	<!-- 삭제 할 파일 정보 불러오기 -->
+	<select id="deleteFileList" parameterType="int" resultType="FileDTO">
+		select * from board_files where seq_board = #{seq_board}
+	</select>
+	
+	<!-- 저장된 파일명으로 파일 삭제 -->
+	<delete id="deleteByFileSys" parameterType="string">
+		delete from board_files where files_sys = #{files_sys} 
+	</delete>
 </mapper>
