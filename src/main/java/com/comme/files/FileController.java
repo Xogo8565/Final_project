@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/file")
 public class FileController {
+
     Logger logger = LoggerFactory.getLogger(FileController.class);
     @Autowired
     private HttpSession httpSession;

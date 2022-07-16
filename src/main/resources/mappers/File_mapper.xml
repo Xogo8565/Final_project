@@ -3,6 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.files.FileDAO">
+	
+	<!-- 실종게시판 파일 조회 -->
+	<select id="selectByMissing" parameterType="int" resultType="FileDTO">
+		select * from missing_file where = #{seq_board}
+	</select>
     <insert id="insert_volFile">
         insert into ${table_name}
         values (seq_file.nextval , #{fileDTO.seq_board}, #{fileDTO.files_upload}, #{fileDTO.files_ori}, #{fileDTO.files_sys})
