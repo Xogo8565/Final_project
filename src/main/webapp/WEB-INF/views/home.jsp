@@ -4,6 +4,16 @@
     <title>Home</title>
   </head>
   <body>
-  $END$
+  <button id ="supportBoard">s</button>
+  <button id ="volBoard">b</button>
+  <script>
+    document.querySelector("#volBoard").addEventListener("click",()=>{
+      location.href = "/volBoard/lists";
+    });
+
+    document.querySelector("#supportBoard").addEventListener("click",()=>{
+      location.href = "/supportBoard/lists";
+    })
+  </script>
   </body>
 </html>

@@ -3,5 +3,15 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.vol.VolSubmitDAO">
-
+    <insert id="insert" parameterType="VolSubmitDTO">
+        insert into VOL_SUBMIT
+        values (SEQ_VOL_SUBMIT.nextval, #{seq_board}, #{member_id}, #{writer_name}, #{writer_phone}, 'N')
+    </insert>
+    <select id="count" resultType="int" parameterType="VolSubmitDTO">
+        select count(*) from VOL_SUBMIT
+            where seq_board = #{seq_board}
+        <if test="member_id != null and member_id != ''">
+            and member_id = #{member_id}
+        </if>
+    </select>
 </mapper>

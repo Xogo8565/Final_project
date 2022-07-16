@@ -3,5 +3,41 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.support_board.SupportBoardDAO">
+    <resultMap id="BoardResult" type="HashMap">
+        <result property="seq_board" column="seq_board"/>
+        <result property="board_title" column="board_title"/>
+        <result property="board_content" column="board_content" jdbcType="CLOB" javaType="java.lang.String"/>
+        <result property="member_id" column="member_id"/>
+        <result property="writer_nickname" column="writer_nickname"/>
+        <result property="written_date" column="written_date"/>
+        <result property="support_bank" column="support_bank"/>
+        <result property="member_brn" column="member_brn"/>
+        <result property="files_sys" column="files_sys"/>
+    </resultMap>
 
+    <select id="selectList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="int">
+        select b.*,
+        (select FILES_SYS
+        from VOL_FILES where b.SEQ_BOARD = SEQ_BOARD) from
+        (select a.*, rownum as num
+         from (select * from SUPPORT_BOARD order by 1 desc) a
+        where rownum <![CDATA[<=]]> 30) b
+        where num <![CDATA[>=]]> 1
+    </select>
+    <select id="selectTotalCnt" resultType="int">
+        select count(*) from SUPPORT_BOARD
+    </select>
+    <insert id="insert" parameterType="VolBoardDTO">
+        <selectKey order="BEFORE" keyProperty="seq_board" resultType="int">
+            select seq_board.nextval from dual
+        </selectKey>
+        insert into support_board values
+        (#{seq_board},#{board_title},#{board_content},#{member_id},#{writer_nickname},sysdate,#{support_bank},#{member_brn})
+    </insert>
+    <select id="select" parameterType="int" resultMap="BoardResult">
+        select a.*,
+               (select FILES_SYS from SUPPORT_FILES where SEQ_BOARD = a.SEQ_BOARD and rownum = 1) as FILES_SYS
+        from VOL_BOARD a
+        where SEQ_BOARD = #{seq_board}
+    </select>
 </mapper>

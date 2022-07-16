@@ -8,4 +8,15 @@
 	<select id="selectByMissing" parameterType="int" resultType="FileDTO">
 		select * from missing_file where = #{seq_board}
 	</select>
+    <insert id="insert_volFile">
+        insert into ${table_name}
+        values (seq_file.nextval , #{fileDTO.seq_board}, #{fileDTO.files_upload}, #{fileDTO.files_ori}, #{fileDTO.files_sys})
+    </insert>
+    <select id="get_volFileList" resultType="FileDTO">
+        select * from ${table_name}
+        where SEQ_BOARD = #{seq_board}
+    </select>
+    <delete id="delete_volFile">
+        delete from ${table_name} where SEQ_FILE = #{seq_file}
+    </delete>
 </mapper>
