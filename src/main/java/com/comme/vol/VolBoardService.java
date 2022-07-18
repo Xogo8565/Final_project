@@ -1,9 +1,11 @@
 package com.comme.vol;
 
+import com.comme.utils.PagingVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,17 @@ import java.util.Map;
 public class VolBoardService implements VolBoardDAO {
     @Autowired
     VolBoardDAO volBoardDAO;
+
+    public Map<String,Object> selectList(int curPage) throws Exception {
+        int total = selectTotalCnt();
+        Map<String, Object> map = new HashMap<>();
+        PagingVO pagingVO = new PagingVO(total, curPage, 12);
+        List<Map<String, Object>> list = selectList(pagingVO.getStart(), pagingVO.getEnd());
+        map.put("pagingVO", pagingVO);
+        map.put("list", list);
+
+        return map;
+    }
 
     @Override
     public List<Map<String, Object>> selectList(int start, int end) throws Exception {

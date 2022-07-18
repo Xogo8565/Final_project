@@ -31,10 +31,8 @@ public class SupportBoardController {
 
     @GetMapping("/lists")
     public String volBoard(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
-        int start = 1;
-        int end = 12;
-        List<Map<String, Object>> list = supportBoardService.selectList(start, end);
-        model.addAttribute("list", list);
+        Map<String, Object> map = supportBoardService.selectList(curPage);
+        model.addAttribute("map", map);
         return "support/support_board_list";
     }
 
@@ -68,10 +66,26 @@ public class SupportBoardController {
         model.addAttribute("map", map);
 
 
-        int total =supportBoardService.selectTotalCnt();
-        List<Map<String, Object>> list = supportBoardService.selectList(total-1,total);
-        model.addAttribute("list", list);
-
         return "support/support_board_detail";
+    }
+
+    @GetMapping("/order")
+    public String order(int seq_board, int order_number, int price, Model model) throws Exception {
+
+        Map<String, Object> map = supportBoardService.select(seq_board);
+        model.addAttribute("map", map);
+        model.addAttribute("order_number", order_number);
+        model.addAttribute("price", price);
+
+        return "pay/payment";
+    }
+
+    @PostMapping("/delete")
+    public String delete(int seq_board, @RequestParam("file_name") List<String> file_name) throws Exception {
+        supportBoardService.delete(seq_board);
+        String path = httpSession.getServletContext().getRealPath("");
+        fileService.delete_file(file_name, path);
+
+        return "redirect:/volBoard/lists";
     }
 }

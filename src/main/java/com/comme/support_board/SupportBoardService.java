@@ -1,10 +1,12 @@
 package com.comme.support_board;
 
+import com.comme.utils.PagingVO;
 import com.comme.vol.VolBoardDAO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,5 +34,21 @@ public class SupportBoardService implements SupportBoardDAO {
     @Override
     public Map<String, Object> select(int seq_board) throws Exception {
         return supportBoardDAO.select(seq_board);
+    }
+
+    @Override
+    public int delete(int seq_board) throws Exception {
+        return supportBoardDAO.delete(seq_board);
+    }
+
+    public Map<String, Object> selectList(int curPage) throws Exception {
+        int total = selectTotalCnt();
+        Map<String, Object> map = new HashMap<>();
+        PagingVO pagingVO = new PagingVO(total, curPage, 12);
+        List<Map<String, Object>> list = selectList(pagingVO.getStart(), pagingVO.getEnd());
+        map.put("pagingVO", pagingVO);
+        map.put("list", list);
+
+        return map;
     }
 }

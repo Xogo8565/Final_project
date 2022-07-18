@@ -121,8 +121,9 @@
         }
 
         .boardList a {
+            color: black;
             text-decoration: none;
-            max-height: 600px;
+            max-height: 400px;
         }
 
         .board {
@@ -270,6 +271,21 @@
                 border-bottom: none;
             }
 
+            .page a {
+                display: block;
+                margin: 0 3px;
+                font-size: 13px;
+                color: #999;
+                text-decoration: none;
+            }
+
+            .page a:hover {
+                background-color: #f9f9f9;
+                color: #555;
+                border: 1px solid #aaa;
+                border-radius: 2px;
+            }
+
         }
     </style>
 </head>
@@ -297,7 +313,7 @@
             </form>
         </div>
         <div class="boardList">
-            <c:forEach items="${list}" var="i">
+            <c:forEach items="${map.list}" var="i">
                 <a href="/supportBoard/view?seq_board=${i.seq_board}">
                     <div class="board">
                         <div class="board_img">
@@ -305,7 +321,7 @@
                                 <img src="/resources/images/No_image.png">
                             </c:if>
                             <c:if test="${not empty i.files_sys}">
-                                <img src="/files/vol/${i.files_sys}">
+                                <img src="/files/support/${i.files_sys}">
                             </c:if>
                         </div>
                         <div class="board_content">
@@ -318,7 +334,25 @@
             </c:forEach>
         </div>
         <div class="content_footer">
-            <div class="pagination">paging</div>
+            <div class="page">
+                <c:if test="${map.pagingVO.startPage!=1}">
+                    <a id="first"
+                       href="/supportBoard/lists?curPage=1">첫
+                        페이지</a>
+                    <a class="arrow left"
+                       href="/supportBoard/lists?curPage=${map.pagingVO.startPage-1}">&lt;</a>
+                </c:if>
+                <c:forEach begin="${map.pagingVO.startPage}" end="${map.pagingVO.endPage }" var="p" step="1">
+                    <a href="/supportBoard/lists?curPage=${p}">${p}</a>
+                </c:forEach>
+                <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
+                    <a class="arrow right"
+                       href="/supportBoard/lists?curPage=${map.pagingVO.endPage+1}">></a>
+
+                    <a id="last"
+                       href="/supportBoard/lists?curPage=${map.pagingVO.lastPage}">끝페이지</a>
+                </c:if>
+            </div>
             <button type="button" id="write">글쓰기</button>
         </div>
     </div>
@@ -326,9 +360,21 @@
 </div>
 </body>
 <script>
+    // pagination css 안 먹어서 스크립트로 해둘게요
+    let page = document.querySelectorAll(".page a");
+    page.forEach(target=>{
+        target.style.color = "#999";
+        target.style.textDecoration = "none"
+    })
+    page.forEach(target=>addEventListener('hover',()=>{
+        target.style.color = "#555";
+        target.style.backgroundColor = "#f9f9f9";
+        target.style.textDecoration = "none"
+    }))
     document.querySelector("#write").addEventListener("click",()=>{
         location.href = "/supportBoard/write"
     })
+
 </script>
 </html>
 <html>

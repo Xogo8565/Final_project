@@ -70,7 +70,7 @@ public class FileService implements FileDAO {
     }
 
     // 파일 삭제
-    public void delete_volFile(List<String> file_name, String path) throws Exception {
+    public void delete_file(List<String> file_name, String path) throws Exception {
         List<String> list = convertFileUrlToPath.convertTofullPath(file_name);
         for(String temp : list){
             File file = new File(path+File.separator+temp);

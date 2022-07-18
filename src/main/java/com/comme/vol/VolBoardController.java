@@ -35,10 +35,8 @@ public class VolBoardController {
         logger.info("테스트 중 세션 발생");
         httpSession.setAttribute("loginSession", new MemberDTO("test","test","test","test","test","0100000000","n","1","사업자"));
 
-        int start = 1;
-        int end = 12;
-        List<Map<String, Object>> list = volBoardService.selectList(start, end);
-        model.addAttribute("list", list);
+        Map<String, Object> map = volBoardService.selectList(curPage);
+        model.addAttribute("map", map);
         return "vol/vol_board_list";
     }
 
@@ -71,7 +69,6 @@ public class VolBoardController {
         Map<String, Object> map = volBoardService.select(seq_board);
         model.addAttribute("map", map);
 
-
         int total = volBoardService.selectTotalCnt();
         List<Map<String, Object>> list = volBoardService.selectList(total-1,total);
         model.addAttribute("list", list);
@@ -83,7 +80,7 @@ public class VolBoardController {
     public String delete(int seq_board, @RequestParam("file_name") List<String> file_name) throws Exception {
         volBoardService.delete(seq_board);
         String path = httpSession.getServletContext().getRealPath("");
-        fileService.delete_volFile(file_name, path);
+        fileService.delete_file(file_name, path);
 
         return "redirect:/volBoard/lists";
     }
