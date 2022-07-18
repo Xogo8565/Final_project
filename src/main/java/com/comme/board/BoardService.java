@@ -157,5 +157,12 @@ public class BoardService {
 		dao.updateBoard(dto);
 	}
 	
+	public List<CategoryDTO> mainCategory() throws Exception{
+		return dao.mainCategory();
+	}
+	
+	public CategoryDTO inquiryCategory() throws Exception{
+		return dao.inquiryCategory();
+	}
 	
 }

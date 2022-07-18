@@ -24,6 +24,34 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 <title>메인 페이지</title>
+<script>
+	document.addEventListener("DOMContentLoaded", function(){
+
+		document.getElementById('topBtn').addEventListener('click', function(){
+			window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+		})
+
+		// Top 버튼
+			$(window).scroll(function(){
+			if ($(this).scrollTop() > 300){
+				$("#topBtn").show();
+			} else{
+				$("#topBtn").hide();
+			}
+		});
+
+		document.getElementById('shelterAnimalBtn').addEventListener('click', function(){
+			location.href = "/shelterAnimal/toShelterAnimal?curPage=1";
+		})
+
+
+
+	});
+
+  
+  
+	
+  </script>
 <style>
 /*콘텐츠 시작*/
 /*함께하면 더 즐거운 유기동물 봉사 사진*/
@@ -100,12 +128,13 @@
 }
 
 /*top버튼*/
-.topBtn {
+#topBtn {
 	display: none;
 	position: fixed;
 	bottom: 30px;
 	right: 30px;
 	z-index: 999;
+	cursor: pointer;
 }
 
 .topBtn img {
@@ -176,20 +205,7 @@
 }
 </style>
 </head>
-<script>
-  // Top 버튼
-  $(window).scroll(function(){
-    if ($(this).scrollTop() > 300){
-      $(".topBtn").show();
-    } else{
-      $(".topBtn").hide();
-    }
-  });
-  $(".topBtn").click(function(){
-    $('html, body').animate({scrollTop:0},400);
-    return false;
-  });
-  </script>
+
 <body style="overflow-x: hidden">
 	<!--main container-->
 	<div class="mainP-Container">
@@ -282,7 +298,7 @@
 				<!--비반응형 멀리서도 마음만은 늘 가까이~ 후원-->
 				<div class="col d-none d-sm-block mainContent-2">
 					<img src="/resources/mainImg/content-md-2.png">
-					<button type="button">
+					<button id="shelterAnimalBtn" type="button">
 						&nbsp;&nbsp; <strong>자세히 알아보기</strong> &nbsp;&nbsp;
 					</button>
 				</div>
@@ -331,7 +347,7 @@
 	</div>
 
 	<!--top버튼-->
-	<a href="" class="topBtn"><img src="/resources/mainImg/DIEALRIGHT.png"></a>
+	<a id="topBtn"><img src="/resources/mainImg/DIEALRIGHT.png"></a>
 
 </body>
 </html>
