@@ -295,17 +295,25 @@
     document.querySelector("#vol_deadLine").min = date;
 
     document.querySelector("#form").addEventListener("submit",(e) => {
-        const content = document.querySelector(".board_content");
-        const content2 = document.querySelector(".board_content .note-editable *");
+        const content = document.querySelector(".board_content .note-editable");
+        let imgs = document.querySelectorAll(".board_content img");
+        let str = "";
 
-
-        if (content.innerHTML === ""||content2.innerHTML==="<br>"||content2.innerHTML==="") {
+        if(!content.innerText && imgs.length === 0){
+            alert('내용을 입력해주세요.');
             e.preventDefault();
-            alert("내용을 입력해주세요");
             return;
+        }else if(content.children.length > 0 && imgs.length === 0){
+            for(let e of content.children){
+                str += e.innerText.replace(/\s/g, "");
+            }
+            if(str === ''){
+                alert('내용을 입력해주세요');
+                e.preventDefault();
+                return;
+            }
         }
 
-        let imgs = document.querySelectorAll(".board_content img");
         let arr = [];
         imgs.forEach(e => {
             let uri = decodeURI(e.src);

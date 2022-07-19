@@ -3,5 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.pay.PayDAO">
-
+    <insert id="insert" parameterType="PayDTO">
+        <selectKey resultType="int" order="BEFORE" keyProperty="seq_pay">
+            select SEQ_PAY.nextval from dual
+        </selectKey>
+        insert into PAY values (#{seq_pay}, #{member_id}, #{seq_board}, #{pay_money}, sysdate)
+    </insert>
+    <select id="select" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="int">
+        select a.*,
+               b.MEMBER_EMAIL, b.MEMBER_PHONE, b.MEMBER_NAME,
+               c.BOARD_TITLE, c.WRITER_NICKNAME ,
+               (select FILES_SYS from SUPPORT_FILES where SEQ_BOARD = a.SEQ_BOARD and rownum = 1) as files_sys
+        from Pay a,
+             (select MEMBER_ID, member_phone, member_email, member_name from member) b,
+             (select SEQ_BOARD, WRITER_NICKNAME, board_title from SUPPORT_BOARD) c
+        where SEQ_PAY = #{seq_pay}
+          and a.MEMBER_ID = b.MEMBER_ID
+          and a.SEQ_BOARD = c.SEQ_BOARD
+    </select>
 </mapper>

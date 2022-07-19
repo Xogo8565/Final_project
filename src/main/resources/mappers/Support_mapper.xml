@@ -23,12 +23,16 @@
                   and rownum = 1) as files_sys
         from (select a.*, rownum as num
               from (select * from SUPPORT_BOARD order by 1 desc) a
-              where rownum <![CDATA[<=]]> 30) b
-        where num <![CDATA[>=]]> 1
+              where rownum <![CDATA[<=]]> #{end}) b
+        where num <![CDATA[>=]]> #{start}
     </select>
     <select id="selectTotalCnt" resultType="int">
         select count(*)
         from SUPPORT_BOARD
+        <if test="category!=null">
+            where ${category} like '%'|| #{search}||'%'
+        </if>
+
     </select>
     <insert id="insert" parameterType="VolBoardDTO">
         <selectKey order="BEFORE" keyProperty="seq_board" resultType="int">
@@ -55,4 +59,20 @@
             SUPPORT_BANK  = #{support_bank}
         where SEQ_BOARD = #{seq_board}
     </update>
+    <select id="search" parameterType="map" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap">
+        select b.*,
+               (select FILES_SYS
+                from support_FILES
+                where b.SEQ_BOARD = SEQ_BOARD
+                  and rownum = 1) as files_sys
+        from (select a.*, rownum as num
+              from (select * from SUPPORT_BOARD
+                                        where
+                                        <if test="category!=null">
+                                            ${category} like '%' || #{search} || '%'
+                                        </if>
+                             order by 1 desc) a
+              where rownum <![CDATA[<=]]> 30) b
+        where num <![CDATA[>=]]> 1
+    </select>
 </mapper>

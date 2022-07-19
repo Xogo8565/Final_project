@@ -335,22 +335,43 @@
         </div>
         <div class="content_footer">
             <div class="page">
-                <c:if test="${map.pagingVO.startPage!=1}">
-                    <a id="first"
-                       href="/supportBoard/lists?curPage=1">첫
-                        페이지</a>
-                    <a class="arrow left"
-                       href="/supportBoard/lists?curPage=${map.pagingVO.startPage-1}">&lt;</a>
-                </c:if>
-                <c:forEach begin="${map.pagingVO.startPage}" end="${map.pagingVO.endPage }" var="p" step="1">
-                    <a href="/supportBoard/lists?curPage=${p}">${p}</a>
-                </c:forEach>
-                <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
-                    <a class="arrow right"
-                       href="/supportBoard/lists?curPage=${map.pagingVO.endPage+1}">></a>
+                <c:if test="${empty map.category}">
+                    <c:if test="${map.pagingVO.startPage!=1}">
+                        <a id="first"
+                           href="/supportBoard/lists?curPage=1">첫
+                            페이지</a>
+                        <a class="arrow left"
+                           href="/supportBoard/lists?curPage=${map.pagingVO.startPage-1}">&lt;</a>
+                    </c:if>
+                    <c:forEach begin="${map.pagingVO.startPage}" end="${map.pagingVO.endPage }" var="p" step="1">
+                        <a href="/supportBoard/lists?curPage=${p}">${p}</a>
+                    </c:forEach>
+                    <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
+                        <a class="arrow right"
+                           href="/supportBoard/lists?curPage=${map.pagingVO.endPage+1}">&lt></a>
 
-                    <a id="last"
-                       href="/supportBoard/lists?curPage=${map.pagingVO.lastPage}">끝페이지</a>
+                        <a id="last"
+                           href="/supportBoard/lists?curPage=${map.pagingVO.lastPage}">끝페이지</a>
+                    </c:if>
+                </c:if>
+                <c:if test="${not empty map.category}">
+                    <c:if test="${map.pagingVO.startPage!=1}">
+                        <a id="first"
+                           href="/supportBoard/search?category=${map.category}&search=${map.search}">첫
+                            페이지</a>
+                        <a class="arrow left"
+                           href="/supportBoard/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.startPage-1}">&lt;</a>
+                    </c:if>
+                    <c:forEach begin="${map.pagingVO.startPage}" end="${map.pagingVO.endPage }" var="p" step="1">
+                        <a href="/supportBoard/search?category=${map.category}&search=${map.search}&curPage=${p}">${p}</a>
+                    </c:forEach>
+                    <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
+                        <a class="arrow right"
+                           href="/supportBoard/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.endPage+1}">&lt></a>
+
+                        <a id="last"
+                           href="/supportBoard/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.lastPage}">끝페이지</a>
+                    </c:if>
                 </c:if>
             </div>
             <button type="button" id="write">글쓰기</button>

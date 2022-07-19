@@ -195,7 +195,6 @@
                             <option value="카카오뱅크">카카오뱅크</option>
                         </select>
                         <input type="text" name="support_bank" id="support_bank" placeholder="계좌 번호를 입력해주세요" required
-                               pattern="[0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-]"
                                oninvalid="this.setCustomValidity('계좌 번호를 입력해주세요')"
                                oninput="this.setCustomValidity('')">
                     </label>
@@ -213,17 +212,34 @@
 <script>
 
     document.querySelector("#form").addEventListener("submit",(e) => {
-        const content = document.querySelector(".board_content .note-editable>p");
         let check = confirm("계좌 번호 등 등록 정보를 한 번 더 확인해주세요. 잘못된 등록정보로 인한 사건 / 사고의 책임은 본인에게 있습니다.");
 
         if(check){
-            if (content.innerHTML === "<br>") {
+            const content = document.querySelector(".board_content .note-editable");
+            let imgs = document.querySelectorAll(".board_content img");
+            let str = '';
+            let bank_regex = /[0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-]/;
+            if(!bank_regex.test(document.querySelector("#support_bank").value)){
+                alert("계좌 번호를 잘못 입력하셨습니다");
                 e.preventDefault();
-                alert("내용을 입력해주세요");
                 return;
             }
+            if(!content.innerText && imgs.length === 0){
+                alert('내용을 입력해주세요.');
+                e.preventDefault();
+                return;
 
-            let imgs = document.querySelectorAll(".board_content img");
+            }else if(content.children.length > 0 && imgs.length === 0){
+                for(let e of content.children){
+                    str += e.innerText.replace(/\s/g, "");
+                }
+                if(str === ''){
+                    alert('내용을 입력해주세요');
+                    e.preventDefault();
+                    return;
+                }
+            }
+
             let arr = [];
             imgs.forEach(e => {
                 let uri = decodeURI(e.src);

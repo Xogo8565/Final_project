@@ -241,15 +241,24 @@
 
     document.querySelector("#form").addEventListener("submit",(e) => {
         const content = document.querySelector(".board_content .note-editable");
+        let imgs = document.querySelectorAll(".board_content img");
         let str = "";
 
-        if (content.innerHTML === "") {
+        if(!content.innerText && imgs.length === 0){
+            alert('내용을 입력해주세요.');
             e.preventDefault();
-            alert("내용을 입력해주세요");
             return;
+        }else if(content.children.length > 0 && imgs.length === 0){
+            for(let e of content.children){
+                str += e.innerText.replace(/\s/g, "");
+            }
+            if(str === ''){
+                alert('내용을 입력해주세요');
+                e.preventDefault();
+                return;
+            }
         }
 
-        let imgs = document.querySelectorAll(".board_content img");
         let arr = [];
         imgs.forEach(e => {
             let uri = decodeURI(e.src);
@@ -258,13 +267,6 @@
         document.querySelector("#files_name").value = arr;
         document.querySelector("#temp_files").value = tempImg;
 
-    })
-
-    document.querySelector(".boardList").addEventListener("click",(e)=>{
-        let check = confirm("페이지를 이동하면 작성한 글 내용이 저장되지 않습니다. 정말로 이동하시겠습니까?");
-        if (!check) {
-            e.preventDefault();
-        }
     })
 
 

@@ -115,5 +115,18 @@ public class SupportBoardController {
         return "redirect:/supportBoard/view?seq_board="+supportBoardDTO.getSeq_board();
     }
 
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "curPage", defaultValue = "1") int curPage,
+                         @RequestParam(value = "category") String category,
+                         @RequestParam(value = "search") String search, Model model) throws Exception {
+
+        Map<String, Object> map = supportBoardService.search(curPage, category, search);
+        map.put("category", category);
+        map.put("search", search);
+        model.addAttribute("map", map);
+
+        return "vol/vol_board_list";
+    }
+
 
 }

@@ -23,8 +23,8 @@ public class SupportBoardService implements SupportBoardDAO {
     }
 
     @Override
-    public int selectTotalCnt() throws Exception {
-        return supportBoardDAO.selectTotalCnt();
+    public int selectTotalCnt(String category, String search) throws Exception {
+        return supportBoardDAO.selectTotalCnt(category, search);
     }
 
     @Override
@@ -48,8 +48,13 @@ public class SupportBoardService implements SupportBoardDAO {
         return supportBoardDAO.update(volBoardDTO);
     }
 
+    @Override
+    public List<Map<String, Object>> search(int start, int end, String category, String search) throws Exception {
+        return supportBoardDAO.search(start, end, category, search);
+    }
+
     public Map<String, Object> selectList(int curPage) throws Exception {
-        int total = selectTotalCnt();
+        int total = selectTotalCnt(null, null);
         Map<String, Object> map = new HashMap<>();
         PagingVO pagingVO = new PagingVO(total, curPage, 12);
         List<Map<String, Object>> list = selectList(pagingVO.getStart(), pagingVO.getEnd());
@@ -59,4 +64,14 @@ public class SupportBoardService implements SupportBoardDAO {
         return map;
     }
 
+    public Map<String, Object> search(int curPage, String category, String search) throws Exception {
+        int total = supportBoardDAO.selectTotalCnt(category, search);
+        Map<String, Object> map = new HashMap<>();
+        PagingVO pagingVO = new PagingVO(total, curPage, 12);
+        List<Map<String, Object>> list = search(pagingVO.getStart(), pagingVO.getEnd(), category, search);
+        map.put("pagingVO", pagingVO);
+        map.put("list", list);
+
+        return map;
+    }
 }
