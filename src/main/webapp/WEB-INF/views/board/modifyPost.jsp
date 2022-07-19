@@ -218,6 +218,7 @@
     #writeBox{
         border: 1px solid lightgray;
         padding: 15px;
+        border-radius: 2px;
     }
 
     #cancleBtn{
@@ -231,22 +232,18 @@
     }
 </style>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col mt-3">
-                <p style="border: 1px solid black;">여긴 원래 네비바 들어올자리</p>
-            </div>
-        </div>
-    </div>
+    <div>
 
-    <div class="container mt-5">
-        <div class="row">
+        <!-- header -->
+		<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
+
+        <div class="row" style="margin: 0 10vw 0 10vw;">
             <div class="col"> <!-- 상단에 대분류 카테고리 이름 해놓은거 -->
                 <span id="categoryTitle"><i class="fa-solid fa-circle"></i><a href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&category_name=${etcMap.category_name}"> <strong>${etcMap.bigCategory}</strong> </a></span>
             </div>
         </div>
 
-        <div class="row mt-3" id="writeBox">
+        <div class="row mt-3 mb-5" id="writeBox" style="margin: 0 10vw 0 10vw;">
             <div class="col-12">
                 <!-- 안에 내용이 수정내용보내는 폼임 -->
                 <form method="post" action="/board/modifyBoard" id="modifyForm">
@@ -274,6 +271,8 @@
             </div>
         </div>
 
+        	<!-- footer -->
+	    <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         
     </div>
 </body>
