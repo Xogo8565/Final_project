@@ -5,13 +5,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">    
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">    
  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script> 
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>-->
+	
   <link href="${pageContext.request.contextPath}/resources/css/footer.css" rel="stylesheet" type="text/css">
     <title>footer</title>
 </head>
@@ -51,7 +52,7 @@
                 <!-- Modal header -->
                 <div class="modal-header">
                     <h4 class="modal-title">이용약관</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="btn-close" data-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
                 <div class="modal-body">
@@ -144,7 +145,8 @@
               <!-- Modal header -->
               <div class="modal-header">
                   <h4 class="modal-title">개인정보처리방침</h4>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                  <button type="button" class="btn-close" data-dismiss="modal"></button>
               </div>
               <!-- Modal body -->
               <div class="modal-body">
@@ -219,8 +221,8 @@ IP주소, 쿠키, MAC주소, 서비스 이용기록, 방문기록, 불량 이용
       </div>
   </div>
 
-<!--모달창 cdn-->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!--모달창 cdn
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

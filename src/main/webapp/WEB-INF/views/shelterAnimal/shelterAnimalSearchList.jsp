@@ -16,11 +16,14 @@
 	rel="stylesheet"
 	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 	crossorigin="anonymous">
+<!-- 폰트 -->
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,1,0" />
+<!-- Jquery -->
 <script src="https://code.jquery.com/jquery-3.6.0.js"
 	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
 	crossorigin="anonymous"></script>
+
 <title>유기동물 현황</title>
 </head>
 <style>
@@ -31,12 +34,7 @@
     font-style: normal;
 }
 body{
-    font-family: 'LeferiBaseType-RegularA';
-}
-.header {
-	height: 150px;
-	background-color: rgb(207, 185, 136);
-	color: rgb(207, 147, 111);
+    font-family: 'LeferiBaseType-RegularA' !important;
 }
 /* 축종탭 */
 .nav-tabs {
@@ -60,8 +58,12 @@ body{
 }
 
 /* 검색창 */
-.input-group {
+#inputDiv{
+	text-align: -webkit-right;
+}
+#inputGroup {
 	width: 20em;
+	margin-right: 20px;
 }
 #iconNote {
 	margin-top: 10px;
@@ -134,47 +136,51 @@ body{
 }
 </style>
 <body>
-	<div class="container">
-		<div class="header d-flex justify-content-center align-items-center">
-		<a class="btn m-2 btn-secondary" href="/shelterAnimal/toShelterAnimalList?curPage=1">DB</a>
-		<a class="btn m-2 btn-secondary" href="/shelterAnimal/toShelterAnimal?curPage=1">API</a></div>
-		<div class="col d-flex justify-content-center mt-5">
-			<h4>
-				<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
-				<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물 소식
-			</h4>
-		</div>
-		<div class="col mt-5">
-			<ul class="nav nav-tabs justify-content-center">
-				<li class="nav-item"><a class="nav-link active"
-					href="/shelterAnimal/toShelterAnimal?curPage=1">전체</a></li>
-				<li class="nav-item"><a class="nav-link linkAjax" id="dogList">개</a> <input
-					class="linkAjax d-none" type="text" value="417000">
-				</li>
-				<li class="nav-item"><a class="nav-link linkAjax" id="catList">고양이</a> <input
-					class="linkAjax d-none" type="text" value="422400">
-				</li>
-				<li class="nav-item"><a class="nav-link linkAjax" id="etcList">기타</a> <input
-					class="linkAjax d-none" type="text" value="429900">
-				</li>
-			</ul>
-			<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
-			<div class="row justify-content-end mt-5">
-				<div class="input-group mb-3">
-					<span class="input-group-text material-symbols-outlined" id="iconSearch">search</span> 
-					<input type="search" id="inputSearch" name="keyword" class="form-control" placeholder="검색" aria-describedby="btnSearch">
-					<button class="btn" type="submit" id="btnSearch">검색</button>
-				</div>
-				<input class="d-none" type="text" name="curPage" value="1">
+	<!-- header -->
+	<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
+	<div class="col d-flex justify-content-center mt-5">
+		<h4>
+			<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
+			<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물 소식
+		</h4>
+	</div>
+	<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
+		<div class="col mt-5" id="inputDiv">
+			<div class="input-group mb-3" id="inputGroup">
+				<span class="input-group-text material-symbols-outlined" id="iconSearch">search</span> 
+				<input type="search" id="inputSearch" name="keyword" class="form-control" placeholder="검색" aria-describedby="btnSearch">
+				<button class="btn" type="submit" id="btnSearch">검색</button>
 			</div>
-		</form>
+			<input class="d-none" type="text" name="curPage" value="1">
 		</div>
+	</form>
+	<div class="col mb-5">
+		<ul class="nav nav-tabs justify-content-center">
+			<li class="nav-item">
+				<a class="nav-link active" href="/shelterAnimal/toShelterAnimal?curPage=1">전체</a></li>
+			<li class="nav-item">
+				<a class="nav-link linkAjax" id="dogList">개</a> 
+				<input class="linkAjax d-none" type="text" value="417000">
+			</li>
+			<li class="nav-item">
+				<a class="nav-link linkAjax" id="catList">고양이</a> 
+				<input class="linkAjax d-none" type="text" value="422400">
+			</li>
+			<li class="nav-item">
+				<a class="nav-link linkAjax" id="etcList">기타</a> 
+				<input class="linkAjax d-none" type="text" value="429900">
+			</li>
+		</ul>
+		
+	</div>
+	<div class="container">
 		<%-- 목록 출력 --%>
 		<c:choose>
 			<c:when test="${empty list && not empty data}"></c:when>
 			<c:when test="${not empty list}"></c:when>
 			<c:otherwise>
 				<div class="col notFoundSpace mt-5 text-center">
+					<h1>!</h1>
 					<img src="/resources/images/comme-sm.png" id="notFoundImg">
 					<h3 class="mt-3">찾으시는 검색 결과가 없어요!</h3>
 				</div>
@@ -182,15 +188,13 @@ body{
 		</c:choose>
 		<c:choose>
 			<c:when test="${empty data}">
-				<div class="card-group justify-content-center">
+				<div class="card-group cardGroup justify-content-center">
 					<c:forEach items="${list}" var="item">
-						<a class="apiLink d-flex justify-content-center"
-							href="/shelterAnimal/toDetail?desertionNo=${item.desertionNo}&keyword=${keyword}&curPage=${pageNum}">
+						<a class="apiLink d-flex justify-content-center" href="/shelterAnimal/toDetail?desertionNo=${item.desertionNo}&keyword=${keyword}&curPage=${pageNum}">
 							<div class="card col-3 m-2" style="width: 18rem;">
 								<img src="${item.popfile}" class="cardImg">
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item" id="liPlace">발견장소 :
-										${item.orgNm}&nbsp;${item.happenPlace}</li>
+									<li class="list-group-item" id="liPlace">발견장소 : ${item.orgNm}&nbsp;${item.happenPlace}</li>
 									<li class="list-group-item" id="liKind">품종 : ${item.kindCd}</li>
 									<li class="list-group-item" id="liMark">특징 : ${item.specialMark}</li>
 									<li class="list-group-item" id="liDt">보호시작일 : ${item.happenDt}</li>
@@ -208,8 +212,7 @@ body{
 							<div class="card col-3 m-2" style="width: 18rem;">
 								<img src="${item.popfile}" class="cardImg">
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item" id="liPlace">발견장소 :
-										${item.orgNm}&nbsp;${item.happenPlace}</li>
+									<li class="list-group-item" id="liPlace">발견장소 : ${item.orgNm}&nbsp;${item.happenPlace}</li>
 									<li class="list-group-item" id="liKind">품종 : ${item.kindCd}</li>
 									<li class="list-group-item" id="liMark">특징 : ${item.specialMark}</li>
 									<li class="list-group-item" id="liDt">보호시작일 : ${item.happenDt}</li>
@@ -227,21 +230,22 @@ body{
 					<nav aria-label="Page navigation example">
 						<ul class="pagination justify-content-center mt-5">
 							<c:if test="${searchCurPage.needPrev eq true}">
-								<li class="page-item" id="navLeft"><a class="page-link"
-									href="/shelterAnimal/toSearch?keyword=${keyword}&curPage=${searchCurPage.startNavi-1}" aria-label="Previous">
-								<span aria-hidden="true">&laquo;</span>
-								</a></li>
+								<li class="page-item" id="navLeft">
+									<a class="page-link" href="/shelterAnimal/toSearch?keyword=${keyword}&curPage=${searchCurPage.startNavi-1}" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span></a>
+								</li>
 							</c:if>
 							<c:forEach var="pageNum" begin="${searchCurPage.startNavi}"
 								end="${searchCurPage.endNavi}" step="1">
-								<li class="page-item navCenter"><a class="page-link"
-									href="/shelterAnimal/toSearch?keyword=${keyword}&curPage=${pageNum}">${pageNum}</a></li>
+								<li class="page-item navCenter">
+									<a class="page-link" href="/shelterAnimal/toSearch?keyword=${keyword}&curPage=${pageNum}">${pageNum}</a>
+								</li>
 							</c:forEach>
 							<c:if test="${searchCurPage.needNext eq true}">
-								<li class="page-item" id="navRight"><a class="page-link"
-									href="/shelterAnimal/toSearch?keyword=${keyword}&curPage=${searchCurPage.endNavi+1}" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-								</a></li>
+								<li class="page-item" id="navRight">
+									<a class="page-link" href="/shelterAnimal/toSearch?keyword=${keyword}&curPage=${searchCurPage.endNavi+1}" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span></a>
+								</li>
 							</c:if>
 						</ul>
 					</nav>
@@ -252,21 +256,20 @@ body{
 					<nav aria-label="Page navigation example">
 						<ul class="pagination justify-content-center mt-5">
 							<c:if test="${curPageMap.needPrev eq true}">
-								<li class="page-item" id="navLeft"><a class="page-link"
-									href="/shelterAnimal/toShelterAnimalList?curPage=${curPageMap.startNavi-1}" aria-label="Previous"> 
-								<span aria-hidden="true">&laquo;</span>
-								</a></li>
+								<li class="page-item" id="navLeft">
+									<a class="page-link" href="/shelterAnimal/toShelterAnimalList?curPage=${curPageMap.startNavi-1}" aria-label="Previous"> 
+									<span aria-hidden="true">&laquo;</span></a>
+								</li>
 							</c:if>
-							<c:forEach var="pageNum" begin="${curPageMap.startNavi}"
-								end="${curPageMap.endNavi}" step="1">
-								<li class="page-item navCenter"><a class="page-link"
-									href="/shelterAnimal/toShelterAnimalList?curPage=${pageNum}">${pageNum}</a></li>
+							<c:forEach var="pageNum" begin="${curPageMap.startNavi}" end="${curPageMap.endNavi}" step="1">
+								<li class="page-item navCenter">
+									<a class="page-link" href="/shelterAnimal/toShelterAnimalList?curPage=${pageNum}">${pageNum}</a>
+								</li>
 							</c:forEach>
 							<c:if test="${curPageMap.needNext eq true}">
-								<li class="page-item" id="navRight"><a class="page-link"
-									href="/shelterAnimal/toShelterAnimalList?curPage=${curPageMap.endNavi+1}" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-								</a></li>
+								<li class="page-item" id="navRight"><a class="page-link" href="/shelterAnimal/toShelterAnimalList?curPage=${curPageMap.endNavi+1}" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span></a>
+								</li>
 							</c:if>
 						</ul>
 					</nav>
@@ -274,6 +277,8 @@ body{
 			</c:otherwise>
 		</c:choose>
 	</div>
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
 	<script>	
     	$(".nav-link").on("click", function(){ // 축종탭 이벤트
         	$(".nav-link").removeClass("active");
