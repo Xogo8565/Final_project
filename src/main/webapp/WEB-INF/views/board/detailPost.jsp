@@ -186,6 +186,10 @@
                 margin-right: 10px;
             }
 
+            #commentList{
+                margin: 0 10vw 0 10vw;
+            }
+
             
 
             #first, #last{
@@ -261,21 +265,25 @@
                 height: 60px;
             }
             
-
+            /*top버튼*/
+            #topBtn {
+                display: none;
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                z-index: 999;
+                cursor: pointer;
+            }
         </style>
 
         <body>
-            <div class="container">
-                <div class="row">
-                    <div class="col mt-3">
-                        <p style="border: 1px solid black;">여긴 원래 네비바 들어올자리</p>
-                    </div>
-                </div>
-            </div>
+            <div>
 
-            <div class="container mt-5">
+                <!-- header -->
+		        <jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
+
                 <div class="row mt-3">
-                    <div class="col"> <!-- 상단에 큰 분류 카테고리 이름이랑 소분류 카테고리 출력 -->
+                    <div class="col" style="margin: 0 10vw 0 10vw;"> <!-- 상단에 큰 분류 카테고리 이름이랑 소분류 카테고리 출력 -->
                         <span style="font-size: 17px;"><a id="head" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&category_name=${etcMap.category_name}" style="color: #555;"><strong>${etcMap.bigCategory}</strong> </a></span>
                         <span style="margin-left: 10px; padding: 0 10px 0 10px ;border-left: 1px solid lightgray; border-right: 1px solid lightgray;">
                             <a id="tap" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&small_category=${post.seq_category}&category_name=${etcMap.category_name}">
@@ -293,7 +301,7 @@
                 </div>
 
                 <div class="row mt-2" style="margin-left: 0px;">
-                    <div class="col postBar"> <!-- 글 제목이랑 시간 나타내기 -->
+                    <div class="col postBar" style="margin: 0 10vw 0 10vw;"> <!-- 글 제목이랑 시간 나타내기 -->
                         <span id="title"><strong><c:out value="${post.board_title}" /> </strong></span>
                         <span class="postInfo"><fmt:formatDate value="${post.written_date}" pattern="yyyy.MM.dd HH:mm"/></span>
                     </div>
@@ -301,7 +309,7 @@
                 </div>
 
                 <div class="row" style="margin-left: 0px;">
-                    <div class="col postBar2"> <!-- 조회 수랑 댓글 수 나타내기 -->
+                    <div class="col postBar2" style="margin: 0 10vw 0 10vw;"> <!-- 조회 수랑 댓글 수 나타내기 -->
                         <span style="font-size: 12px;">${post.writer_nickname}</span>
                         <span class="postInfo">댓글 <strong id="commentNum2">${post.cm_count}</strong>  </span>
                         <span class="postInfo">조회 수 <strong>${post.view_count}</strong> </span>
@@ -309,18 +317,18 @@
                 </div>
 
                 <div class="row mt-3 mb-5"> <!-- 게시물 내용 -->
-                    <div class="col" style="margin: 10px; font-size: 13px;">
+                    <div class="col" style="margin: 10px 10vw 10px 10vw; font-size: 13px;">
                         <c:out value="${post.board_content}" escapeXml="false" />
                     </div>
                 </div>
 
-                <div class="row mb-4 mt-5">
+                <div class="row mb-4 mt-5" style="margin: 0 10vw 0 10vw;">
                     <div class="col pb-3" style="text-align: center; border-bottom: 1px solid lightgray; margin: 0 12px 0 12px;">
                         <button type="button" id="listBtn">목록으로 </button>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="margin: 0 10vw 0 10vw;">
                     <div class="col"> <!-- 게시물 수정 삭제 버튼 -->
                         <button type="button" id="removePost"><i class="fa-solid fa-xmark"></i>  삭제</button>
                         <button type="button" id="modifyPost"><i class="fa-solid fa-pen"></i>  수정</button>
@@ -328,15 +336,15 @@
                 </div>
 
                 <c:if test="${post.cm_count != 0}" > <!-- 댓글이 존재할 시 나오는 댓글갯수 나타내는 박스 -->
-                    <div class="row mt-5" style="margin-left: 0px;">
-                        <div class="col" id="replyNumDiv">
+                    <div class="row mt-5" >
+                        <div class="col" id="replyNumDiv" style="margin: 0 10vw 0 10vw;">
                             댓글 <strong id="commentNum">${post.cm_count}</strong>  개
                         </div>
                     </div>
                 </c:if>
                 
                 <!-- 게시물에 해당하는 댓글이 존재할시 뿌려줌 -->
-                <div class="row" id="commentList" style="margin: 0;">
+                <div class="row" id="commentList">
                     <c:choose> 
                         <c:when test="${post.cm_count == 0}">
                         </c:when>
@@ -356,7 +364,7 @@
 
                 
                 <!-- 댓글 쓰는거 인풋 히든으로 글번호 보내줌 -->
-                <div class="row mt-4" id="replyWrite">
+                <div class="row mt-4" id="replyWrite" style="margin: 0 10vw 0 10vw;">
                     <div class="col-12"> 
                         <label for="comment_content" style="margin-bottom: 10px;">
                             <strong>댓글 쓰기</strong> </label>
@@ -367,13 +375,13 @@
                             <textarea name="comment_content" id="comment_content" placeholder="회원 간의 불편함을 주는 댓글은 자제해주시고 따뜻한 댓글 부탁드립니다."></textarea>
                         </form>
                     </div>
-                    <div class="col-1"  style="padding: 0; text-align: center;">
+                    <div class="col-1"  style="text-align: center;">
                         <button type="button" id="registerBtn">등록</button>
                     </div>
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col"> <!-- 이하부터는 board.jsp 그대로 출력하는거라서 주석 안달음 -->
+                    <div class="col" style="margin: 0 10vw 0 10vw;"> <!-- 이하부터는 board.jsp 그대로 출력하는거라서 주석 안달음 -->
                         <h5 style="display: inline-block; font-size: 17;"><a id="head" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&category_name=${etcMap.category_name}"><strong>${etcMap.bigCategory}</strong> </a></h5>
                         <ul style="display: inline-block; margin-bottom: 0;">
                             <li><a class="category" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&small_category=${etcMap.category}&category_name=${etcMap.category_name}" id="${etcMap.category}">공지</a></li>
@@ -384,65 +392,70 @@
                     </div>
                 </div>
 
-                <table class="table table-hover">
-                    <thead style="border-top: 1px solid lightgray;">
-                        <tr>
-                            <th scope="col" class="col-2">탭</th>
-                            <th scope="col" class="col-6">제목</th>
-                            <th scope="col" class="col-2">글쓴이</th>
-                            <th scope="col" class="col-1">날짜</th>
-                            <th scope="col" class="col-1">조회</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <c:choose>
-                           <c:when test="${empty list}">
-                            <tr>
-                                <td colspan="5">등록 된 글이 없습니다.</td>
-                            </tr>
-                           </c:when>
-                           
-                           <c:otherwise>
-                                <c:forEach items="${list}" var="dto">
+                <div class="row">
+                    <div class="col" style="margin: 0 10vw 0 10vw;">
+                        <table class="table table-hover">
+                            <thead style="border-top: 1px solid lightgray;">
+                                <tr>
+                                    <th scope="col" class="col-2">탭</th>
+                                    <th scope="col" class="col-6">제목</th>
+                                    <th scope="col" class="col-2">글쓴이</th>
+                                    <th scope="col" class="col-1">날짜</th>
+                                    <th scope="col" class="col-1">조회</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+        
+                                <c:choose>
+                                   <c:when test="${empty list}">
                                     <tr>
-                                        <td><a class="tap" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&small_category=${dto.SEQ_CATEGORY}&category_name=${etcMap.category_name}">
-                                            <c:choose>
-                                               <c:when test="${dto.SEQ_CATEGORY eq etcMap.category}">
-                                                공지 
-                                               </c:when>
-                                            
-                                               <c:otherwise>
-                                                ${dto.CATEGORY_NAME}
-                                               </c:otherwise>
-                                            </c:choose> </a></td>
-                                            <c:choose>
-                                                <c:when test="${etcMap.search_type eq null}">
-                                                        <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
-                                                        <c:if test="${dto.CM_COUNT != 0}" >
-                                                        <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
-                                                        </c:if> </td>
-                                                </c:when>
-                                                <c:otherwise>
-                                                        <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
-                                                        <c:if test="${dto.CM_COUNT != 0}" >
-                                                        <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
-                                                        </c:if> </td>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        <td>${dto.WRITER_NICKNAME}</td>
-                                        <td><fmt:formatDate value="${dto.WRITTEN_DATE}" pattern="yyyy.MM.dd"/></td>
-                                        <td>${dto.VIEW_COUNT}</td>
+                                        <td colspan="5">등록 된 글이 없습니다.</td>
                                     </tr>
-                                </c:forEach>
-                           </c:otherwise>
-                        </c:choose>
-                        
-                    </tbody>
-                </table>
+                                   </c:when>
+                                   
+                                   <c:otherwise>
+                                        <c:forEach items="${list}" var="dto">
+                                            <tr>
+                                                <td><a class="tap" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&small_category=${dto.SEQ_CATEGORY}&category_name=${etcMap.category_name}">
+                                                    <c:choose>
+                                                       <c:when test="${dto.SEQ_CATEGORY eq etcMap.category}">
+                                                        공지 
+                                                       </c:when>
+                                                    
+                                                       <c:otherwise>
+                                                        ${dto.CATEGORY_NAME}
+                                                       </c:otherwise>
+                                                    </c:choose> </a></td>
+                                                    <c:choose>
+                                                        <c:when test="${etcMap.search_type eq null}">
+                                                                <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
+                                                                <c:if test="${dto.CM_COUNT != 0}" >
+                                                                <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
+                                                                </c:if> </td>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                                <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
+                                                                <c:if test="${dto.CM_COUNT != 0}" >
+                                                                <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
+                                                                </c:if> </td>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                <td>${dto.WRITER_NICKNAME}</td>
+                                                <td><fmt:formatDate value="${dto.WRITTEN_DATE}" pattern="yyyy.MM.dd"/></td>
+                                                <td>${dto.VIEW_COUNT}</td>
+                                            </tr>
+                                        </c:forEach>
+                                   </c:otherwise>
+                                </c:choose>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
 
                 <div class="row">
-                    <div class="col">
+                    <div class="col" style="margin: 0 10vw 0 10vw;">
                         <form action="/board/toBoard" method="get">
                         <span class="searchBox">
                             <input type="text" name="search_keyword" id="search" value="${etcMap.search_keyword}">
@@ -460,7 +473,7 @@
                         </c:if>
                         </form>
                     </div>
-                    <div class="col">
+                    <div class="col" style="margin: 0 10vw 0 10vw;">
                         <button type="button" id="write" ><i class="fa-solid fa-pen"></i>  쓰기</button>
                     </div>
                 </div>
@@ -503,7 +516,14 @@
                         </c:choose>
                     </div>
                 </div>
+
+                	<!-- footer -->
+	            <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
+
             </div>
+
+            <!--top버튼-->
+	        <a id="topBtn"><img src="/resources/mainImg/DIEALRIGHT.png"></a>
         </body>
         <script>
             const active = document.getElementsByClassName('paging');
@@ -672,7 +692,7 @@
                         const now = new Date();
 
                         if(!document.getElementById('replyNumDiv')){
-                            let div1 = $('<div>').attr('class', 'row mt-5').css('margin-left', '0px');
+                            let div1 = $('<div>').attr('class', 'row mt-5').css('margin', '0 10vw 0 10vw');
                             let div2 = $('<div>').attr({
                             class: 'col',
                             id: 'replyNumDiv'
@@ -759,7 +779,18 @@
             }
 
 
+            document.getElementById('topBtn').addEventListener('click', function(){
+			window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+		    })
 
+            // Top 버튼
+                $(window).scroll(function(){
+                if ($(this).scrollTop() > 300){
+                    $("#topBtn").show();
+                } else{
+                    $("#topBtn").hide();
+                }
+            });
 
 
             

@@ -16,7 +16,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="/resources/js/summernote/summernote-lite.js"></script>
 <script src="/resources/js/summernote/lang/summernote-ko-KR.js"></script>
-
 <link rel="stylesheet" href="/resources/css/summernote/summernote-lite.css">
 <title><c:out value="${etcMap.bigCategory}" /> - Comme</title>
 <script>
@@ -221,6 +220,7 @@
     #writeBox{
         border: 1px solid lightgray;
         padding: 15px;
+        border-radius: 2px;
     }
 
     #cancleBtn{
@@ -234,22 +234,19 @@
     }
 </style>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col mt-3">
-                <p style="border: 1px solid black;">여긴 원래 네비바 들어올자리</p>
-            </div>
-        </div>
-    </div>
 
-    <div class="container mt-5">
-        <div class="row">
+    <div>
+
+        <!-- header -->
+		<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
+
+        <div class="row mt-5" style="margin: 0 10vw 0 10vw;">
             <div class="col">
                 <span id="categoryTitle"><i class="fa-solid fa-circle"></i><a href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&category_name=${etcMap.category_name}"> <strong>${etcMap.bigCategory}</strong> </a></span>
             </div>
         </div>
 
-        <div class="row mt-3" id="writeBox">
+        <div class="row mt-3 mb-5" id="writeBox" style="margin: 0 10vw 0 10vw;">
             <div class="col-12">
                 <form method="post" action="/board/registerBoard" id="registerForm">
                     <span id="categoryBox">
@@ -275,6 +272,8 @@
             </div>
         </div>
 
+        <!-- footer -->
+	    <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         
     </div>
 </body>
