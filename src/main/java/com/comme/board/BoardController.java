@@ -48,8 +48,7 @@ public class BoardController {
 		System.out.println("small_category : " + small_category); // 소분류 카테고리
 		System.out.println("search_keyword : " + search_keyword); // 검색 키워드
 		System.out.println("search_type : " + search_type); // 검색 타입
-		
-		seq_category = "2"; // 원래는 게시판 들어올 때 물고 들어 올 예정 추후에 수정 필요함
+		System.out.println("category_name : " + category_name); // 카테고리네임
 		
 		if(small_category == null) { // 처음 그냥 대분류카테고리 누르고 들어오면 당연히 값이 없음
 			small_category = "0";
@@ -90,6 +89,8 @@ public class BoardController {
 		model.addAttribute("paging", vo); // 페이징정보
 		model.addAttribute("categoryMenu", service.selectCategory(Integer.parseInt(seq_category))); // 대분류 카테고리에 속한 소분류 카테고리의 목록
 		model.addAttribute("etcMap", etcMap); // 잡다한거 넘기는거
+		model.addAttribute("mainCategory", service.mainCategory()); // 상단바 카테고리
+        model.addAttribute("inquiry", service.inquiryCategory()); // 상단바 문의 들어가기
 		return "board/board";
 	}
 	
@@ -107,6 +108,8 @@ public class BoardController {
 		model.addAttribute("paging", vo);
 		  model.addAttribute("etcMap", etcMap);
 		  model.addAttribute("categoryMenu", service.selectCategory(Integer.parseInt(seq_category))); // 대분류에 속해 있는 소분류 카테고리들
+		  model.addAttribute("mainCategory", service.mainCategory()); // 상단바 카테고리
+	      model.addAttribute("inquiry", service.inquiryCategory()); // 상단바 문의 들어가기
 		  return "board/board_write";
 	}
 	
@@ -126,6 +129,9 @@ public class BoardController {
 	  model.addAttribute("etcMap", etcMap);
 	  model.addAttribute("categoryMenu", service.selectCategory(Integer.parseInt(seq_category))); // 대분류에 속해 있는 소분류 카테고리들
 	  model.addAttribute("dto", service.selectByModify(Integer.parseInt(seq_board))); // 수정할 게시물의 기존 정보
+	  model.addAttribute("mainCategory", service.mainCategory()); // 상단바 카테고리
+      model.addAttribute("inquiry", service.inquiryCategory()); // 상단바 문의 들어가기
+	  
 	  return "board/modifyPost";
 	}
 	
@@ -236,9 +242,9 @@ public class BoardController {
 		
 		int total = 0;
 		if(search_keyword == null) {
-			total = service.countBoard(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, "id2");
+			total = service.countBoard(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, "id");
 		}else {
-			total = service.countBySearch(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, "id2" ,search_type, search_keyword);
+			total = service.countBySearch(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, "id" ,search_type, search_keyword);
 		}
 		
 		System.out.println(total);
@@ -273,6 +279,8 @@ public class BoardController {
 		model.addAttribute("post", service.detailPost(Integer.parseInt(seq_board))); // 게시판 글 뿌려주기 사실상 이거만 다른거임
 		model.addAttribute("comment", service.selectComment(Integer.parseInt(seq_board))); // 댓글목록 뿌려주기
 		model.addAttribute("etcMap", etcMap); // 검색타입,검색어,대분류카테고리,소분류카테고리 저장소
+		model.addAttribute("mainCategory", service.mainCategory()); // 상단바 카테고리
+        model.addAttribute("inquiry", service.inquiryCategory()); // 상단바 문의 들어가기
 		return "board/detailPost";
 	}
 	

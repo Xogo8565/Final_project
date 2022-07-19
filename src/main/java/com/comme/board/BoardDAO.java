@@ -43,6 +43,10 @@ public interface BoardDAO {
 	
 	void updateBoard(BoardDTO dto);
 	
+	List<CategoryDTO> mainCategory();
+	
+	CategoryDTO inquiryCategory();
+	
 	
 	
 }
