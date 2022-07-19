@@ -47,16 +47,21 @@
                         <h1>Sign In</h1>
                     </div>
                 </div>
+                
                 <div class="row">
                     <div class="col">
                         <hr id="hr">
                     </div>
                 </div>
+                
             </div>
+            
+            
+            <form id="signupForm" action="/member/signupGeneral" method="post">
             <div class="bodyContent">
-
                 <div class="row d-flex justify-content-center">
                     <div class="col-9">
+                    
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="name">
@@ -65,9 +70,14 @@
                                 </label>        
                             </div>
                             <div class="col-9">
-                                <input type="text" class="form-control" id="name" name="name">
+                                <input type="text" class="form-control" id="name" name="member_name">
                             </div>
                         </div>
+                        <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
+                        	<div class="col-3"></div>
+                        	<div class="col-9"><span id="checkName"></span></div>
+                        </div>
+                        
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="id">
@@ -76,12 +86,17 @@
                                 </label>        
                             </div>
                             <div class="col-7">
-                                <input type="text" class="form-control" id="id" name="id">
+                                <input type="text" class="form-control" id="id" name="member_id">
                             </div>
                             <div class="col-2">
-                                <button type="button" class="btn btn-primary">중복확인</button>
+                                <button type="button" id="idCheckBtn" class="btn btn-primary">중복확인</button>
                             </div>
                         </div>
+                        <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
+                        	<div class="col-3"></div>
+                        	<div class="col-9"><span id="checkId"></span></div>
+                        </div>
+
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="pw">
@@ -90,9 +105,14 @@
                                 </label>        
                             </div>
                             <div class="col-9">
-                                <input type="text" class="form-control" id="pw" name="pw">
+                                <input type="password" class="form-control" id="pw" name="member_pw">
                             </div>
                         </div>
+                        <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
+                        	<div class="col-3"></div>
+                        	<div class="col-9"><span id="checkPw"></span></div>
+                        </div>
+
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="pw2">
@@ -101,9 +121,10 @@
                                 </label>        
                             </div>
                             <div class="col-9">
-                                <input type="text" class="form-control" id="pw2">
+                                <input type="password" class="form-control" id="pw2">
                             </div>
                         </div>
+
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="nickname">
@@ -112,9 +133,14 @@
                                 </label>        
                             </div>
                             <div class="col-9">
-                                <input type="text" class="form-control" id="nickname" name="nickname">
+                                <input type="text" class="form-control" id="nickname" name="member_nickname">
                             </div>
                         </div>
+                        <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
+                        	<div class="col-3"></div>
+                        	<div class="col-9"><span id="checkNickname"></span></div>
+                        </div>
+
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="phone">
@@ -139,8 +165,14 @@
                                         <input type="number" id="phone3" class="form-control" maxlength="4" oninput="maxLengthCheck(this)">
                                     </div>
                                 </div>
+                                <div class="row">
+                                	<div class="col d-none">
+                                		<input type="text" id="phone" name="member_phone"> <!-- 폰번호 합쳐주는곳 -->
+                                	</div>
+                                </div>
                             </div>
                         </div>
+                        
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="email">
@@ -149,18 +181,26 @@
                                 </label>        
                             </div>
                             <div class="col-9">
-                                <input type="text" class="form-control" id="email" name="email">
+                                <input type="text" class="form-control" id="email" name="member_email">
                             </div>
                         </div>
+                        <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
+                        	<div class="col-3"></div>
+                        	<div class="col-9"><span id="checkEmail"></span></div>
+                        </div>
+
+
                         <div class="row">
                             <div class="col d-flex justify-content-center">
-                                <button class="btn btn-secondary" id="btn-cancel">취소</button>
-                                <button class="btn btn-primary" id="btn-signup">회원가입</button>
+                                <button type="button" class="btn btn-secondary" id="btn-cancel">취소</button>
+                                <button type="button" class="btn btn-primary" id="btn-signup">회원가입</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            </form>
+            
         </div>
     
         <div class="footer">
@@ -175,6 +215,152 @@
             object.value = object.value.slice(0, object.maxLength);
         }    
     }
+    
+    
+
+	// 이름 조건 밑에 뜨게
+	$("#name").focus(function(){
+		$("#checkName").html("한글 및 영문으로 2~6자 이내로 작성해주세요.");
+		$("#checkName").css("color", "green");
+	});
+	$("#name").blur(function(){
+		$("#checkName").html("");
+	});
+	
+	
+	// 아이디 조건 밑에 뜨게
+	$("#id").focus(function(){
+		if($("#checkId").html() !== "사용가능한 아이디 입니다."){
+			$("#checkId").html("소문자와 숫자로 5~12자 이내로 작성해주세요.");
+    		$("#checkId").css("color", "green");
+    		$("#id").blur(function(){
+	    		$("#checkId").html("");
+	    	});
+		}
+	});
+
+
+	// 아이디 중복 검사
+	$("#idCheckBtn").on("click", function(){
+		// 아이디 유효성 검사
+		let regexId = /^[a-z0-9]{5,12}$/;
+		if(!regexId.test($("#id").val())){
+			$("#checkId").html("형식에 맞지않는 아이디 입니다. 다시 입력해주세요.");
+			$("#checkId").css("color", "red");
+			$("#id").val("");
+			return;
+		}
+		// ajax로 중복값 검사
+		$.ajax({
+			url: "/member/idCheck"
+			, type: "post"
+			, data: {id: $("#id").val()}
+			, dataType: "text"
+			, success: function(data){
+				console.log(data);
+				if(data === "nope"){
+					$("#checkId").html("이미 사용중인 아이디 입니다.");
+					$("#checkId").css("color", "red");
+					$("#id").val("");
+				}else if(data === "ok"){
+					$("#checkId").html("사용가능한 아이디 입니다.");
+					$("#checkId").css("color", "green");
+				}
+			}
+			, error: function(e){
+				console.log(e);
+			}
+		})
+	});
+	
+	
+	// 닉네임 조건 밑에 뜨게
+	$("#nickname").focus(function(){
+		$("#checkNickname").html("대소문자, 한글, 숫자를 이용해서 3~6자 이내로 작성해 주세요.");
+		$("#checkNickname").css("color", "green");
+	});
+	$("#nickname").blur(function(){
+		$("#checkNickname").html("");
+	});
+	
+	
+	// 비밀번호 조건 밑에 뜨게
+	$("#pw").focus(function(){
+		$("#checkPw").html("대소문자, 숫자, 특수문자(~!@#$)를 이용해서 6~12자 이내로 작성해 주세요.");
+		$("#checkPw").css("color", "green");
+		
+	});
+	$("#pw").blur(function(){
+		$("#checkPw").html("");
+	});
+	
+	
+	
+
+	// 취소 버튼을 눌렀을때
+	$("#btn-cancel").on("click", function(){
+		location.href="/member/toSignupPage";
+	});
+	
+	// 회원가입 버튼을 눌렀을때
+	$("#btn-signup").on("click", function(){
+		let regexName = /[a-zA-Z가-힣]{2,6}$/;
+		let regexId = /^[a-z0-9]{5,12}$/;
+		let regexNickname = /^[a-zA-z0-9ㄱ-흫]{2,6}$/;
+		let regexPw = /^[a-zA-z0-9~!@#$]{6,12}$/;
+		let regexEmail = /^[a-zA-z0-9][\w]+@[a-zA-z]+\.(com|net|co\.kr|or\.kr)$/;
+		let regexPhone = /^[0-9]{11}$/;
+		
+		// phone번호 합쳐주는 작업
+		// select박스에서 선택된 값을 가져오는 방법
+		//console.log($("#phone1 option:selected").val());
+		let phone = $("#phone1 option:selected").val() + $("#phone2").val() + $("#phone3").val();
+		console.log(phone);
+		$("#phone").val(phone);
+		
+		if($("#name").val() === ""){
+			alert("이름을 입력해주세요.");
+			$("#name").focus();
+			return;
+		}else if(!regexName.test($("#name").val())){
+			alert("이름은 한글 및 영문으로 2~10자 이내로 작성해주세요.");
+			$("#name").focus();
+			return;
+		}else if(!regexId.test($("#id").val())){
+			alert("아이디는 영어소문자와 숫자로 5~12자 이내로 작성해주세요.");
+			$("#id").focus();
+			return;
+		}else if($("#checkId").html() !== "사용가능한 아이디 입니다."){
+			alert("아이디 중복확인을 해주세요.");
+			$("#id").focus();
+			return;
+		}else if(!regexNickname.test($("#nickname").val())){
+			alert("닉네임은 영어대소문자 또는 한글 또는 숫자를 이용해서 2 ~ 6자 이내로 작성해 주세요.");
+			$("#nickname").focus();
+			return;
+		}else if(!regexPw.test($("#pw").val())){
+			alert("비밀번호는 영어 대소문자 숫자 특수문자(~!@#$)를 이용해서 6~12자 이내로 작성해 주세요.");
+			$("#pw").focus();
+			return;
+		}else if($("#pw").val() !== $("#pw2").val()){
+			alert("비밀번호와 비밀번호 확인창에 있는 값이 일치하지 않습니다.");
+			return;
+		}else if(!regexPhone.test(phone)){ // 숫자 데이터에 대한 별도의 형변환이 필요없음
+			alert("휴대폰번호는 각각 4자리의 숫자로 입력해주세요.");
+			return;
+		}else if(!regexEmail.test($("#email").val())){
+			alert("이메일 형식에 맞게 입력해주세요.");
+			$("#email").focus();
+			return;
+		}
+		
+		$("#signupForm").submit();
+		alert("회원가입이 완료되었습니다.");
+		
+	});
+	
+	
+	
 </script>
 </body>
 </html>

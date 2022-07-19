@@ -138,7 +138,9 @@
         </div>
     </div>
 <script>
-
+	$("#btnLogin").on("click", function(){
+		
+	})
 	
 
 </script>

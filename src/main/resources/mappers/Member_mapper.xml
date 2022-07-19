@@ -4,4 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.member.MemberDAO">
 
+	<select id="idCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM MEMBER WHERE MEMBER_ID = #{id}
+	</select>
+	
+	
+	<insert id="signupGeneral" parameterType="com.comme.member.MemberDTO">
+		insert into member values(#{member_id}, #{member_pw}, #{member_nickname}, #{member_email}, #{member_name}, #{member_phone}, 'N', '1', '')
+	</insert>
+	
+	
 </mapper>

@@ -206,9 +206,9 @@
                 <div class="signupIcons">
                     <div class="row">
                         <div class="col d-flex justify-content-center">
-                            <a href="">
+                            <a href="javascript:toGeneralSignup()">
                                 <div class="row">
-                                    <img class="signupIconsPic" src="/resources/member/general_signup.png" style="width : 200px;">
+                                    <img class="signupIconsPic" src="/resources/images/member/general_signup.png" style="width : 200px;">
                                 </div>
                                 <div class="row d-flex justify-content-center">
                                     일반회원
@@ -216,9 +216,9 @@
                             </a>
                         </div>
                         <div class="col d-flex justify-content-center">
-                            <a href="">
+                            <a href="javascript:toBusinessSignup()">
                                 <div class="row">
-                                    <img class="signupIconsPic" src="/resources/member/business_signup.png" style="width: 200px;">
+                                    <img class="signupIconsPic" src="/resources/images/member/business_signup.png" style="width: 200px;">
                                 </div>
                                 <div class="row d-flex justify-content-center">
                                     기관회원
@@ -266,6 +266,29 @@
             }
         });
     });
+    
+    
+    /* 기관회원가입으로 이동 */
+    function toBusinessSignup(){
+    	if($("#checkAll").is(":checked")) {
+    		location.href = "/member/toSignup_business";
+    	} else {
+    		alert("약관에 모두 동의해주세요.");
+    		return;
+    	}
+    }
+    
+    
+    /* 일반회원가입으로 이동 */
+    function toGeneralSignup(){
+    	if($("#checkAll").is(":checked")) {
+    		location.href = "/member/toSingup_general";
+    	} else {
+    		alert("약관에 모두 동의해주세요.");
+    		return;
+    	}
+    }
+
 
 
 
