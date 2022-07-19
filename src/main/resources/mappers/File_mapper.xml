@@ -8,6 +8,10 @@
 	<select id="selectByMissing" parameterType="int" resultType="FileDTO">
 		select * from missing_file where = #{seq_board}
 	</select>
+	<insert id="insert_missFile" parameterType="FileDTO">
+		insert into missing_file values(seq_file.nextval, #{seq_board}, #{files_upload}, #{files_ori}, #{files_sys})
+	</insert>
+	
     <insert id="insert_volFile">
         insert into ${table_name}
         values (seq_file.nextval , #{fileDTO.seq_board}, #{fileDTO.files_upload}, #{fileDTO.files_ori}, #{fileDTO.files_sys})

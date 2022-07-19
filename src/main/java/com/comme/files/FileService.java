@@ -49,6 +49,7 @@ public class FileService implements FileDAO {
 
         return jsonObject;
     }
+   
 
     // 테이블 저장
     public void insert_file(int seq_board, List<String> files_name, String[] temp_files, String path, String table_name) throws Exception {
@@ -123,6 +124,9 @@ public class FileService implements FileDAO {
         }
 
     }
+    public void insert_missFile(FileDTO dto){
+		fileDAO.insertFile(dto);
+	}
 
     public void insertFile(FileDTO dto){
 		fileDAO.insertFile(dto);

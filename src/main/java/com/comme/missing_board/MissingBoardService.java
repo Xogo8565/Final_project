@@ -1,5 +1,7 @@
 package com.comme.missing_board;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +10,10 @@ import com.comme.files.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.comme.board.BoardDTO;
 import com.comme.comment.CommentDAO;
 import com.comme.files.FileDAO;
+import com.comme.files.FileDTO;
 
 @Service
 public class MissingBoardService {
@@ -48,6 +52,25 @@ public class MissingBoardService {
 	public void insert(MissingBoardDTO dto) throws Exception{
 		dao.insert(dto);
 	}
+	public void boardFileCheck(List<Map<String, Object>> jsonData, String[] imgSrc, MissingBoardDTO dto) throws Exception{
+		for(int i = 0; i < jsonData.size()-1; i++) { // 파일정보만 비교할거라 마지막인자는 폼의 값이므로 -1해서 돌려줌
+			if(Arrays.asList(imgSrc).contains("/mbFile/" + (String)jsonData.get(i).get("files_sys"))) { // 게시물 등록할때 남아잇는 파일정보랑 모든 파일정보랑 비교해서 일치하면 트루 아니면 펄스
+				FileDTO fileDTO = new FileDTO(0, dto.getSeq_board(), (String)jsonData.get(i).get("files_upload"), (String)jsonData.get(i).get("files_ori"), (String)jsonData.get(i).get("files_sys"));
+				fileService.insert_missFile(fileDTO); // 남아잇는 파일정보랑 넘겨받은 파일정보랑 동일해서 db에 저장해줌
+			}else { // 이 말은 즉 사용자가 이미지를 쓸려고 썸머노트에 올렷다가 지운경우임 그래서 최종에는 없지만 파일이 업로드된거
+				File garbageFile = new File(
+						(String)jsonData.get(i).get("files_upload") + File.separatorChar  + (String)jsonData.get(i).get("files_sys")); // 그 i번째 파일을 파일객체 선언함
+				if(garbageFile.exists()) { // 디렉토리에 남아잇는지 체크 사실 무조건 잇는게 정배긴함
+					garbageFile.delete(); // 삭제
+				}
+			}
+		}
+	}
+	// 글 수정
+	public void modify(MissingBoardDTO dto) throws Exception{
+		dao.modify(dto);
+	}
+	
 	// 글 삭제
 	public void delete(int seq_board) throws Exception{
 		dao.delete(seq_board);

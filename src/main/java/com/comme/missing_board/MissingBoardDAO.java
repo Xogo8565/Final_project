@@ -22,6 +22,9 @@ public interface MissingBoardDAO {
 	//글 작성
 	void insert(MissingBoardDTO dto);
 	
+	// 글 수정
+	void modify(MissingBoardDTO dto);
+	
 	// 글 삭제
 	void delete(int seq_board);
 }
