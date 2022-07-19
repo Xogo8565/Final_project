@@ -294,8 +294,8 @@
     <div class="header">HEADER</div>
     <div class="content">
         <div class="content_header">
-            <h3>봉사 게시판</h3>
-            <form action="/volBoard/search" id="search_form">
+            <h3>후원 게시판</h3>
+            <form action="/supportBoard/search" id="search_form">
                 <label for="category"></label>
                 <select name="category" id="category">
                     <option value="board_title">제목</option>

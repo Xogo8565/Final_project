@@ -24,6 +24,8 @@ public class VolSubmitController {
         volSubmitDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
         volSubmitDTO.setWriter_name(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_name());
 
+
+
         //중복 검사
         if(volSubmitService.count(volSubmitDTO)>0) return "duplicated";
 

@@ -206,43 +206,58 @@
                     <input type="hidden" name="seq_board" id="seq_board" value="${map.seq_board}">
                     <input type="hidden" name="temp_files[]" id="temp_files">
                     <input type="hidden" name="files_name" id="files_name">
-                    <input type="text" name="board_title" id="board_title" placeholder="제목을 입력해주세요" value="${map.board_title}">
+                    <input type="text" name="board_title" id="board_title" placeholder="제목을 입력해주세요" value="${map.board_title}"
+                           required
+                           oninvalid="this.setCustomValidity('제목을 입력해주세요')"
+                           oninput="this.setCustomValidity('')">
                 </div>
                 <div class="board_content">
                     <label for="vol_deadLine"><span>봉사 날짜를 입력해주세요</span>
-                        <input type="date" name="vol_deadLine" id="vol_deadLine" placeholder="봉사 날짜를 입력해주세요" value="${map.vol_deadLine}">
+                        <input type="date" name="vol_deadLine" id="vol_deadLine" placeholder="봉사 날짜를 입력해주세요" value="${map.vol_deadLine}"
+                               required
+                               oninvalid="this.setCustomValidity('봉사활동 날짜를 입력해주세요')"
+                               oninput="this.setCustomValidity('')">
                     </label>
                     <label for="vol_count"><span>봉사 인원을 입력해주세요</span>
-                        <input type="number" name="vol_count" id="vol_count" placeholder="봉사 최대 정원을 입력해주세요" value="${map.vol_count}">
+                        <input type="number" name="vol_count" id="vol_count" placeholder="봉사 최대 정원을 입력해주세요" value="${map.vol_count}"
+                               required
+                               min = '1'
+                               oninvalid="this.setCustomValidity('봉사활동 인원을 입력해주세요')"
+                               oninput="this.setCustomValidity('')">
                     </label>
                     <textarea name="board_content" id="board_content"></textarea>
                     <button type="submit" id="write">작성</button>
                 </div>
             </form>
             <ul class="boardList">
-                <c:if test="${list.size()==2}}">
-                    <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                        <li>
-                            <button>Up</button>
-                            <span>${list.get(0).board_title}</span></li>
-                    </a>
-                    <a href="/volBoard/view?seq_board=${list.get(1).seq_board}">
-                        <li>
-                            <button>down</button>
-                            <span>${list.get(1).board_title}</span></li>
-                    </a>
-                </c:if>
-                <c:if test="${list.size()==1}">
-                    <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                        <li>
-                            <button>Up</button>
-                            <span>${list.get(0).board_title}</span></li>
-                    </a>
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
+                <c:if test="${not empty list}">
+                    <c:choose>
+                        <c:when test="${list.size()==1}">
+                            <a disabled>
+                                <li>
+                                    <button>UP</button>
+                                    <span>등록된 게시글이 없습니다</span></li>
+                            </a>
+                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
+                                <li>
+                                    <button>DOWN</button>
+                                    <span><c:out value="${list.get(0).board_title}"/></span></li>
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+
+                            <a href="/volBoard/view?seq_board=${list.get(1).seq_board}">
+                                <li>
+                                    <button>UP</button>
+                                    <span><c:out value="${list.get(1).board_title}"/></span></li>
+                            </a>
+                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
+                                <li>
+                                    <button>DOWN</button>
+                                    <span><c:out value="${list.get(0).board_title}"/></span></li>
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
                 </c:if>
                 <c:if test="${empty list}">
                     <a disabled>
@@ -280,32 +295,11 @@
     document.querySelector("#vol_deadLine").min = date;
 
     document.querySelector("#form").addEventListener("submit",(e) => {
-        const title = document.querySelector("#board_title")
-        const vol_deadLine = document.querySelector("#vol_deadLine");
-        const vol_count = document.querySelector("#vol_count");
-        const content = document.querySelector(".board_content .note-editable>p");
+        const content = document.querySelector(".board_content");
+        const content2 = document.querySelector(".board_content .note-editable *");
 
 
-        if(title.value===""){
-            e.preventDefault();
-            alert("제목을 입력하세요");
-            title.focus();
-            return;
-        }
-        if(vol_deadLine.value===""){
-            e.preventDefault();
-            alert("봉사 활동 날짜를 입력하세요");
-            vol_deadLine.focus();
-            return;
-        }
-        if(vol_count.value===""){
-            e.preventDefault();
-            alert("봉사 활동 인원을 입력하세요");
-            vol_count.focus();
-            return;
-        }
-
-        if (content.innerHTML === "<br>") {
+        if (content.innerHTML === ""||content2.innerHTML==="<br>"||content2.innerHTML==="") {
             e.preventDefault();
             alert("내용을 입력해주세요");
             return;
@@ -320,6 +314,13 @@
         document.querySelector("#files_name").value = arr;
         document.querySelector("#temp_files").value = tempImg;
 
+    })
+
+    document.querySelector(".boardList").addEventListener("click",(e)=>{
+        let check = confirm("페이지를 이동하면 작성한 글 내용이 저장되지 않습니다. 정말로 이동하시겠습니까?");
+        if (!check) {
+            e.preventDefault();
+        }
     })
 
 

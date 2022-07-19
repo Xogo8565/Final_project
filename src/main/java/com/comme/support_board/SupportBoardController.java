@@ -37,10 +37,7 @@ public class SupportBoardController {
     }
 
     @GetMapping("/write")
-    public String write(Model model) throws Exception {
-        int total = supportBoardService.selectTotalCnt();
-        List<Map<String, Object>> list = supportBoardService.selectList(total-1,total);
-        model.addAttribute("list", list);
+    public String write() throws Exception {
         return "support/support_board_write";
     }
 
@@ -51,7 +48,6 @@ public class SupportBoardController {
         supportBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
         supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
         supportBoardDTO.setMember_brn(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_brn());
-        logger.info(supportBoardDTO.toString());
 
         int seq_board = supportBoardService.insert(supportBoardDTO);
 
@@ -93,20 +89,31 @@ public class SupportBoardController {
     public String toModify(int seq_board, Model model) throws Exception {
 
         Map<String, Object> map = supportBoardService.select(seq_board);
-        String title = (String) map.get("board_title");
-        int idx = title.indexOf("] ");
-        String area = title.substring(1, idx);
-        String board_title = title.substring(idx+1);
-        map.put("area", area);
-        map.put("board_title", board_title);
+        String support_bank = (String) map.get("support_bank");
+        int idx = support_bank.indexOf(" ");
+        String bank = support_bank.substring(1, idx);
+        support_bank = support_bank.substring(idx+1);
+        map.put("bank", bank);
+        map.put("support_bank", support_bank);
         model.addAttribute("map", map);
 
-
-
-        int total = supportBoardService.selectTotalCnt();
-        List<Map<String, Object>> list = supportBoardService.selectList(total-1,total);
-        model.addAttribute("list", list);
-
-        return "vol/vol_board_modify";
+        return "support/support_board_modify";
     }
+
+    @PostMapping("/modify")
+    public String modify(SupportBoardDTO supportBoardDTO, String bank_category, @RequestParam(value = "files_name") List<String> files_name, @RequestParam(value = "temp_files[]") String[] temp_files) throws Exception {
+        String path = httpSession.getServletContext().getRealPath("files/support");
+        supportBoardDTO.setSupport_bank(bank_category+ " " +supportBoardDTO.getSupport_bank());
+        supportBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+
+        supportBoardService.update(supportBoardDTO);
+        logger.info("support:  " +supportBoardDTO);
+        fileService.update_file(supportBoardDTO.getSeq_board(), files_name, temp_files, path,"support_files");
+
+
+        return "redirect:/supportBoard/view?seq_board="+supportBoardDTO.getSeq_board();
+    }
+
+
 }

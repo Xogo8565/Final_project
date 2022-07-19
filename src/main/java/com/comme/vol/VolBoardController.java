@@ -42,9 +42,6 @@ public class VolBoardController {
 
     @GetMapping("/write")
     public String write(Model model) throws Exception {
-        int total = volBoardService.selectTotalCnt();
-        List<Map<String, Object>> list = volBoardService.selectList(total-1,total);
-        model.addAttribute("list", list);
         return "vol/vol_board_write";
     }
 
@@ -69,8 +66,7 @@ public class VolBoardController {
         Map<String, Object> map = volBoardService.select(seq_board);
         model.addAttribute("map", map);
 
-        int total = volBoardService.selectTotalCnt();
-        List<Map<String, Object>> list = volBoardService.selectList(total-1,total);
+        List<Map<String, Object>> list = volBoardService.selectListByDistance(seq_board);
         model.addAttribute("list", list);
 
         return "vol/vol_board_detail";
@@ -86,7 +82,7 @@ public class VolBoardController {
     }
 
     @GetMapping("/modify")
-    public String toModify(int seq_board, Model model) throws Exception {
+    public String toModify(@RequestParam("seq_board") int seq_board, Model model) throws Exception {
 
         Map<String, Object> map = volBoardService.select(seq_board);
         String title = (String) map.get("board_title");
@@ -97,10 +93,7 @@ public class VolBoardController {
         map.put("board_title", board_title);
         model.addAttribute("map", map);
 
-
-
-        int total = volBoardService.selectTotalCnt();
-        List<Map<String, Object>> list = volBoardService.selectList(total-1,total);
+        List<Map<String, Object>> list = volBoardService.selectListByDistance(seq_board);
         model.addAttribute("list", list);
 
         return "vol/vol_board_modify";
@@ -108,33 +101,28 @@ public class VolBoardController {
 
     @PostMapping("/modify")
     public String modify(VolBoardDTO volBoardDTO, String area, @RequestParam(value = "files_name") List<String> files_name, @RequestParam(value = "temp_files[]") String[] temp_files) throws Exception {
-        String path = httpSession.getServletContext().getRealPath("");
+        String path = httpSession.getServletContext().getRealPath("files/vol");
         volBoardDTO.setBoard_title("["+area+"]"+volBoardDTO.getBoard_title());
         volBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
         volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
 
         volBoardService.update(volBoardDTO);
-        fileService.update_volFile(volBoardDTO.getSeq_board(), files_name, temp_files, path,"vol_files");
+        fileService.update_file(volBoardDTO.getSeq_board(), files_name, temp_files, path,"vol_files");
 
-
-        return "redirect:/volBoard/lists";
+        return "redirect:/volBoard/view?seq_board="+volBoardDTO.getSeq_board();
     }
 
     @GetMapping("/search")
     public String search(@RequestParam(value = "curPage", defaultValue = "1") int curPage,
                            @RequestParam(value = "category") String category,
                            @RequestParam(value = "search") String search, Model model) throws Exception {
-        int start = 1;
-        int end = 12;
 
         logger.info("검색요청  category" + category + "/    val" + search);
-        Map<String, Object> map = new HashMap<>();
-        map.put("start", start);
-        map.put("end", end);
+        Map<String, Object> map = volBoardService.search(curPage, category, search);
         map.put("category", category);
         map.put("search", search);
-        List<Map<String, Object>> list = volBoardService.search(map);
-        model.addAttribute("list", list);
+        model.addAttribute("map", map);
+
         return "vol/vol_board_list";
     }
 }

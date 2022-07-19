@@ -225,28 +225,29 @@
                 <c:if test="${not empty list}">
                     <c:choose>
                         <c:when test="${list.size()==1}">
-                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                                <li>
-                                    <button>Up</button>
-                                    <span><c:out value="${list.get(0).board_title}"/></span></li>
-                            </a>
                             <a disabled>
                                 <li>
-                                    <button>down</button>
+                                    <button>UP</button>
                                     <span>등록된 게시글이 없습니다</span></li>
+                            </a>
+                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
+                                <li>
+                                    <button>DOWN</button>
+                                    <span><c:out value="${list.get(0).board_title}"/></span></li>
                             </a>
                         </c:when>
                         <c:otherwise>
-                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                                <li>
-                                    <button>Up</button>
-                                    <span><c:out value="${list.get(0).board_title}"/></span></li>
-                            </a>
+
                             <a href="/volBoard/view?seq_board=${list.get(1).seq_board}">
                                 <li>
-                                    <button>down</button>
+                                    <button>UP</button>
                                     <span><c:out value="${list.get(1).board_title}"/></span></li>
                             </a>
+                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
+                            <li>
+                                <button>DOWN</button>
+                                <span><c:out value="${list.get(0).board_title}"/></span></li>
+                        </a>
                         </c:otherwise>
                     </c:choose>
                 </c:if>
@@ -275,7 +276,9 @@
 
     // 봉사활동 유효기간 확인
     let deadLine = "${map.vol_deadLine}";
+
     deadLine = deadLine.substring(0,11);
+
     let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000);
     deadLine = new Date(deadLine);
 
@@ -296,7 +299,7 @@
             form.action = "/volBoard/delete";
 
             let input = document.createElement("input");
-            input.value = ${map.seq_board};
+            input.value = '${map.seq_board}';
             input.type = "hidden";
             input.name = "seq_board";
 
@@ -338,6 +341,7 @@
             data: {seq_board: document.querySelector("#seq_board").value, writer_phone: document.querySelector("#tel").value},
             success: function (data) {
                 if(data==='success') {
+                    alert("봉사활동에 등록했습니다.");
                     getCurrentVolCount();
                 } else if (data === "duplicated"){
                     alert("이미 봉사활동에 등록하셨습니다.")

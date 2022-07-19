@@ -19,6 +19,10 @@
     <select id="selectTotalCnt" resultType="int">
         select count(*)
         from VOL_BOARD
+        <if test="category!=null">
+            where ${category} like '%'|| #{search}||'%'
+        </if>
+
     </select>
 
     <select id="selectList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="int">
@@ -33,6 +37,19 @@
               where rownum <= #{end}) b
         where num >= #{start}
         ]]>
+    </select>
+    <select id="selectListByDistance" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="int">
+        select * from (
+        select b.*, rownum as num from (
+        select a.*,
+        (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = a.SEQ_BOARD) as cur,
+        (abs(SEQ_BOARD - #{seq_board})) as distance
+        from VOL_BOARD a
+        order by 11
+        ) b
+        where rownum <![CDATA[<=]]> 3
+        )
+        where num <![CDATA[>=]]> 2
     </select>
 
     <insert id="insert" parameterType="VolBoardDTO">

@@ -40,14 +40,14 @@
             height: 10%;
         }
 
-        button {
+        .title button {
             background-color: white;
             border: 1px solid var(--sil);
             color: var(--sil);
             border-radius: 5px;
         }
 
-        button:hover {
+        .title button:hover {
             background-color: var(--sil);
             color: white;
         }
@@ -101,7 +101,7 @@
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
-            font-size: 1.6em;
+            font-size: 1.2em;
         }
 
         .order_number {
@@ -128,6 +128,7 @@
         .order_number2 button {
             background-color: var(--sil);
             border: none;
+            color: white;
         }
 
         .order_number2 #order_number {
@@ -301,7 +302,11 @@
             document.body.append(form);
             form.submit();
         }
-    })
+    });
+
+    document.querySelector("#modify").addEventListener("click",()=>{
+        location.href = "/supportBoard/modify?seq_board=${map.seq_board}"
+    });
 
 </script>
 </body>

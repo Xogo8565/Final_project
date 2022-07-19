@@ -88,5 +88,19 @@ public class SupportBoardDTO {
     public void setMember_brn(String member_brn) {
         this.member_brn = member_brn;
     }
+
+    @Override
+    public String toString() {
+        return "SupportBoardDTO{" +
+                "seq_board=" + seq_board +
+                ", board_title='" + board_title + '\'' +
+                ", board_content='" + board_content + '\'' +
+                ", member_id='" + member_id + '\'' +
+                ", writer_nickname='" + writer_nickname + '\'' +
+                ", written_date='" + written_date + '\'' +
+                ", support_bank='" + support_bank + '\'' +
+                ", member_brn='" + member_brn + '\'' +
+                '}';
+    }
 }
 
