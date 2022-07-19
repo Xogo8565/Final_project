@@ -130,7 +130,24 @@
 				</c:if>
 			</div>
 			<div class="row">
-				<div class="col d-flex justify-content-center">페이징</div>
+				<div class="col d-flex justify-content-center">
+					<c:choose>
+                           <c:when test="${list.size() > 0}">
+                                <c:if test="${paging.startPage!=1}" >
+                                    <a id="first" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}">첫 페이지</a>
+                                    <a class="arrow left" href="/board/toBoard?nowPage=${paging.startPage-1}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}">&lt;</a>
+                                </c:if>	
+                                <c:forEach begin="${paging.startPage}" end="${paging.endPage }" var="p" step="1">
+                                    <a href="/board/toBoard?nowPage=${p}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}"
+                                        class="paging">${p}</a>
+                                </c:forEach>
+                                <c:if test="${paging.endPage != paging.lastPage}">
+                                    <a class="arrow right" href="/board/toBoard?nowPage=${paging.endPage+1}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}">&gt;</a>
+                                    <a id="last" href="/board/toBoard?nowPage=${paging.lastPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}">끝 페이지</a>
+                                </c:if>
+                           </c:when>
+                        </c:choose>
+				</div>
 				<div class="col d-none d-sm-flex justify-content-end">
 					<button type="button" class="btn btn-outline-warning writeBtn">글쓰기</button>
 				</div>

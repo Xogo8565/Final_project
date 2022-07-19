@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.comme.utils.PagingVO;
 import com.google.gson.JsonObject;
 
 @RequestMapping("/miss")
@@ -29,8 +30,20 @@ public class MissingBoardController {
 	private HttpSession session;
 
 	@RequestMapping(value = "/toMissing") // 실종게시판 요청
-	public String toMissing(Model model) throws Exception {
+	public String toMissing(PagingVO vo, Model model, @RequestParam(value="nowPage", required=false)String nowPage
+			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) throws Exception {
+		int total = 0;
+		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
+			nowPage = "1";
+			cntPerPage = "20";
+		} else if (nowPage == null) {
+			nowPage = "1";
+		} else if (cntPerPage == null) { 
+			cntPerPage = "20";
+		}
+		vo = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
 		List<MissingBoardDTO> list = service.selectAllMissing();
+		model.addAttribute("paging", vo); // 페이징정보
 		model.addAttribute("list", list);
 		return "/board/missing_board";
 	}
