@@ -29,12 +29,31 @@
 }
 
 .mainP-nav li {
-	font-size: larger;
+	font-size: 1.1vw;
 	margin-top: 30px;
 	list-style: none;
 	float: left;
-	margin-right: 50px;
+	margin-right: 3vw;
 	color: black;
+}
+
+#drop-ul{
+	display: flex;
+	list-style: none;
+	margin-left: 11vw;
+	font-size: 0.8vw;
+}
+
+#drop-ul a{
+	color: black;
+}
+
+#community{
+	cursor: pointer;
+}
+
+.drop-li{
+	margin-right: 20px;
 }
 
 /*비반응형 인스타그램,유튜브,유저 로고*/

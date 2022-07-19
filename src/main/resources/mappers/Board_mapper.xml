@@ -251,4 +251,25 @@
 	<update id="updateComment" parameterType="CommentDTO">
 		update board_comment set comment_content = #{comment_content} where seq_comment = #{seq_comment}
 	</update>
+	
+	<!-- 메인페이지 게시판 목록 띄워주기 -->
+	<select id="mainCategory" resultType="CategoryDTO">
+		select * 
+		from 
+		    category 
+		    where category_pk is null 
+		    and category_name not like '%'|| '문의' ||'%'
+		    and category_name not like '%'|| '봉사' ||'%'
+		    and category_name not like '%'|| '후원' ||'%'
+		    and category_name not like '%'|| '유기' ||'%'
+		    and category_name not like '%'|| '실종' ||'%'
+	</select>
+	
+	<!-- 문의 카테고리 정보 가져오기 -->
+	<select id="inquiryCategory" resultType="CategoryDTO">
+		SELECT * 
+		FROM CATEGORY
+		    WHERE CATEGORY_NAME LIKE '%'|| '문의' ||'%'
+		    AND CATEGORY_PK IS NULL
+	</select>
 </mapper>
