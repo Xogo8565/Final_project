@@ -88,4 +88,25 @@ public class SupportBoardController {
 
         return "redirect:/volBoard/lists";
     }
+
+    @GetMapping("/modify")
+    public String toModify(int seq_board, Model model) throws Exception {
+
+        Map<String, Object> map = supportBoardService.select(seq_board);
+        String title = (String) map.get("board_title");
+        int idx = title.indexOf("] ");
+        String area = title.substring(1, idx);
+        String board_title = title.substring(idx+1);
+        map.put("area", area);
+        map.put("board_title", board_title);
+        model.addAttribute("map", map);
+
+
+
+        int total = supportBoardService.selectTotalCnt();
+        List<Map<String, Object>> list = supportBoardService.selectList(total-1,total);
+        model.addAttribute("list", list);
+
+        return "vol/vol_board_modify";
+    }
 }

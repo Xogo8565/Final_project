@@ -18,22 +18,10 @@
             box-sizing: border-box;
         }
 
-        .container {
-            width: 100%;
-            min-height: 1500px;
-            height: 1px;
-        }
-
-        .header {
-            height: 10%;
-        }
-
-        .footer {
-            height: 10%;
-        }
-
         .content {
-            height: 80%;
+            margin-top : 50px;
+            height: 1px;
+            min-height: 1200px;
         }
 
         .content_header {
@@ -42,6 +30,7 @@
 
         .content_footer {
             height: 4%;
+            margin-bottom: 50px;
         }
 
         .boardList {
@@ -315,87 +304,87 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">HEADER</div>
-    <div class="content">
-        <div class="content_header">
-            <h3>봉사 게시판</h3>
-            <form action="/volBoard/search" id="search_form">
-                <label for="category"></label>
-                <select name="category" id="category">
-                    <option value="board_title">제목</option>
-                    <option value="board_content">내용</option>
-                    <option value="writer_nickname">작성자</option>
-                </select>
-                <div class="search">
-                    <button type="submit" id="searchBtn"><img src="/resources/images/search.png"></button>
-                    <label for="search">
-                        <input type="text" id="search" name="search" required
-                               oninvalid="this.setCustomValidity('검색어를 입력해주세요')"
-                               oninput="this.setCustomValidity('')">
-                    </label>
-                </div>
-            </form>
-        </div>
-        <div class="boardList">
-            <c:forEach items="${map.list}" var="i">
-                <a href="/volBoard/view?seq_board=${i.seq_board}">
-                    <div class="board">
-                        <div class="board_img">
-                            <c:if test="${empty i.files_sys}">
-                                <img src="/resources/images/No_image.png">
-                            </c:if>
-                            <c:if test="${not empty i.files_sys}">
-                                <img src="/files/vol/${i.files_sys}">
-                            </c:if>
-                        </div>
-                        <div class="board_content">
-                            <span class="title"><c:out value="${i.board_title}"/></span>
-                            <span class="count"><c:out value="${i.cur}"/> / <c:out value="${i.vol_count}"/> </span>
-                            <span class="nickname"><c:out value="${i.writer_nickname}"/></span>
-                            <span class="vol_date"><fmt:formatDate value="${i.deadLine}"
-                                                                   pattern="yyyy-MM-dd HH:mm:ss"/> </span>
-                            <span class="written_date"><fmt:formatDate value="${i.written_date}"
-                                                                       pattern="yyyy-MM-dd HH:mm:ss"/></span>
-                        </div>
-                    </div>
-                </a>
-            </c:forEach>
-        </div>
-        <div class="content_footer">
-            <div class="page">
-                <c:if test="${map.pagingVO.startPage!=1}">
-                    <a id="first"
-                       href="/volBoard/lists?curPage=1">첫
-                        페이지</a>
-                    <a class="arrow left"
-                       href="/volBoard/lists?curPage=${map.pagingVO.startPage-1}">&lt;</a>
-                </c:if>
-                <c:forEach begin="${map.pagingVO.startPage}" end="${map.pagingVO.endPage }" var="p" step="1">
-                    <a href="/volBoard/lists?curPage=${p}">${p}</a>
-                </c:forEach>
-                <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
-                    <a class="arrow right"
-                       href="/volBoard/lists?curPage=${map.pagingVO.endPage+1}">&lt></a>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
 
-                    <a id="last"
-                       href="/volBoard/lists?curPage=${map.pagingVO.lastPage}">끝페이지</a>
-                </c:if>
+<div class="content">
+    <div class="content_header">
+        <h3>봉사 게시판</h3>
+        <form action="/volBoard/search" id="search_form">
+            <label for="category"></label>
+            <select name="category" id="category">
+                <option value="board_title">제목</option>
+                <option value="board_content">내용</option>
+                <option value="writer_nickname">작성자</option>
+            </select>
+            <div class="search">
+                <button type="submit" id="searchBtn"><img src="/resources/images/search.png"></button>
+                <label for="search">
+                    <input type="text" id="search" name="search" required
+                           oninvalid="this.setCustomValidity('검색어를 입력해주세요')"
+                           oninput="this.setCustomValidity('')">
+                </label>
             </div>
-            <button type="button" id="write">글쓰기</button>
-        </div>
+        </form>
     </div>
-    <div class="footer">FOOTER</div>
+    <div class="boardList">
+        <c:forEach items="${map.list}" var="i">
+            <a href="/volBoard/view?seq_board=${i.seq_board}">
+                <div class="board">
+                    <div class="board_img">
+                        <c:if test="${empty i.files_sys}">
+                            <img src="/resources/images/No_image.png">
+                        </c:if>
+                        <c:if test="${not empty i.files_sys}">
+                            <img src="/files/vol/${i.files_sys}">
+                        </c:if>
+                    </div>
+                    <div class="board_content">
+                        <span class="title"><c:out value="${i.board_title}"/></span>
+                        <span class="count"><c:out value="${i.cur}"/> / <c:out value="${i.vol_count}"/> </span>
+                        <span class="nickname"><c:out value="${i.writer_nickname}"/></span>
+                        <span class="vol_date"><fmt:formatDate value="${i.deadLine}"
+                                                               pattern="yyyy-MM-dd HH:mm:ss"/> </span>
+                        <span class="written_date"><fmt:formatDate value="${i.written_date}"
+                                                                   pattern="yyyy-MM-dd HH:mm:ss"/></span>
+                    </div>
+                </div>
+            </a>
+        </c:forEach>
+    </div>
+    <div class="content_footer">
+        <div class="page">
+            <c:if test="${map.pagingVO.startPage!=1}">
+                <a id="first"
+                   href="/volBoard/lists?curPage=1">첫
+                    페이지</a>
+                <a class="arrow left"
+                   href="/volBoard/lists?curPage=${map.pagingVO.startPage-1}">&lt;</a>
+            </c:if>
+            <c:forEach begin="${map.pagingVO.startPage}" end="${map.pagingVO.endPage }" var="p" step="1">
+                <a href="/volBoard/lists?curPage=${p}">${p}</a>
+            </c:forEach>
+            <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
+                <a class="arrow right"
+                   href="/volBoard/lists?curPage=${map.pagingVO.endPage+1}">&lt></a>
+
+                <a id="last"
+                   href="/volBoard/lists?curPage=${map.pagingVO.lastPage}">끝페이지</a>
+            </c:if>
+        </div>
+        <button type="button" id="write">글쓰기</button>
+    </div>
 </div>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
+
 </body>
 <script>
     // pagination css 안 먹어서 스크립트로 해둘게요
     let page = document.querySelectorAll(".page a");
-    page.forEach(target=>{
+    page.forEach(target => {
         target.style.color = "#999";
         target.style.textDecoration = "none"
     })
-    page.forEach(target=>addEventListener('hover',()=>{
+    page.forEach(target => addEventListener('hover', () => {
         target.style.color = "#555";
         target.style.backgroundColor = "#f9f9f9";
         target.style.textDecoration = "none"
