@@ -134,26 +134,25 @@
                 height: 28px;
             }
 
-            
-
-            
+            /*top버튼*/
+            #topBtn {
+                display: none;
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                z-index: 999;
+                cursor: pointer;
+            }
 
         </style>
 
         <body>
-            <div class="container">
-                <div class="row">
-                    <div class="col mt-3">
-                        <p style="border: 1px solid black;">여긴 원래 네비바 들어올자리</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container mt-5">
+            <div>
                 
+                <jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
 
                 <div class="row mt-5">
-                    <div class="col">
+                    <div class="col" style="padding: 0 10vw 0 10vw;">
                         <h5 style="display: inline-block; font-size: 17;"><a id="head" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&category_name=${etcMap.category_name}"><strong>${etcMap.bigCategory}</strong> </a></h5>
                         <ul style="display: inline-block; margin-bottom: 0;">
                             <li><a class="category" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&small_category=${etcMap.category}&category_name=${etcMap.category_name}" id="${etcMap.category}">공지</a></li>
@@ -166,66 +165,71 @@
                 </div>
 
                 <!-- 게시물 뿌려주기 -->
-                <table class="table table-hover">
-                    <thead style="border-top: 1px solid lightgray;">
-                        <tr>
-                            <th scope="col" class="col-2">탭</th>
-                            <th scope="col" class="col-6">제목</th>
-                            <th scope="col" class="col-2">글쓴이</th>
-                            <th scope="col" class="col-1">날짜</th>
-                            <th scope="col" class="col-1">조회</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:choose>
-                           <c:when test="${empty list}">
-                            <tr>
-                                <td colspan="5">등록 된 글이 없습니다.</td>
-                            </tr>
-                           </c:when>
-                        
-                           <c:otherwise>
-                                <c:forEach items="${list}" var="dto">
+                <div class="row">
+                    <div class="col" style="padding: 0 10vw 0 10vw;">
+                        <table class="table table-hover">
+                            <thead style="border-top: 1px solid lightgray;">
+                                <tr>
+                                    <th scope="col" class="col-2">탭</th>
+                                    <th scope="col" class="col-6">제목</th>
+                                    <th scope="col" class="col-2">글쓴이</th>
+                                    <th scope="col" class="col-1">날짜</th>
+                                    <th scope="col" class="col-1">조회</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:choose>
+                                   <c:when test="${empty list}">
                                     <tr>
-                                        <td><a class="tap" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&small_category=${dto.SEQ_CATEGORY}&category_name=${etcMap.category_name}"> <!-- 카테고리 번호에 따라서 탭 뿌려주기 대분류는 공지로 변환 -->
-                                            <c:choose>
-                                               <c:when test="${dto.SEQ_CATEGORY eq etcMap.category}">
-                                                공지
-                                               </c:when>
-                                            
-                                               <c:otherwise>
-                                                ${dto.CATEGORY_NAME}
-                                               </c:otherwise>
-                                            </c:choose> </a></td>
-                                            <!-- 검색어가 존재하는지에 대한 여부에 따라 타이틀에 넘겨주는 정보를 달리함 이렇게 안하고 편하게 갈 수 잇엇을거 같은데 실수한듯 돌이키기는 좀 그럼 -->
-                                            <c:choose> 
-                                                <c:when test="${etcMap.search_type eq null}">
-                                                        <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
-                                                        <c:if test="${dto.CM_COUNT != 0}" > <!-- 댓글 수 체크해서 0개 보다 많을 때만 게시물 옆에 추가해줌 -->
-                                                        <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
-                                                        </c:if> </td>
-                                                </c:when>
-                                                <c:otherwise>
-                                                        <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
-                                                        <c:if test="${dto.CM_COUNT != 0}" >
-                                                        <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
-                                                        </c:if> </td>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        <td>${dto.WRITER_NICKNAME}</td>
-                                        <td><fmt:formatDate value="${dto.WRITTEN_DATE}" pattern="yyyy.MM.dd"/></td>
-                                        <td>${dto.VIEW_COUNT}</td>
+                                        <td colspan="5">등록 된 글이 없습니다.</td>
                                     </tr>
-                                </c:forEach>
-                           </c:otherwise>
-                        </c:choose>
-                        
-                    </tbody>
-                </table>
+                                   </c:when>
+                                
+                                   <c:otherwise>
+                                        <c:forEach items="${list}" var="dto">
+                                            <tr>
+                                                <td><a class="tap" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&small_category=${dto.SEQ_CATEGORY}&category_name=${etcMap.category_name}"> <!-- 카테고리 번호에 따라서 탭 뿌려주기 대분류는 공지로 변환 -->
+                                                    <c:choose>
+                                                       <c:when test="${dto.SEQ_CATEGORY eq etcMap.category}">
+                                                        공지
+                                                       </c:when>
+                                                    
+                                                       <c:otherwise>
+                                                        ${dto.CATEGORY_NAME}
+                                                       </c:otherwise>
+                                                    </c:choose> </a></td>
+                                                    <!-- 검색어가 존재하는지에 대한 여부에 따라 타이틀에 넘겨주는 정보를 달리함 이렇게 안하고 편하게 갈 수 잇엇을거 같은데 실수한듯 돌이키기는 좀 그럼 -->
+                                                    <c:choose> 
+                                                        <c:when test="${etcMap.search_type eq null}">
+                                                                <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
+                                                                <c:if test="${dto.CM_COUNT != 0}" > <!-- 댓글 수 체크해서 0개 보다 많을 때만 게시물 옆에 추가해줌 -->
+                                                                <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
+                                                                </c:if> </td>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                                <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
+                                                                <c:if test="${dto.CM_COUNT != 0}" >
+                                                                <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
+                                                                </c:if> </td>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                <td>${dto.WRITER_NICKNAME}</td>
+                                                <td><fmt:formatDate value="${dto.WRITTEN_DATE}" pattern="yyyy.MM.dd"/></td>
+                                                <td>${dto.VIEW_COUNT}</td>
+                                            </tr>
+                                        </c:forEach>
+                                   </c:otherwise>
+                                </c:choose>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
 
                 <div class="row">
                     <!-- 검색박스부분 -->
-                    <div class="col">
+                    <div class="col" style="padding: 0 10vw 0 10vw;">
                         <form action="/board/toBoard" method="get">
                         <span class="searchBox">
                             <input type="text" name="search_keyword" id="search" value="${etcMap.search_keyword}">
@@ -243,7 +247,7 @@
                         </c:if>
                         </form>
                     </div>
-                    <div class="col">
+                    <div class="col" style="padding: 0 10vw 0 10vw;">
                         <button type="button" id="write" ><i class="fa-solid fa-pen"></i>  쓰기</button>
                     </div>
                 </div>
@@ -283,7 +287,14 @@
                         </c:choose>
                     </div>
                 </div>
+
+                	<!-- footer -->
+	            <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
+
             </div>
+
+            <!--top버튼-->
+	        <a id="topBtn"><img src="/resources/mainImg/DIEALRIGHT.png"></a>
         </body>
         <script>
             const active = document.getElementsByClassName('paging');
@@ -320,6 +331,19 @@
                     location.href = "/board/toWrite?nowPage=${paging.nowPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}";
                 }
             })
+
+            document.getElementById('topBtn').addEventListener('click', function(){
+			window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+		    })
+
+            // Top 버튼
+                $(window).scroll(function(){
+                if ($(this).scrollTop() > 300){
+                    $("#topBtn").show();
+                } else{
+                    $("#topBtn").hide();
+                }
+            });
         </script>
 
         </html>
