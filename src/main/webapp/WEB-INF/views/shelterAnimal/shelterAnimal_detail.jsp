@@ -199,8 +199,8 @@
 			</c:otherwise>
 		</c:choose>
 		<div class="col d-flex justify-content-center mt-5 mb-5" id="btnSpace">
-            <button type="button" class="btn btn-secondary" id="btnList">목록으로</button>
-        	<button type="button" class="btn btn-secondary" id="btnBack">뒤로가기</button>
+            <button type="button" class="btn btn-secondary m-2" id="btnList">목록으로</button>
+        	<button type="button" class="btn btn-secondary m-2" id="btnBack">뒤로가기</button>
         </div>
     </div>
 	<!-- footer -->

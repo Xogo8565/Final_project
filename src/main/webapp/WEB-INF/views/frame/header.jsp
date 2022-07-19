@@ -5,10 +5,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<!-- <link rel="stylesheet"
+ <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
 	crossorigin="anonymous">
-<link
+<!--<link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet" />
 <script
@@ -21,10 +21,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
 <!-- <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"> -->
-=======
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
->>>>>>> d088888ec9010ccac1054c120d46e9ca95140598
 <link href="${pageContext.request.contextPath}/resources/css/header.css"
 	rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
