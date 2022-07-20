@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,10 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.comme.board.BoardDTO;
 import com.comme.files.FileDTO;
-import com.comme.utils.PagingVO;
+import com.comme.files.FileService;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @RequestMapping("/miss")
 @Controller
@@ -31,36 +33,28 @@ public class MissingBoardController {
 	private MissingBoardService service;
 	@Autowired
 	private HttpSession session;
+	@Autowired
+	private FileService fileService;
 
 	@RequestMapping(value = "/toMissing") // 실종게시판 요청 -> 이미지 꺼내기..?
-	public String toMissing(PagingVO vo, Model model, @RequestParam(value="nowPage", required=false)String nowPage
-			, @RequestParam(value="cntPerPage", required=false)String cntPerPage) throws Exception {
-		int total = 0;
-		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
-			nowPage = "1";
-			cntPerPage = "20";
-		} else if (nowPage == null) {
-			nowPage = "1";
-		} else if (cntPerPage == null) { 
-			cntPerPage = "20";
-		}
-		vo = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-		List<MissingBoardDTO> list = service.selectAllMissing();
-		
-		model.addAttribute("paging", vo); // 페이징정보
-		model.addAttribute("list", list);
+	public String toMissing(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
+		Map<String, Object> map = service.selectAllMissing(curPage);
+	    model.addAttribute("map", map);
 		return "/board/missing_board";
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/search") // 검색
-	public List<MissingBoardDTO> search(String category, String keywordMissing) throws Exception {
+	@RequestMapping(value = "/search", produces="application/json; charset=utf-8") // 검색
+	public Map<String, Object> search(@RequestParam(value = "category") String category, @RequestParam(value = "keywordMissing") String keywordMissing, 
+			@RequestParam(value = "curPage", defaultValue = "1") int curPage) throws Exception {
 		System.out.println("카테고리 : " + category);
 		System.out.println("키워드 : " + keywordMissing);
-
-		List<MissingBoardDTO> list = service.search(category, keywordMissing);
-		System.out.println(list.toString());
-		return list;
+		
+		Map<String, Object> map = service.search(curPage, category, keywordMissing);
+        map.put("category", category);
+        map.put("keywordMissing", keywordMissing);
+        System.out.println(map.get("list"));       
+        return map;
 	}
 
 	@RequestMapping(value = "/toWrite") // 글쓰기 페이지 요청
@@ -131,6 +125,8 @@ public class MissingBoardController {
 	public String delete(int seq_board) throws Exception{
 		System.out.println("글 삭제 번호 : " +seq_board);
 		service.delete(seq_board);
+		// 삭제하려는 글번호로 저장된 파일 db 데이터들 불러와서 싹 삭제함
+		fileService.delete_file(seq_board, "missing_file"); // 해당 글번호에 해당하는 모든 파일을 삭제할때 사용하는 메서드
 		return "redirect:/miss/toMissing";
 	}
 	@RequestMapping(value="/toModify") // 글 수정페이지 요청
@@ -139,9 +135,9 @@ public class MissingBoardController {
 		Map<String, Object> map = service.selectOne(seq_board);
 		model.addAttribute("map", map);
 		
-		return "/board/write_missing";
+		return "/board/modify_missing";
 	}
-	@RequestMapping(value="/modify") // 글 수정요청 -> 더해야함..^^
+	@RequestMapping(value="/modify") // 글 수정요청
 	public String modify(@RequestBody List<Map<String, Object>> jsonData) throws Exception{
 		System.out.println("jsonData : " + jsonData);
 		String[] imgSrc = ((String)jsonData.get(jsonData.size()-1).get("imgSrc[]")).split(",");
@@ -157,17 +153,17 @@ public class MissingBoardController {
 		String miss_area = (String)jsonData.get(jsonData.size()-1).get("miss_area"); // 실종지역
 		String miss_date = (String)jsonData.get(jsonData.size()-1).get("miss_date"); // 실종 날짜
 		String animal_kind = (String)jsonData.get(jsonData.size()-1).get("animal_kind"); // 동물 종류
-		
+		System.out.println(seq_board);
 		MissingBoardDTO dto = new MissingBoardDTO(Integer.parseInt(seq_board), board_title, board_content, "test", "test", null, miss_area, miss_date, animal_kind, 0); // 아이디랑 닉네임은 나중에 세션에서 따오기
 		service.modify(dto);
 		
 		service.boardFileCheck(jsonData, imgSrc, dto);
 		
 		// db에 인서트되서 해당 글번호에 존재하고 잇는 파일들에 대한 정보를 가져옴
-		List<FileDTO> deleteFiles = fileService.deleteFileList(Integer.parseInt(seq_board));
+		List<FileDTO> deleteFiles = fileService.get_fileList(Integer.parseInt(seq_board), "missing_board");
 		service.boardModifyFileCk(deleteFiles, imgSrc);
 		
-		return dto.getSeq_category();
+		return "success";
 	}
 
 	@RequestMapping(value = "/toDetail") // 상세보기 페이지 요청
@@ -178,6 +174,7 @@ public class MissingBoardController {
 		System.out.println(map.get("MissingBoardDTO"));
 		System.out.println(map.get("FileDTO"));
 		System.out.println(map.get("commentDTO"));
+		System.out.println(map.get("commentCount"));
 		model.addAttribute("map", map);
 		return "/board/missing_detail";
 	}

@@ -3,6 +3,26 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.missing_board.MissingBoardDAO">
+	 <resultMap id="MissingBoardResult" type="HashMap">
+	 	<result property="board_content" column="board_content" jdbcType="CLOB" javaType="java.lang.String"/>
+	 </resultMap>
+	
+	    <select id="selectTotalCnt" resultType="int">
+	        select count(*)
+	        from missing_board
+	        		<if test="category == 'title'">
+						where board_title like '%'||#{keywordMissing} || '%'
+					</if>
+					<if test="category == 'content'">
+						where board_content like '%' || #{keywordMissing} || '%'
+					</if>
+					<if test="category == 'writerNickname'">
+						where writer_nickname like '%' || #{keywordMissing} || '%'
+					</if>
+					<if test="category == 'area'">
+						where miss_area like '%' || #{keywordMissing} || '%'
+					</if>
+    	</select>
 	
 	<!-- 전체조회 -->
     <select id="selectAllMissing" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="int">
@@ -18,22 +38,31 @@
         where num >= #{start}
         ]]>
     </select>
+ 	<!-- 검색 요청 -->
+	<select id="searchMissing" parameterType="map" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap">
+	 select seq_board, board_title, member_id, writer_nickname, written_date, miss_area, miss_date, animal_kind,
+               (select nvl(count(SEQ_BOARD), 0) from missing_board where SEQ_BOARD = b.SEQ_BOARD) as cur,
+               (select FILES_SYS from missing_file where SEQ_BOARD = b.SEQ_BOARD and ROWNUM = 1)  as files_sys
+        from (select a.*, rownum as num
+              from (select *
+                    from missing_board where 
+                                      
+					<if test="category == 'title'">
+						board_title like '%'||#{keywordMissing} || '%'
+					</if>
+					<if test="category == 'content'">
+						board_content like '%' || #{keywordMissing} || '%'
+					</if>
+					<if test="category == 'writerNickname'">
+						writer_nickname like '%' || #{keywordMissing} || '%'
+					</if>
+					<if test="category == 'area'">
+						miss_area like '%' || #{keywordMissing} || '%'
+					</if>
+                                   order by 1 desc) a
+              where rownum <![CDATA[<=]]> #{end}) b
+        where num <![CDATA[>=]]> #{start}
 	
-	<!-- 검색 요청 -->
-	<select id="search" parameterType="map" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap">
-		select * from missing_board where
-		<if test="category == 'title'">
-			board_title like '%'||#{keywordMissing} || '%'
-		</if>
-		<if test="category == 'content'">
-			board_content like '%' || #{keywordMissing} || '%'
-		</if>
-		<if test="category == 'writerNickname'">
-			writer_nickname like '%' || #{keywordMissing} || '%'
-		</if>
-		<if test="category == 'area'">
-			miss_area like '%' || #{keywordMissing} || '%'
-		</if>
 	</select>
 	
 	<!-- 조회수 +1 -->

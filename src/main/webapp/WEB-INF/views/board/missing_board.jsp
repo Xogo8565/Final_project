@@ -52,7 +52,9 @@
 	margin-right: 15px;
 	cursor: pointer;
 }
-
+ .missingContent{
+ 	margin-top : 30px;
+ }
 /* 실종 카드 */
 .cardMissing {
 	margin: 10px;
@@ -60,6 +62,9 @@
 /*반응형 실종 목록 */
 .resMissing {
 	border-bottom: 1px solid black;
+}
+.missingContent img{
+	width : 100%;
 }
 </style>
 </head>
@@ -94,28 +99,40 @@
 				</div>
 			</div>
 			<div class="row missingContent">
-				<c:if test="${list.size() == 0}">
+				<c:if test="${map.list.size() == 0}">
 					<div class="col d-flex justify-content-center">
 						<p><strong>실종 동물이 없습니다.</strong></p>
 					</div>
 				</c:if>
-				<c:if test="${list.size() > 0}">
-					<c:forEach items="${list}" var="dto">
+				<c:if test="${map.list.size() > 0}">
+					<c:forEach items="${map.list}" var="dto">
 						<div class="col-6 d-none d-sm-flex justify-content-center">
-							<div class="card" style="width: 18rem;">
-								<a href="/board/toDetail?seq_board=${dto.seq_board}"><img src="..." class="card-img-top" alt="..."></a>
+							<div class="card" style="width: 19rem;">
+								<a href="/miss/toDetail?seq_board=${dto.seq_board}">
+							<c:if test="${empty dto.files_sys}">
+                            	<img src="/resources/images/No_image.png">
+                        	</c:if>
+                        	<c:if test="${not empty dto.files_sys}">
+                           		 <img src="/mbFile/${dto.files_sys}">
+                        	</c:if></a>
 								<div class="card-body">
 									<h5 class="card-title">${dto.board_title}</h5>
-									<span>${dto.miss_area}</span> <span>${dto.animal_kind}</span>
-									<p class="card-text">${dto.miss_date}</p>
-									<p class="card-text">${dto.written_date}</p>
+									<span>실종지역 : ${dto.miss_area}</span> <span> 동물 종류 : ${dto.animal_kind}</span>
+									<p class="card-text">실종일 : ${dto.miss_date}</p>
+									<p class="card-text">작성일 : ${dto.written_date}</p>
 								</div>
 							</div>
 						</div>
 						<div class="col-12 d-sm-none">
 							<div class="row resMissing">
 								<div class="col">
-									<a href="#"><img src="..." class="card-img-top" alt="..."></a>
+									<a href="/miss/toDetail?seq_board=${dto.seq_board}">
+									<c:if test="${empty dto.files_sys}">
+                            			<img src="/resources/images/No_image.png">
+                        			</c:if>
+                        			<c:if test="${not empty dto.files_sys}">
+                           		 		<img src="/mbFile/${dto.files_sys}">
+                        			</c:if></a>
 								</div>
 								<div class="col">
 									<h5>${dto.board_title}</h5>
@@ -131,22 +148,43 @@
 			</div>
 			<div class="row">
 				<div class="col d-flex justify-content-center">
-					<c:choose>
-                           <c:when test="${list.size() > 0}">
-                                <c:if test="${paging.startPage!=1}" >
-                                    <a id="first" href="/board/toBoard?nowPage=1&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}">첫 페이지</a>
-                                    <a class="arrow left" href="/board/toBoard?nowPage=${paging.startPage-1}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}">&lt;</a>
-                                </c:if>	
-                                <c:forEach begin="${paging.startPage}" end="${paging.endPage }" var="p" step="1">
-                                    <a href="/board/toBoard?nowPage=${p}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}"
-                                        class="paging">${p}</a>
-                                </c:forEach>
-                                <c:if test="${paging.endPage != paging.lastPage}">
-                                    <a class="arrow right" href="/board/toBoard?nowPage=${paging.endPage+1}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}">&gt;</a>
-                                    <a id="last" href="/board/toBoard?nowPage=${paging.lastPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}">끝 페이지</a>
-                                </c:if>
-                           </c:when>
-                        </c:choose>
+				  <c:if test="${empty map.category}">
+                <c:if test="${map.pagingVO.startPage!=1}">
+                    <a id="first"
+                       href="/miss/toMissing?curPage=1">첫
+                        페이지</a>
+                    <a class="arrow left"
+                       href="/miss/toMissing?curPage=${map.pagingVO.startPage-1}">&lt;</a>
+                </c:if>
+                <c:forEach begin="${map.pagingVO.startPage}" end="${map.pagingVO.endPage}" var="p" step="1">
+                    <a href="/miss/toMissing?curPage=${p}">${p}</a>
+                </c:forEach>
+                <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
+                    <a class="arrow right"
+                       href="/miss/toMissing?curPage=${map.pagingVO.endPage+1}">&lt></a>
+
+                    <a id="last"
+                       href="/miss/toMissing?curPage=${map.pagingVO.lastPage}">끝페이지</a>
+                </c:if>
+            </c:if>
+            <c:if test="${not empty map.category}">
+                <c:if test="${map.pagingVO.startPage!=1}">
+                    <a id="first"
+                       href="/miss/search?category=${map.category}&search=${map.search}">첫
+                        페이지</a>
+                    <a class="arrow left"
+                       href="/miss/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.startPage-1}">&lt;</a>
+                </c:if>
+                <c:forEach begin="${map.pagingVO.startPage}" end="${map.pagingVO.endPage }" var="p" step="1">
+                    <a href="/miss/search?category=${map.category}&search=${map.search}&curPage=${p}">${p}</a>
+                </c:forEach>
+                <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
+                    <a class="arrow right"
+                       href="/miss/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.endPage+1}">&lt></a>
+                    <a id="last"
+                       href="/miss/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.lastPage}">끝페이지</a>
+                </c:if>
+            </c:if>
 				</div>
 				<div class="col d-none d-sm-flex justify-content-end">
 					<button type="button" class="btn btn-outline-warning writeBtn">글쓰기</button>
@@ -174,99 +212,81 @@
 					url : "/miss/search"
 					,type: "get"
 					,data : formData
-					,dataType : "json"
 					, success : function(data) {
 						console.log(data);
-						mkElement(data);
+						//mkElement(data);
+						$(".missingContent").empty();
+						if(data.list.length == 0){ // 검색 결과 없음
+							let divCol1 = $("<div>").addClass("col d-flex justify-content-center");
+							let p = $("<p>").html($("#keywordMissing").val() + "로 검색한 결과입니다.");
+							let p2 = $("<p>");
+							let strong = $("<strong>").html("검색된 결과가 없습니다.");
+							p2.append(strong);
+							p.appendTo(divCol1);
+							p2.appendTo(divCol1);
+							$(".missingContent").append(divCol1);
+						}else{
+							for(let dto of data.list){
+								console.log(typeof dto.miss_date);
+								let miss_date = new Date(dto.miss_date - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 19).replace(/T/g, " ");
+								let written_date = new Date(dto.written_date).toISOString().slice(0, 19).replace(/T/g, " ");
+				
+								let col2 = $("<div>").addClass("col-6 d-none d-sm-flex justify-content-center");
+								let card = $("<div>").addClass("card").css("width", "18rem");
+								let a = $("<a>").attr("href","/miss/toDetail?seq_board="+dto.seq_board);
+								if(dto.files_sys == null){
+									let img = $("<img>").attr("src", "/resources/images/No_image.png").addClass("card-img-top");
+									a.append(img);
+								}else if(dto.files_sys != null){
+									let img = $("<img>").attr("src", "/mbFile/"+dto.files_sys).addClass("card-img-top");
+									a.append(img);
+								}
+								console.log();
+								let cardBody = $("<div>").addClass("card-body");
+								let h5 = $("<h5>").addClass("card-title").html(dto.board_title);
+								let span1 = $("<span>").html(dto.miss_area);
+								let span2 = $("<span>").html(dto.animal_kind);
+								let cardText = $("<p>").addClass("card-text").html(miss_date);
+								let cardText2 = $("<p>").addClass("card-text").html(written_date);
+								
+								cardBody.append(h5, span1, span2, cardText, cardText2);
+								
+								card.append(a, cardBody);
+								col2.append(card);
+								col2.appendTo(".missingContent");
+								
+								let div3 = $("<div>").addClass("col-12 d-sm-none");
+								let row = $("<div>").addClass("row resMissing");
+								let col3 = $("<div>").addClass("col");
+								let a2 = $("<a>").attr("href","/miss/toDetail?seq_board="+dto.seq_board);
+								if(dto.files_sys == null){
+									let img2 = $("<img>").attr("src", "/resources/images/No_image.png").addClass("card-img-top");
+									a2.append(img2);
+								}else if(dto.files_sys != null){
+									let img2 = $("<img>").attr("src", "/mbFile/"+dto.files_sys).addClass("card-img-top");
+									a2.append(img2);
+								}
+								let col4 = $("<div>").addClass("col");
+								let h5_1 = $("<h5>").addClass("card-title").html(dto.board_title);
+								let span3 = $("<span>").html("실종지역: "+ dto.miss_area);
+								let span4 = $("<span>").html(dto.animal_kind);
+								let p1 = $("<p>").html(miss_date);
+								let p2 = $("<p>").html(written_date);
+								
+								col4.append(h5_1, span3, span4, p1, p2);
+								col3.append(a2);
+								row.append(col3, col4);
+								div3.append(row);
+								div3.appendTo(".missingContent");
+							}
+						}
+						
 					}, error : function(e) {
 						console.log(e);
 					}
 				})
 			}
 		})
-		//엔터키 입력했을때
-		function enterKey(event) {
-			let keywordMissing = document.getElementById("keywordMissing");
-			console.log(event.code);
-			let code = event.code;
-			if(code == 'Enter'){
-				if (keywordMissing.value == "") {
-				location.href = "/miss/toMissing";
-
-				} else { // -> 오류남 왜 오류나니......ㅜㅜ;;
-					let formData = $("#searchForm").serialize();
-					console.log(formData);
-
-					$.ajax({
-						url : "/miss/search"
-						,type: "get"
-						,data : formData
-						,dataType : "json"
-						,success : function(data) {
-							console.log(data);
-							mkElement(data);
-						},
-						error : function(e) {
-							console.log(e);
-						}
-					})
-				}
-			}
-
-		}
-		
-		function mkElement(data){
-			$(".missingContent").empty();
-			if(data.length == 0){ // 검색 결과 없음
-				let divCol1 = $("<div>").addClass("col d-flex justify-content-center");
-				let p = $("<p>").html($("#keywordMissing").val() + "로 검색한 결과입니다.");
-				let p2 = $("<p>");
-				let strong = $("<strong>").html("검색된 결과가 없습니다.");
-				p2.append(strong);
-				p.appendTo(divCol1);
-				p2.appendTo(divCol1);
-				$(".missingContent").append(divCol1);
-			}else{
-				
-				for(let dto of data){
-					let col2 = $("<div>").addClass("col-6 d-none d-sm-flex justify-content-center");
-					let card = $("<div>").addClass("card").css("width", "18rem");
-					let a = $("<a>").attr("href","/board/toDetail?seq_board=${dto.seq_board}")
-					let img = $("<img>").attr("src", "...").addClass("card-img-top");
-					let cardBody = $("<div>").addClass("card-body");
-					let h5 = $("<h5>").addClass("card-title").html(dto.board_title);
-					let span1 = $("<span>").html(dto.miss_area);
-					let span2 = $("<span>").html(dto.animal_kind);
-					let cardText = $("<p>").addClass("card-text").html(dto.miss_date);
-					let cardText2 = $("<p>").addClass("card-text").html(dto.written_date);
-					
-					cardBody.append(h5, span1, span2, cardText, cardText2);
-					a.append(img);
-					card.append(a, cardBody);
-					col2.append(card);
-					col2.appendTo(".missingContent");
-					
-					let div3 = $("<div>").addClass("col-12 d-sm-none");
-					let row = $("<div>").addClass("row resMissing");
-					let col3 = $("<div>").addClass("col");
-					let a2 = $("<a>").attr("href","#");
-					let img2 = $("<img>").attr("src", "...").addClass("card-img-top");
-					let col4 = $("<div>").addClass("col");
-					let h5_1 = $("<h5>").addClass("card-title").html(dto.board_title);
-					let span3 = $("<span>").html(dto.miss_area);
-					let span4 = $("<span>").html(dto.animal_kind);
-					let p1 = $("<p>").html(dto.miss_date);
-					let p2 = $("<p>").html(dto.written_date);
-					
-					col4.append(h5_1, span3, span4, p1, p2);
-					a2.append(img2);
-					col3.append(a2);
-					row.append(col3, col4);
-					div3.append(row);
-					
-				}
-			}
-		}
 	</script>
 	
 </body>

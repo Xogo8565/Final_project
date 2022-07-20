@@ -203,44 +203,6 @@
                     <button type="submit" id="write">작성</button>
                 </div>
             </form>
-            <ul class="boardList">
-                <c:if test="${list.size()==2}}">
-                    <a href="/supportBoard/view?seq_board=${list.get(0).seq_board}">
-                        <li>
-                            <button>Up</button>
-                            <span>${list.get(0).board_title}</span></li>
-                    </a>
-                    <a href="/supportBoard/view?seq_board=${list.get(1).seq_board}">
-                        <li>
-                            <button>down</button>
-                            <span>${list.get(1).board_title}</span></li>
-                    </a>
-                </c:if>
-                <c:if test="${list.size()==1}">
-                    <a href="/supportBoard/view?seq_board=${list.get(0).seq_board}">
-                        <li>
-                            <button>Up</button>
-                            <span>${list.get(0).board_title}</span></li>
-                    </a>
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
-                </c:if>
-                <c:if test="${empty list}">
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
-                </c:if>
-            </ul>
             <div class="board_footer">
                 <button id="list" type="button">목록</button>
             </div>

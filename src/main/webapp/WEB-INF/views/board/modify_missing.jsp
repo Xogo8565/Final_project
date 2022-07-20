@@ -14,7 +14,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="/resources/js/summernote/summernote-lite.js"></script>
 <script src="/resources/js/summernote/lang/summernote-ko-KR.js"></script>
-
 <link rel="stylesheet" href="/resources/css/summernote/summernote-lite.css">
 
  
@@ -75,23 +74,25 @@
         	<div class="col">
         			<p> *정확한 정보를 입력하지 않을시에 대한 책임은 본인에게 있습니다.*</p>
         			<label class="textForm">실종날짜 :&nbsp </label>
-                	&nbsp<input type="date" class="m_date" >${map.MissingBoardDTO.miss_date}<br>
+                	&nbsp<input type="date" class="m_date" value="${map.MissingBoardDTO.miss_date}"><br>
                 	<label class="textForm">실종지역 :&nbsp</label>
-                	&nbsp<input type="text" placeholder="예)00시/00구/00동" class="miss_area" name="miss_area">${map.MissingBoardDTO.miss_area}
+                	&nbsp<input type="text" value="${map.MissingBoardDTO.miss_area}" class="miss_area" name="miss_area">
                 	<br>
                     <label class="textForm">동물종류 :&nbsp</label>
-                    &nbsp<input type="text" placeholder="예)푸들" class="animal_kind" name="animal_kind">${map.MissingBoardDTO.animal_kind}
+                    &nbsp<input type="text" value="${map.MissingBoardDTO.animal_kind}" class="animal_kind" name="animal_kind">
         	</div>
         	<div class="col d-none">
-        		<input type="text" name="member_id" value="${logionSession.id}">"
-				<input type="text" name="writer_nickname" value="${logionSession.nickname}"> 	
+        		<input type="text" name="seq_board" value="${map.MissingBoardDTO.seq_board}">"
+        		<%-- <input type="text" name="member_id" value="${logionSession.id}">"
+				<input type="text" name="writer_nickname" value="${logionSession.nickname}"> --%> 	
         		<input type="text" class="miss_date" name="miss_date">
         	</div>
         </div>
         <div class="row">
             <div class="col">
+            	<input type="hidden" id="imgSrc" name="imgSrc[]">
                 <textarea id="summernote" name="board_content">	
-               	 
+                ${map.MissingBoardDTO.board_content}
                 </textarea>
             </div>
             <div class="row">
@@ -111,11 +112,15 @@
         </div>
     </div>
     <script>
+    let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    document.querySelector(".m_date").value = date;
     // 목록버튼을 눌렀을때
     $("#backBtn").click(function(){
     	lcoation.href="/miss/toMissing";
     })
      $(document).ready(function() {
+    	// Summernote에 글 내용 추가하는 코드
+    	/* $("#summernote").summernote('code',  '${map.MissingBoardDTO.board_content}'); */
 	//여기 아래 부분
 	$('#summernote').summernote({
         height: 300,                 // 에디터 높이
@@ -140,8 +145,7 @@
         }
 	});
         
-	// Summernote에 글 내용 추가하는 코드
-	$("#summernote").summernote('code',  '${map.MissingBoardDTO.board_content}');    
+	
 
 	/**
 	* 이미지 파일 업로드
@@ -188,7 +192,28 @@
       const imgSrc = new Array();
 
       $("#writeOk").click(function(){
-        const imgs = document.querySelectorAll(".note-editable>p img"); // 게시물에 찐막으로 남아잇는 이미지태그
+    	  
+        const title = document.getElementById('title');
+        const summernote = document.getElementById('summernote');
+        const content = document.querySelector(".note-editable");
+        let str = "";
+      const imgs = document.querySelectorAll(".note-editable>p img"); // 게시물에 찐막으로 남아잇는 이미지태그
+      
+      if(title.value.replace(/\s/g, "") == ''){
+          alert('제목을 입력해주세요.');
+          return;
+      }else if(!content.innerText && imgSrc.length == 0){
+          alert('내용을 입력해주세요.');
+          return;
+      }else if(content.children.length > 0 && imgSrc.length == 0){
+          for(let e of content.children){
+              str += e.innerText.replace(/\s/g, "");
+          }
+          if(str == ''){
+              alert('내용을 입력해주세요');
+              return;
+          }
+      }
 
         // console.log("src : " + imgs[0].getAttribute('src'));
         imgs.forEach(imgs=>{
@@ -240,7 +265,6 @@
             , traditional :true
             , data   : JSON.stringify(files)
             , contentType: 'application/json'
-            , dataType : "json"
             , success : function(data){
                 console.log(data);
 			    if(data == "success"){

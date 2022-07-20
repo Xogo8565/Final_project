@@ -91,13 +91,13 @@
                         <span>작성일${map.MissingBoardDTO.written_date}</span>
                         <span>조회수${map.MissingBoardDTO.view_count}</span>
                          <!--로그인 세션으로 글쓴이 비교할것-->
-                      <c:if test="${loginSession.member_id eq map.MissingBoardDTO.member_id}">
+                      <%-- <c:if test="${loginSession.member_id eq map.MissingBoardDTO.member_id}"> --%>
                         <div class="col writerBtn d-flex justify-content-end">
                             <span class="writingModify">글수정</span>
                             &nbsp/&nbsp
                             <span class="writingDelete">삭제</span>
                         </div>
-                      </c:if>
+                      <%-- </c:if> --%>
                     </div>
                    
                 </div>
@@ -105,13 +105,13 @@
                    <div class="col">
                    <c:if test="${map.fileDTO.size() > 0}">
                    	 <c:forEach items="${map.fileDTO}" var="fileDTO">
-                        <img style="width:200px" src="/폴더이름/${fileDTO.files_sys}">
+                        <img style="width:200px" src="/mbFile/${fileDTO.files_sys}">
                       </c:forEach>
                    </c:if>
                    </div>
                    <div class="row">
-                   	<div class="col">
-                        <textarea id="board_content" name="board_content" class="form-control" readonly>${map.MissingBoardDTO.board_content}</textarea>
+                   	<div class="col board_content">
+                        <c:out value="${map.MissingBoardDTO.board_content}" escapeXml="false"/>
                     </div>
                    </div>
                 </div>
@@ -120,7 +120,7 @@
         <div class="row comment">
             <div class="col comment-title">
                 <img src="/resources/images/chat.png">
-                <span>Comment(달린 댓글 수)</span>
+                <span>Comment(${map.commentCount})</span>
             </div>
             <div class="row comment-body">
             	<div class="col">
@@ -128,25 +128,26 @@
 	            <c:if test="${map.commentDTO.size() == 0}">
 	            	<p> 등록된 댓글이 없습니다.</p>
 	            </c:if>
-                <!-- 여러개 일 경우 for문-->
+                <%-- 여러개 일 경우 for문--%>
                 <c:if test="${map.commentDTO.size() > 0}">
                 	<c:forEach items="${map.commentDTO}" var="commentDTO">
                     	<span>${commentDTO.comment_nickname}</span>
                     	<span>${commentDTO.comment_date}</span> <br>
                     	<p></p>
                     	<input type="text" class="seq_comment d-none" value="${commentDTO.seq_comment}">
+	                    	<%--댓글 작성자 아이디 비교
+	                <c:if test="${loginSession.member_id eq map.commentDTO.comment_id}">--%>
+	                <div class="col commentBtn d-flex justify-content-end">
+	                    <span class="commentModify">수정</span>
+	                    <span class="commentModifyOk d-none">수정완료</span>
+	                    &nbsp/&nbsp
+	                    <span class="commentDelete">삭제</span>
+	                </div>
+	                <%--</c:if>--%>
                     </c:forEach>
                 </c:if>
                 </div>
-                <!--댓글 작성자 아이디 비교-->
-                <c:if test="${loginSession.member_id eq map.commentDTO.comment_id}">
-                <div class="col commentBtn d-flex justify-content-end">
-                    <span class="commentModify">수정</span>
-                    <span class="commentModifyOk d-none">수정완료</span>
-                    &nbsp/&nbsp
-                    <span class="commentDelete">삭제</span>
-                </div>
-                </c:if>
+                
                  <c:if test="${map.commentDTO.size() > 0}">
                 	<c:forEach items="${map.commentDTO}" var="comment">
                 <div class="row comment-text">
@@ -160,14 +161,14 @@
             <form id="commentForm" action="/comment/missing_comment" method="post">
             <div class="row commentWrite">
                 <div class="col">
-                    <input id="commentNickname" type="text" name="nickname" value="${loginSession.member_nickname}" class="form-control" readonly>
+                <%-- ${loginSession.member_nickname} 로그인 세션으로 넣어줄것--%> 
+                    <input id="commentNickname" type="text" name="comment_nickname" value="test" class="form-control" readonly>
                     <textarea id="comment_content" name="comment_content" placeholder="내용을 입력해주세요" class="form-control"></textarea>
                     <button type="button" id="commentBtn" class="btn btn-light">댓글 등록</button>
                 </div>
                 <div class="col d-none">
                 	<input type="text" id="seq_board" value="${map.MissingBoardDTO.seq_board}" name="seq_board">
-                	<input type="text" name="comment_id" value="${logionSession.id}">"
-					<input type="text" name="comment_nickname" value="${logionSession.nickname}"> 
+                	<input type="text" name="comment_id" value="test"> <%-- ${logionSession.member_id} 로그인 세션 아이디로 넣어줄것--%> 
                 </div>
             </div>
             </form>
@@ -189,14 +190,13 @@
     	// 글 삭제
     	$(".writingDelete").click(function(){
     		let answer = confirm("작성하신 글을 삭제하시겠습니까?");
-    		let seq_board = $("#seq_board").val();
     		if(answer){
-    			location.href="/miss/delete?seq_board="+ seq_board;
+    			location.href="/miss/delete?seq_board="+ $("#seq_board").val();
     		}
     	})
     	// 글 수정
     	$(".writingModify").click(function(){
-    		location.href="/miss/toModify?seq_board="+ seq_board;
+    		location.href="/miss/toModify?seq_board="+ $("#seq_board").val();
     	})
     
     	// 댓글 수정
@@ -231,7 +231,7 @@
     		
     	})
     	// 댓글 삭제
-    	document.getElementById("commentDelete").click = function(e){
+    	$("#commentDelete").click(function(e){
     		let rs = confirm("댓글을 삭제하시겠습니까?");
     		let seq_comment = $(e.target).val();
     		if(rs){
@@ -250,23 +250,23 @@
     				}
     			})
     		}
-    	}
+    	})
     	// 댓글 입력
-    	document.getElementById("commentBtn").click = function(){
+    	$("#commentBtn").click(function(){
     		if(document.getElementById("comment_content").value == ""){
     			alert("댓글을 입력해주세요.");
     			return;
     		}
-    		document.getElementById("commentBtn").submit();
-    	}
+    		$("#commentForm").submit();
+    	})
     	// 목록 버튼
-    	document.getElementById("listBtn").click = function(){
+    	$("#listBtn").click(function(){
     		location.href = "/miss/toMissing";
-    	}
+    	})
     	// 글쓰기 버튼
-    	document.getElementById("writeBtn").click = function(){
+    	$("#writeBtn").click(function(){
     		location.href = "/miss/toWrite";
-    	}
+    	})
     </script>
 </body>
 </html>

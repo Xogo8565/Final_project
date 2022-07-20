@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            :root {
+                --sil: #d5d5d5;
+                --order: #d9d9d9;
+                --grey: #313131;
+                --sky : #3a84ca;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .container {
+                width: 100%;
+                min-height: 1000px;
+                height: 1px;
+            }
+
+            .header {
+                height: 10%;
+            }
+
+            .footer {
+                height: 10%;
+            }
+
+            .content {
+                height: 80%;
+            }
+
+            .payment_header {
+                border-bottom: 1px solid black;
+                font-size: 1.5em;
+            }
+
+            .payment {
+                display: flex;
+                gap: 30px;
+                height: 80%;
+                margin-top: 50px;
+            }
+
+            .payment > div {
+                flex-basis: 50%;
+            }
+
+            .payment > div:first-child {            
+                padding-left: 5%;
+                height: 100%;
+            }
+            .payment_result_header {
+                border-bottom: 1px solid var(--sil);
+                margin-bottom: 40px;
+                font-size: 1.5em;
+            }
+            .payment_no, .patron_info {
+                display: flex;
+                gap: 30px;
+                margin-bottom: 40px;
+            }
+            .payment_no>div:first-child, .patron_info>div:first-child {
+                flex-basis: 40%;
+            }
+            .payment_no>div:last-child, .patron_info>div:last-child {
+                flex-basis : 60%
+            }
+            .patron_info>div:last-child {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .patronage_container {
+                border:1px solid var(--sil);
+                height: 100%;
+                padding : 20px;
+                display: flex;
+                flex-direction: column;
+                justify-self: center;
+                gap:20px;
+            }
+            .patronage_container > .logo_img {
+                flex-basis: 40%;
+                border-bottom: 1px solid black;
+                margin-bottom: 20px;
+                padding: 20px;
+            }
+
+            .patronage_container > .logo_img img {
+                width: 100%;
+                height: auto;
+            }
+            .patronage_container > .patronage {
+                flex-basis: 40%;
+                display: flex;
+                gap: 20px;
+                align-items: center;
+            }
+            .patronage_container > .buttonDiv {
+                flex-basis: 10%;
+            }
+
+            .patronage .patronage_img {
+                flex-basis: 30%;
+            }
+            
+            .patronage .patronage_img img {
+                width: 100%;
+                height: auto;
+            }
+
+            .patronage .patronage_info {
+                flex-basis: 70%;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .buttonDiv {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .buttonDiv button {
+                background-color: var(--grey);
+                color: #ffffff;
+                border: none;
+                height: 100%;
+                width: 50%;
+            }
+            
+
+        </style>
+    </head>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <body>
+        <div class="container">
+            <div class="header">HEADER</div>
+            <div class="content">
+                <div class="payment_header">
+                    주문 / 결제
+                </div>
+                <div class="payment">
+                    <div class="payment_result">
+                        <div class="payment_result_header">
+                            결제가 정상적으로 완료되었습니다.
+                        </div>
+                        <div class="payment_no">
+                            <div>
+                                <span>결제번호</span>
+                            </div>
+                            <div>
+                                <span>123io2io41uio</span>
+                            </div>                       
+                        </div>
+                        <div class="patron_info">
+                            <div>
+                                <span>후원자 정보</span>
+                            </div>
+                            <div>
+                                <span>홍길동</span><span>010-1234-1234</span><span>email</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="patronage_container">
+                        <div class="logo_img">
+                            <img src="/123.png" alt="">
+                        </div>
+                        <div class="patronage">
+                            <div class="patronage_img">
+                                <img src="/123.png" alt="">
+                            </div>
+                            <div class="patronage_info">
+                                <span>A 보호소</span>
+                                <span>ㅁㅇㄴㄹㅁㄴㅇㄹㅁㄴ</span>
+                                <span>총 금액   10,000원</span>
+                            </div>
+                        </div>
+                        <div class="buttonDiv">
+                            <button type="button">홈으로</button>
+                        </div>                    
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="footer">FOOTER</div>
+        </div>
+        <script>
+        </script>
+    </body>
+</html>

@@ -11,13 +11,6 @@
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
-<!-- include libraries(jQuery, bootstrap)
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<!-- include summernote css/js 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="/resources/js/summernote/summernote-lite.js"></script>
 <script src="/resources/js/summernote/lang/summernote-ko-KR.js"></script>
@@ -118,7 +111,7 @@
     <script>
     // 목록 버튼을 눌렀을때
     $("#backBtn").click(function(){
-    	lcoation.href="/miss/toMissing";
+    	location.href="/miss/toMissing";
     })
      $(document).ready(function() {
 	//여기 아래 부분
@@ -192,8 +185,28 @@
       const imgSrc = new Array();
 
       $("#writeOk").click(function(){
+   
+          const title = document.getElementById('title');
+          const summernote = document.getElementById('summernote');
+          const content = document.querySelector(".note-editable");
+          let str = "";
         const imgs = document.querySelectorAll(".note-editable>p img"); // 게시물에 찐막으로 남아잇는 이미지태그
-
+        
+        if(title.value.replace(/\s/g, "") == ''){
+            alert('제목을 입력해주세요.');
+            return;
+        }else if(!content.innerText && imgSrc.length == 0){
+            alert('내용을 입력해주세요.');
+            return;
+        }else if(content.children.length > 0 && imgSrc.length == 0){
+            for(let e of content.children){
+                str += e.innerText.replace(/\s/g, "");
+            }
+            if(str == ''){
+                alert('내용을 입력해주세요');
+                return;
+            }
+        }
         // console.log("src : " + imgs[0].getAttribute('src'));
         imgs.forEach(imgs=>{
             let src = imgs.getAttribute('src');
@@ -244,10 +257,10 @@
             , traditional :true
             , data   : JSON.stringify(files)
             , contentType: 'application/json'
-            , dataType : "json"
             , success : function(data){
                 console.log(data);
 			    if(data == "success"){
+			    	alert("글을 작성하였습니다.");
 			    	location.href ="/miss/toMissing";
 			    }
 		    },
