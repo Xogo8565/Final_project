@@ -20,7 +20,7 @@
 }
 
 /* 줄간격 여백주기 */
-.bodyContent > .row {
+.bodyContent > .rowInput {
     margin-top: 10px;
 }
 
@@ -59,11 +59,20 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 /* 아이디찾기버튼 */
 .buttonRow {
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 #btnFindId {
     width: 200px;
+}
+
+/* 결과창 */
+.cls-resultTitleRow {
+	margin-top: 60px;
+}
+
+.cls-resultIdRow {
+	margin-bottom: 50px;
 }
 
 </style>
@@ -89,12 +98,12 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
             <div class="bodyContent">
 
-                <div class="row">
+                <div class="row rowInput">
                     <div class="col d-flex justify-content-center">
                         <div class="cls-findBox">
                             <div class="row cls-label">
                                 <div class="col">
-                                    <input type="radio" id="findToEmail" name="findOption" checked>
+                                    <input type="radio" id="findToEmail" name="findOption" value="findToEmail" checked>
                                     <label for="findToEmail">&nbsp;가입한 이메일로 찾기</label>    
                                 </div>
                             </div>
@@ -107,12 +116,12 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row rowInput">
                     <div class="col d-flex justify-content-center">
                         <div class="cls-findBox">
                             <div class="row cls-label">
                                 <div class="col">
-                                    <input type="radio" id="findToPhone" name="findOption">
+                                    <input type="radio" id="findToPhone" value="findToPhone" name="findOption">
                                     <label for="findToPhone">&nbsp;가입한 휴대전화로 찾기</label>    
                                 </div>
                             </div>
@@ -131,7 +140,13 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
                                 <div class="col-4">
                                     <input type="number" id="phone3" class="form-control" maxlength="4" oninput="maxLengthCheck(this)">
                                 </div>
-                            </div>           
+                            </div>
+                            <div class="row">
+                                <div class="col d-none">
+                                	<input type="text" id="phone" name="phone"> <!-- 폰번호 합쳐주는곳 -->
+                                </div>
+                            </div>
+
 
                         </div>
                     </div>
@@ -141,6 +156,17 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
                     <div class="col d-flex justify-content-center">
                         <button type="button" class="btn btn-light" id="btnFindId">아이디 찾기</button>
                     </div>
+                </div>
+                
+                <div class="row cls-resultTitleRow">
+                	<div class="col d-flex justify-content-center">
+                		<h4 id="clsResultTitle"></h4>
+                	</div>
+                </div>
+                <div class="row cls-resultIdRow">
+                	<div class="col d-flex justify-content-center">
+                		<span id="clsResultId"></span>
+                	</div>
                 </div>
 
             </div>
@@ -158,6 +184,76 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
                 object.value = object.value.slice(0, object.maxLength);
             }    
         }
+        
+        
+        // 아이디찾기 버튼 눌렀을 때
+        $("#btnFindId").on("click", function(){
+        	
+    		// phone번호 합쳐주는 작업
+    		// select박스에서 선택된 값을 가져오는 방법
+    		//console.log($("#phone1 option:selected").val());
+    		let phone = $("#phone1 option:selected").val() + $("#phone2").val() + $("#phone3").val();
+    		// console.log(phone);
+    		$("#phone").val(phone);
+			
+    		// 라디오 인풋 값 가져오기
+    		let radio = $("input[name='findOption']:checked").val();
+    		console.log(radio);
+    		
+    		if(radio == 'findToEmail') { // 이메일로 찾기
+    			
+    			// 이메일 유효성검사
+    			let regexEmail = /^[a-zA-z0-9][\w]+@[a-zA-z]+\.(com|net|co\.kr|or\.kr)$/;
+    			if(!regexEmail.test($("#email").val())){
+    				alert("이메일 형식에 맞게 입력해주세요.");
+    				return;
+    			}
+				
+    			$.ajax({
+    				url : "/member/findToEmail"
+    				, type : "post"
+    				, data : {member_email : $("#email").val()}
+    				, success : function(data) {
+    					console.log(data);
+    					$("#clsResultTitle").html("회원님의 아이디");
+    					$("#clsResultId").html(data);
+
+    				}, error : function(e) {
+    					console.log(e);
+    				}
+    			});
+    			
+    		} else if (radio == 'findToPhone') { // 전화번호로 찾기
+    			
+    			// 전화번호 유효성검사
+    			let regexPhone = /^[0-9]{11}$/;
+    			if(!regexPhone.test($("#phone").val())){
+    				alert("휴대폰번호는 각각 4자리의 숫자로 입력해주세요.");
+    				return;
+    			}
+    			
+    			$.ajax({
+    				url : "/member/findToPhone"
+    				, type : "post"
+    				, data : {member_phone : $("#phone").val()}
+    				, success : function(data) {
+    					console.log(data);
+    					$("#clsResultTitle").html("회원님의 아이디");
+    					$("#clsResultId").html(data);
+
+    				}, error : function(e) {
+    					console.log(e);
+    				}
+    			});
+
+    			
+    		}
+    		
+		});
+        
+        
+        
+        
     </script>    
 
 </body>

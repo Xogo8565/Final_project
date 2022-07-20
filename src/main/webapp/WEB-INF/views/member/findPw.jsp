@@ -107,7 +107,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
                                     <input type="text" class="form-control cls-input" name="email" id="email" placeholder="이메일을 입력하세요">
                                 </div>
                                 <div class="col-3">
-                                    <button type="button" class="btn btn-warning cls-inputBtn" id="">전송</button>
+                                    <button type="button" class="btn btn-warning cls-inputBtn" id="submit">전송</button>
                                 </div>
                             </div>
                             <div class="row cls-inputRow">
@@ -117,6 +117,11 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
                                 <div class="col-3">
                                     <button type="button" class="btn btn-warning cls-inputBtn" id="">확인</button>
                                 </div>
+                            </div>
+                            <div class="row">
+                            	<div class="col rs d-flex justify-content-center">
+                            		
+                            	</div>
                             </div>
                         </div>
                     </div>
@@ -135,10 +140,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
             여기는 풋터
         </div>
     </div>
-    <script>
 
-
-    </script>    
 
 </body>
 </html>

@@ -4,14 +4,45 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.member.MemberDAO">
 
+	<!-- 아이디 중복확인 -->
 	<select id="idCheck" parameterType="string" resultType="int">
 		SELECT COUNT(*) FROM MEMBER WHERE MEMBER_ID = #{id}
 	</select>
 	
+	<!-- 이메일 중복확인 -->
+	<select id="emailCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM MEMBER WHERE MEMBER_EMAIL = #{email}
+	</select>
+
 	
+	
+	<!-- 일반회원가입 -->
 	<insert id="signupGeneral" parameterType="com.comme.member.MemberDTO">
 		insert into member values(#{member_id}, #{member_pw}, #{member_nickname}, #{member_email}, #{member_name}, #{member_phone}, 'N', '1', '')
 	</insert>
 	
+	
+	<!-- 기관회원가입 -->
+	<insert id="signupBusiness" parameterType="com.comme.member.MemberDTO">
+		insert into member values(#{member_id}, #{member_pw}, #{member_nickname}, #{member_email}, #{member_name}, #{member_phone}, 'N', '2', '')
+	</insert>
+	
+	
+	<!-- 로그인 -->
+	<select id="loginProc" parameterType="map" resultType="com.comme.member.MemberDTO">
+		select * from member where member_id = #{member_id} and member_pw = #{member_pw}
+	</select>
+	
+	
+	<!-- 아이디찾기 (이메일) -->
+	<select id="findToEmail" parameterType="string" resultType="string">
+		select member_id from member where member_email = #{member_email}
+	</select>
+	
+	
+	<!-- 아이디찾기 (전화번호) -->
+	<select id="findToPhone" parameterType="string" resultType="string">
+		select member_id from member where member_phone = #{member_phone}
+	</select>
 	
 </mapper>

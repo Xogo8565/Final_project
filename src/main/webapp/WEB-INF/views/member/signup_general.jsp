@@ -9,7 +9,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<title>Insert title here</title>
+<title>일반 회원가입</title>
 </head>
 <style>
 
@@ -25,12 +25,18 @@
 
     /* 줄간격 설정 */
     .cls-inputRow {
-        margin-bottom: 20px;
+        margin-top: 20px;
+        margin-botton: 5px;
     }
 
     /* 버튼 간 간격 */
     #btn-cancel {
         margin-right: 20px;
+    }
+
+    /* 버튼로우 */
+    .cls-btnRow {
+    	margin-top: 30px;
     }
 
 </style>
@@ -180,9 +186,13 @@
                                     <span class="cls-labelTitle">이메일</span>
                                 </label>        
                             </div>
-                            <div class="col-9">
+                            <div class="col-7">
                                 <input type="text" class="form-control" id="email" name="member_email">
                             </div>
+                            <div class="col-2">
+                                <button type="button" id="emailCheckBtn" class="btn btn-primary">중복확인</button>
+                            </div>
+
                         </div>
                         <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
                         	<div class="col-3"></div>
@@ -190,7 +200,7 @@
                         </div>
 
 
-                        <div class="row">
+                        <div class="row cls-btnRow">
                             <div class="col d-flex justify-content-center">
                                 <button type="button" class="btn btn-secondary" id="btn-cancel">취소</button>
                                 <button type="button" class="btn btn-primary" id="btn-signup">회원가입</button>
@@ -265,6 +275,42 @@
 				}else if(data === "ok"){
 					$("#checkId").html("사용가능한 아이디 입니다.");
 					$("#checkId").css("color", "green");
+				}
+			}
+			, error: function(e){
+				console.log(e);
+			}
+		})
+	});
+	
+	
+	// 이메일 중복 검사
+	
+		$("#emailCheckBtn").on("click", function(){
+		// 이메일 유효성 검사
+		let regexEmail = /^[a-zA-z0-9][\w]+@[a-zA-z]+\.(com|net|co\.kr|or\.kr)$/;
+		
+		if(!regexEmail.test($("#email").val())){
+			$("#checkEmail").html("형식에 맞지않는 이메일 입니다. 다시 입력해주세요.");
+			$("#checkEmail").css("color", "red");
+			$("#email").val("");
+			return;
+		}
+		// ajax로 중복값 검사
+		$.ajax({
+			url: "/member/emailCheck"
+			, type: "post"
+			, data: {email: $("#email").val()}
+			, dataType: "text"
+			, success: function(data){
+				console.log(data);
+				if(data === "nope"){
+					$("#checkEmail").html("이미 사용중인 이메일 입니다.");
+					$("#checkEmail").css("color", "red");
+					$("#email").val("");
+				}else if(data === "ok"){
+					$("#checkEmail").html("사용가능한 이메일 입니다.");
+					$("#checkEmail").css("color", "green");
 				}
 			}
 			, error: function(e){
@@ -350,6 +396,10 @@
 			return;
 		}else if(!regexEmail.test($("#email").val())){
 			alert("이메일 형식에 맞게 입력해주세요.");
+			$("#email").focus();
+			return;
+		}else if($("#checkEmail").html() !== "사용가능한 이메일 입니다."){
+			alert("이메일 중복확인을 해주세요.");
 			$("#email").focus();
 			return;
 		}
