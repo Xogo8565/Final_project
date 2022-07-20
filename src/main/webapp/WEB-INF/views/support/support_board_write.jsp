@@ -26,23 +26,11 @@
             box-sizing: border-box;
         }
 
-        .container {
-            width: 100%;
-            min-height: 1800px;
-            height: 1px;
+        .content {
+            margin-top : 50px;
+            min-height: 1200px;
         }
 
-        .header {
-            height: 10%;
-        }
-
-        .footer {
-            height: 10%;
-        }
-
-        /* .content {
-            height: 80%;
-        } */
 
         button {
             background-color: white;
@@ -158,6 +146,21 @@
 
 
     </style>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          crossorigin="anonymous">
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            rel="stylesheet" />
+    <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
     <!--  jQuery, bootstrap -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
@@ -168,8 +171,8 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="header">HEADER</div>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
     <div class="content">
         <div class="content_header">
             <h3>후원 게시판</h3>
@@ -207,11 +210,18 @@
             </div>
         </div>
     </div>
-    <div class="footer">FOOTER</div>
-</div>
-<script>
+    <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
+
+    <script>
 
     document.querySelector("#form").addEventListener("submit",(e) => {
+        let brn = "${loginSession.member_brn}";
+        if(!brn||brn===""){
+            alert("기관 회원만 이용할 수 있는 기능입니다");
+            e.preventDefault();
+            return;
+        }
+
         let check = confirm("계좌 번호 등 등록 정보를 한 번 더 확인해주세요. 잘못된 등록정보로 인한 사건 / 사고의 책임은 본인에게 있습니다.");
 
         if(check){

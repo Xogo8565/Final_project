@@ -12,28 +12,18 @@
     <style>
         :root {
             --sil: #d5d5d5;
+            --bro: #CFB988;
         }
 
         * {
             box-sizing: border-box;
         }
 
-        .container {
-            width: 100%;
-            min-height: 1500px;
-            height: 1px;
-        }
-
-        .header {
-            height: 10%;
-        }
-
-        .footer {
-            height: 10%;
-        }
 
         .content {
-            height: 80%;
+            margin-top : 50px;
+            height: 1px;
+            min-height: 1200px;
         }
 
         .content_header {
@@ -86,6 +76,7 @@
             z-index: 1;
             padding-left: 50px;
             border-radius: 10px;
+            border : 1px solid var(--bro);
         }
 
         #search_form #searchBtn {
@@ -95,7 +86,7 @@
             top: 50%;
             left: 0;
             transform: translate(0%, -50%);
-            background-color: var(--sil);
+            background-color: var(--bro);
             border: none;
             display: flex;
             justify-content: center;
@@ -106,7 +97,7 @@
         }
 
         #searchBtn img {
-            background-color: var(--sil);
+            background-color: var(--bro);
             width: 30px;
             height: 30px;
         }
@@ -124,6 +115,10 @@
             color: black;
             text-decoration: none;
             max-height: 400px;
+        }
+
+        .boardList a:hover {
+            text-decoration: none;
         }
 
         .board {
@@ -289,9 +284,25 @@
         }
     </style>
 </head>
+<link rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+      crossorigin="anonymous">
+<link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" />
+<script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <body>
-<div class="container">
-    <div class="header">HEADER</div>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
     <div class="content">
         <div class="content_header">
             <h3>후원 게시판</h3>
@@ -377,10 +388,12 @@
             <button type="button" id="write">글쓰기</button>
         </div>
     </div>
-    <div class="footer">FOOTER</div>
-</div>
+    <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
+
 </body>
 <script>
+
+
     // pagination css 안 먹어서 스크립트로 해둘게요
     let page = document.querySelectorAll(".page a");
     page.forEach(target=>{
@@ -393,6 +406,11 @@
         target.style.textDecoration = "none"
     }))
     document.querySelector("#write").addEventListener("click",()=>{
+        let brn = "${loginSession.member_brn}";
+        if(!brn||brn===""){
+            alert("기관 회원만 이용할 수 있는 기능입니다");
+            return;
+        }
         location.href = "/supportBoard/write"
     })
 

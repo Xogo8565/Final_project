@@ -27,26 +27,15 @@
             box-sizing: border-box;
         }
 
-        .container {
-            width: 100%;
-            min-height: 1000px;
-            height: 1px;
-        }
-
-        .header {
-            height: 10%;
-        }
-
-        .footer {
-            height: 10%;
-        }
 
         .content {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             grid-template-rows: repeat(10, 1fr);
             gap: 30px;
-            height: 65%;
+            min-height: 1000px;
+            margin-top: 50px;
+            margin-bottom: 50px;
         }
 
         .content > div {
@@ -174,7 +163,8 @@
         }
 
         .payment > div:last-child {
-            height: 60%;
+            margin-top: 10%;
+            height: 40%;
         }
 
         .payment > div:last-child > button {
@@ -184,87 +174,113 @@
             color: #ffffff;
         }
 
+        .img_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .img_container img {
+            width: 80%;
+            height: auto;
+        }
+
 
     </style>
 </head>
+<link rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+      crossorigin="anonymous">
+<link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" />
+<script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+
 <!-- jQuery -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <!-- iamport.payment.js -->
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 <body>
-<div class="container">
-    <div class="header">HEADER</div>
-    <div class="content">
-        <div class="patronage_container">
-            <div class="content_header">
-                <span>후원 정보</span>
-            </div>
-            <div class="patronage">
-                <div class="patronageImg">
-                    <c:if test="${not empty map.files_sys}">
-                        <img src="/files/support/${map.files_sys}" alt="">
-                    </c:if>
-                    <c:if test="${empty map.files_sys}">
-                        <img src="/resources/images/No_image.png" alt="">
-                    </c:if>
-                </div>
-                <div class="patronageInfo">
-                    <span><c:out value="${map.board_title}"/></span>
-                    <span><fmt:formatNumber type="number" value="${order_number}" maxFractionDigits="3"/> 개</span>
-                    <span><fmt:formatNumber type="number" value="${price*order_number}" maxFractionDigits="3"/> 원</span>
-                </div>
-            </div>
-        </div>
-        <div class="patron_container">
-            <div class="content_header">
-                <span>후원자 정보</span>
-            </div>
-            <div class="patron">
-                <div class="input">
-                    <input type="text" name="name" id="name" value="${loginSession.member_name}" readonly>
-                    <input type="tel" name="tel" id="tel" value="${loginSession.member_phone}" readonly>
-                    <input type="email" name="email" id="email" value="${loginSession.member_email}" readonly>
-                </div>
-                <div class="select">
-                    <label for="selectAll">
-                        <input type="checkbox" id="selectAll"><span>전체 동의</span>
-                    </label>
-                    <label for="select1">
-                        <input type="checkbox" id="select1"><span>개인정보처리방침</span>
-                    </label>
-                    <label for="select2">
-                        <input type="checkbox" id="select2"><span>구매 조건 확인 및 결제 진행 동의</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="payment_container">
-            <div class="content_header">
-                <span>주문 요약</span>
-            </div>
-            <div class="payment">
-                <div class="orderedList">
-                    <span>금액</span>
-                    <span><fmt:formatNumber type="number" value="${price}" maxFractionDigits="3"/> 원</span>
-                </div>
-                <div class="total">
-                    <span>총 금액</span>
-                    <span><fmt:formatNumber type="number" value="${order_number*price}" maxFractionDigits="3"/> 원</span>
-                </div>
-                <div class="button">
-                    <button type="button" id='pay'>신청(후원)하기</button>
-                </div>
-            </div>
-        </div>
-        <div class="img_container">
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
 
+<div class="content">
+    <div class="patronage_container">
+        <div class="content_header">
+            <span>후원 정보</span>
+        </div>
+        <div class="patronage">
+            <div class="patronageImg">
+                <c:if test="${not empty map.files_sys}">
+                    <img src="/files/support/${map.files_sys}" alt="">
+                </c:if>
+                <c:if test="${empty map.files_sys}">
+                    <img src="/resources/images/No_image.png" alt="">
+                </c:if>
+            </div>
+            <div class="patronageInfo">
+                <span><c:out value="${map.board_title}"/></span>
+                <span><fmt:formatNumber type="number" value="${order_number}" maxFractionDigits="3"/> 개</span>
+                <span><fmt:formatNumber type="number" value="${price*order_number}" maxFractionDigits="3"/> 원</span>
+            </div>
         </div>
     </div>
-
-
-    <div class="footer">FOOTER</div>
+    <div class="patron_container">
+        <div class="content_header">
+            <span>후원자 정보</span>
+        </div>
+        <div class="patron">
+            <div class="input">
+                <input type="text" name="name" id="name" value="${loginSession.member_name}" readonly>
+                <input type="tel" name="tel" id="tel" value="${loginSession.member_phone}" readonly>
+                <input type="email" name="email" id="email" value="${loginSession.member_email}" readonly>
+            </div>
+            <div class="select">
+                <label for="selectAll">
+                    <input type="checkbox" id="selectAll"><span>전체 동의</span>
+                </label>
+                <label for="select1">
+                    <input type="checkbox" id="select1"><span>개인정보처리방침</span>
+                </label>
+                <label for="select2">
+                    <input type="checkbox" id="select2"><span>구매 조건 확인 및 결제 진행 동의</span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="payment_container">
+        <div class="content_header">
+            <span>주문 요약</span>
+        </div>
+        <div class="payment">
+            <div class="orderedList">
+                <span>금액</span>
+                <span><fmt:formatNumber type="number" value="${price}" maxFractionDigits="3"/> 원</span>
+            </div>
+            <div class="total">
+                <span>총 금액</span>
+                <span><fmt:formatNumber type="number" value="${order_number*price}" maxFractionDigits="3"/> 원</span>
+            </div>
+            <div class="button">
+                <button type="button" id='pay'>신청(후원)하기</button>
+            </div>
+        </div>
+    </div>
+    <div class="img_container">
+        <img src="/resources/images/animals.jpeg" alt="">
+    </div>
 </div>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
+
 <script>
     const selectAll = document.querySelector("#selectAll");
     const select = document.querySelectorAll(".select input[type=checkbox]");
@@ -289,10 +305,11 @@
 
     document.querySelector("#pay").addEventListener("click", () => {
         const selected = document.querySelectorAll(".select input[type=checkbox]:checked");
-        if(selected.length<2){
+        if (selected.length < 2) {
             alert("개인정보처리방침 혹은 구매 조건 확인 및 결제 진행에 동의해주세요")
             return
-        } requestPay();
+        }
+        requestPay();
     });
 
     function requestPay() {
@@ -311,19 +328,19 @@
             buyer_addr: null,
             buyer_postcode: null
         }, function (rsp) { // callback
-            if(rsp.success){
+            if (rsp.success) {
                 console.log(rsp.amount);
                 $.ajax({
-                    url : "/pay/insert",
-                    method : 'post',
-                    data : {
-                        seq_board : "${map.seq_board}",
-                        pay_money : "${order_number*price}"
+                    url: "/pay/insert",
+                    method: 'post',
+                    data: {
+                        seq_board: "${map.seq_board}",
+                        pay_money: "${order_number*price}"
                     },
-                    success : function (data) {
-                        location.href = "/pay/result?seq_pay="+data;
+                    success: function (data) {
+                        location.href = "/pay/result?seq_pay=" + data;
                     },
-                    error : function (e) {
+                    error: function (e) {
                         console.log(e)
                     }
                 })

@@ -13,7 +13,8 @@
         <result property="view_count" column="view_count"/>
         <result property="vol_deadLine" column="vol_deadLine"/>
         <result property="vol_count" column="vol_count"/>
-        <result property="cur" column="cur"/>
+        <result property="applicants" column="applicants"/>
+        <result property="accepted" column="accepted"/>
     </resultMap>
 
     <select id="selectTotalCnt" resultType="int">
@@ -62,7 +63,8 @@
 
     <select id="select" parameterType="int" resultMap="BoardResult">
         select a.*,
-               (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = a.SEQ_BOARD) as cur
+               (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = a.SEQ_BOARD) as applicants,
+               (select nvl(count(SEQ_BOARD), 0) from VOL_SUBMIT where SEQ_BOARD = a.SEQ_BOARD and VOL_STATUS = 'Y') as accepted
         from VOL_BOARD a
         where SEQ_BOARD = #{seq_board}
     </select>

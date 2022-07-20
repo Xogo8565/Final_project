@@ -11,7 +11,9 @@
     <title>Document</title>
     <style>
         :root {
+            --bro: #CFB988;
             --sil: #d5d5d5;
+
         }
 
         * {
@@ -75,6 +77,7 @@
             z-index: 1;
             padding-left: 50px;
             border-radius: 10px;
+            border : 1px solid var(--bro);
         }
 
         #search_form #searchBtn {
@@ -84,7 +87,7 @@
             top: 50%;
             left: 0;
             transform: translate(0%, -50%);
-            background-color: var(--sil);
+            background-color: var(--bro);
             border: none;
             display: flex;
             justify-content: center;
@@ -95,7 +98,7 @@
         }
 
         #searchBtn img {
-            background-color: var(--sil);
+            background-color: var(--bro);
             width: 30px;
             height: 30px;
         }
@@ -113,7 +116,9 @@
             text-decoration: none;
             max-height: 600px;
         }
-
+        .boardList a:hover {
+            text-decoration: none;
+        }
         .board {
             display: flex;
             flex-direction: column;
@@ -303,6 +308,21 @@
         }
     </style>
 </head>
+<link rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+      crossorigin="anonymous">
+<link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" />
+<script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 <body>
 <jsp:include page="/WEB-INF/views/frame/header.jsp"/>
 
@@ -412,6 +432,11 @@
     }))
 
     document.querySelector("#write").addEventListener("click", () => {
+        let brn = "${loginSession.member_brn}";
+        if(!brn||brn===""){
+            alert("기관 회원만 이용할 수 있는 기능입니다");
+            return;
+        }
         location.href = "/volBoard/write"
     })
 </script>
