@@ -19,3 +19,12 @@
       width: 30px;
       margin-right: 10px;
     }
+    /*모달 X 커스텀*/
+    .btn-close{
+    	font-size: x-small;
+    	margin-top: 0.1rem !important;
+    }
+    .btn-close:active{
+    	outline: none;
+    	box-shadow: none;
+    }
