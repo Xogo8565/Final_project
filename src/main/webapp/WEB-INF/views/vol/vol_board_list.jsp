@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -324,7 +326,6 @@
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 <body>
-<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
 
 <div class="content">
     <div class="content_header">
@@ -415,7 +416,6 @@
         <button type="button" id="write">글쓰기</button>
     </div>
 </div>
-<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
 
 </body>
 <script>
@@ -441,5 +441,4 @@
     })
 </script>
 </html>
-<html>
-<head>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>

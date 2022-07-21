@@ -8,6 +8,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -175,6 +177,29 @@
             -webkit-appearance: none;
             margin: 0;
         }
+
+        .board_footer {
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--sil);
+        }
+
+        .board_footer button {
+            width: 60px;
+            background-color: white;
+            border: 1px solid var(--sil);
+            color: var(--sil);
+            border-radius: 5px;
+        }
+
+
+        .board_footer button:hover {
+            background-color: var(--sil);
+            color: white;
+        }
     </style>
 </head>
 <link rel="stylesheet"
@@ -194,7 +219,6 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <body>
-<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
     <div class="board">
         <div class="board_header">
             <div class="representativeImg">
@@ -246,8 +270,11 @@
         <div class="board_content">
             ${map.board_content}
         </div>
+        <div class="board_footer">
+            <button id="list" type="button">목록</button>
+            <button id="write" type="button">글쓰기</button>
+        </div>
     </div>
-<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
 
 <script>
     const plus = document.querySelector("#plus");
@@ -326,3 +353,4 @@
 </script>
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>

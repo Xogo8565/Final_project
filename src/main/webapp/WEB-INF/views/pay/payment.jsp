@@ -8,6 +8,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -211,7 +213,6 @@
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 <body>
-<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
 
 <div class="content">
     <div class="patronage_container">
@@ -279,7 +280,6 @@
         <img src="/resources/images/animals.jpeg" alt="">
     </div>
 </div>
-<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
 
 <script>
     const selectAll = document.querySelector("#selectAll");
@@ -354,3 +354,4 @@
 </script>
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>

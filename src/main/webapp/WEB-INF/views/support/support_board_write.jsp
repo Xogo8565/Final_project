@@ -7,9 +7,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    request.setCharacterEncoding("UTF-8");
-%>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
 
 <html lang="en">
 <head>
@@ -171,7 +170,6 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
 
     <div class="content">
         <div class="content_header">
@@ -210,7 +208,6 @@
             </div>
         </div>
     </div>
-    <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
 
     <script>
 
@@ -343,3 +340,4 @@
 </script>
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>

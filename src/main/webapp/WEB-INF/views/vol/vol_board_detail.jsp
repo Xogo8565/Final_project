@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
 
 
 <!DOCTYPE html>
@@ -12,7 +14,7 @@
     <title>Document</title>
     <style>
         :root {
-            --sil: #CFB988;
+            --sil: #d5d5d5;
         }
 
         * {
@@ -197,7 +199,6 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <body>
 
-    <jsp:include page="/WEB-INF/views/frame/header.jsp"/>
 
     <div class="content">
         <div class="content_header">
@@ -305,7 +306,6 @@
             </div>
         </div>
     </div>
-    <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
 
     <script>
 
@@ -327,7 +327,14 @@
 
     document.querySelector("#list").addEventListener("click", e => location.href = "/volBoard/lists");
 
-    document.querySelector("#write").addEventListener("click", e => location.href = "/volBoard/write");
+    document.querySelector("#write").addEventListener("click",()=>{
+        let brn = "${loginSession.member_brn}";
+        if(!brn||brn===""){
+            alert("기관 회원만 이용할 수 있는 기능입니다");
+            return;
+        }
+        location.href = "/supportBoard/write"
+    })
 
     //봉사활동 제출
     document.querySelector("#volSubmit").addEventListener("click", e => {
@@ -386,3 +393,4 @@
 </script>
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
