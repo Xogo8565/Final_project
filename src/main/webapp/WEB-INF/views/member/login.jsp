@@ -43,7 +43,16 @@
 	
 	/* 백그라운드 컬러 */
 	.body {
-	    background-color: rgb(231, 231, 231);
+	    background-color: rgb(231, 231, 231);	    
+	}
+	
+	/* 바디부분 패딩 */
+	.body {
+	    padding-left: 10%;
+		padding-right: 10%;
+		padding-top: 5%;
+		padding-bottom: 5%;
+
 	}
 	
 	/* 하이퍼링크 */
@@ -56,17 +65,15 @@
 	.btn-light {
 	    width: 200px;
 	}
-	
-	/* 로그인 전체 */
-	.body {
-	    padding: 20px;
-	}
+
 </style>
 
 <body>
-    <div class="container">
+
+        
+    <div class="">
         <div class="header">
-            여기는 헤더
+            <jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
         </div>
 
         <div class="body">
@@ -132,10 +139,10 @@
 -->
             </div>
         </div>
- 
-        <div class="footer">
-            여기는 풋터
+         <div class="footer">
+            <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         </div>
+
     </div>
 <script>
 

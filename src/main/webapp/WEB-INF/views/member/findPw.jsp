@@ -13,6 +13,13 @@
 </head>
 <style>
 
+	/* 바디부분 패딩 */
+	.body {
+		padding-left: 10%;
+		padding-right: 10%;
+		padding-top: 5%;
+		padding-bottom: 5%;
+	}
 
 /* 타이틀 수평선 hr */
 #hr {
@@ -35,11 +42,6 @@
     text-decoration: none;
 }
 
-
-/* 바디 전체 */
-.body {
-    padding: 20px;
-}
 
 /* 찾기 너비 */
 .cls-findBox {
@@ -78,9 +80,9 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 </style>
 <body>
-    <div class="container">
+    <div class="">
         <div class="header">
-            여기는 헤더
+            <jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
         </div>
 
         <div class="body">
@@ -161,7 +163,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
         </div>
 
         <div class="footer">
-            여기는 풋터
+            <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         </div>
     </div>
 	<script>

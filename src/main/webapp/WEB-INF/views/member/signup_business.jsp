@@ -13,6 +13,14 @@
 </head>
 <style>
 
+	/* 바디부분 패딩 */
+	.body {
+		padding-left: 10%;
+		padding-right: 10%;
+		padding-top: 5%;
+		padding-bottom: 5%;
+	}
+
     /* 별표 */
     .cls-required {
         color: red;
@@ -24,7 +32,7 @@
     }
 
     /* 줄간격 설정 */
-    .cls-inputRow {
+    .bodyContent .cls-inputRow {
         margin-top: 20px;
         margin-botton: 5px;
     }
@@ -35,15 +43,15 @@
     }
     
     /* 버튼로우 */
-    .cls-btnRow {
+    .bodyContent .cls-btnRow {
     	margin-top: 30px;
     }
 
 </style>
 <body>
-    <div class="container">
+    <div class="">
         <div class="header">
-            여기는 헤더
+            <jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
         </div>
     
         <div class="body">
@@ -92,7 +100,7 @@
                                 <input type="text" class="form-control" id="id" name="member_id">
                             </div>
                             <div class="col-2">
-                                <button type="button" class="btn btn-primary">중복확인</button>
+                                <button type="button" class="btn btn-secondary">중복확인</button>
                             </div>
                         </div>
                         <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
@@ -187,7 +195,7 @@
                                 <input type="text" class="form-control" id="email" name="member_email">
                             </div>
                             <div class="col-2">
-                                <button type="button" id="emailCheckBtn" class="btn btn-primary">중복확인</button>
+                                <button type="button" id="emailCheckBtn" class="btn btn-secondary">중복확인</button>
                             </div>
                         </div>
                         <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
@@ -218,8 +226,8 @@
 
                         <div class="row cls-btnRow">
                             <div class="col d-flex justify-content-center">
-                                <button class="btn btn-secondary" id="btn-cancel">취소</button>
-                                <button class="btn btn-primary" id="btn-signup">회원가입</button>
+                                <!-- <button class="btn btn-secondary" id="btn-cancel">취소</button> -->
+                                <button class="btn btn-warning" id="btn-signup">회원가입</button>
                             </div>
                         </div>
                     </div>
@@ -230,7 +238,7 @@
         </div>
     
         <div class="footer">
-            여기는 풋터
+            <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         </div>    
     </div>
 <script>

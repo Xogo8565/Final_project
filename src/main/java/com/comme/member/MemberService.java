@@ -78,7 +78,7 @@ public class MemberService {
 
 	public String joinEmail(String email) { //이메일 보낼 양식
 		int authNumber = makeRandomNumber();
-		String setFrom = "commeprj@gmail.com";
+		String setFrom = "alsrbald04@gmail.com";
 		String toMail = email;
 		String title = "비밀번호 찾기 인증 이메일입니다."; // 이메일 제목 
 		String content = 
