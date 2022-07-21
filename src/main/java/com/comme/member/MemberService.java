@@ -15,12 +15,13 @@ import org.springframework.stereotype.Service;
 
 import com.comme.utils.EncryptionUtils;
 
+@Component
 @Service
 public class MemberService {
 	@Autowired
 	private MemberDAO dao;
-//	@Autowired
-//	private JavaMailSenderImpl mailSender;
+	@Autowired
+	private JavaMailSenderImpl mailSender;
 	
 	// 아이디 중복확인
 	public int idCheck(String id) throws Exception {
@@ -63,5 +64,61 @@ public class MemberService {
 		return dao.findToPhone(member_phone);
 	}
 	
+
+	// 비밀번호 찾기(이메일 인증)
+
+	public int makeRandomNumber() { // 난수생성
+		// 난수의 범위 111111 ~ 999999 (6자리 난수)
+		Random r = new Random();
+		int checkNum = r.nextInt(888888) + 111111;
+		System.out.println("인증번호 : " + checkNum);
+		int authNumber = checkNum;
+		return authNumber;
+	}
+
+	public String joinEmail(String email) { //이메일 보낼 양식
+		int authNumber = makeRandomNumber();
+		String setFrom = "commeprj@gmail.com";
+		String toMail = email;
+		String title = "비밀번호 찾기 인증 이메일입니다."; // 이메일 제목 
+		String content = 
+				"Comme 비밀번호 찾기 인증 이메일입니다.." + 
+		        "<br><br>" + 
+			    "인증 번호는 " + authNumber + " 입니다." + 
+			    "<br>" + 
+			    "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+		//이메일 내용 삽입
+		mailSend(setFrom, toMail, title, content);
+		return Integer.toString(authNumber);
+	}
 	
+	public void mailSend(String setFrom, String toMail, String title, String content) { //이메일 전송
+		MimeMessage message = mailSender.createMimeMessage();
+		try {
+			MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
+			helper.setFrom(setFrom);
+			helper.setTo(toMail);
+			helper.setSubject(title);
+			helper.setText(content,true);
+			mailSender.send(message);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	// 비밀번호 찾기 -> 비밀번호 변경
+	public void changePw(String member_email, String member_pw) throws Exception {
+		member_pw = EncryptionUtils.getSHA512(member_pw);
+		System.out.println(member_email + " : " + member_pw);
+		Map<String, Object> map = new HashMap<>();
+		map.put("member_pw", member_pw);
+		map.put("member_email", member_email);
+		System.out.println(map);
+		dao.changePw(map);
+		
+	}
+	
+	
+
 }

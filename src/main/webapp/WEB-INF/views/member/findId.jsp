@@ -43,7 +43,7 @@
 
 /* 찾기 너비 */
 .cls-findBox {
-    width: 300px;
+    width: 400px;
     margin-bottom: 25px;
 }
 

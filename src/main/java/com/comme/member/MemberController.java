@@ -24,7 +24,7 @@ public class MemberController {
 	@ResponseBody
 	@RequestMapping(value= "/loginProc") // 로그인 버튼을 눌렀을 때
 	public String loginProc(String member_id, String member_pw) throws Exception {
-		System.out.println("id : " + member_id + " / pw : " + member_pw);
+		// System.out.println("id : " + member_id + " / pw : " + member_pw);
 		MemberDTO dto = service.loginProc(member_id, member_pw);
 		if(dto != null) {
 			session.setAttribute("loginSession", dto);
@@ -114,6 +114,38 @@ public class MemberController {
 		return "member/findPw";
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "/mailCheck") // 비밀번호찾기 인증메일
+	public String mailCheck(String email) {
+		System.out.println("이메일 인증 요청");
+		System.out.println("이메일 인증 이메일 : " + email);
+		String authNumber = service.joinEmail(email);
+		if (authNumber != null) {
+			return authNumber;
+		} else {
+			return null;
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/existEmail") // 비밀번호찾기 -> 해당 이메일의 계정이 존재하는지
+	public String exsistEmail(String email) throws Exception {
+		System.out.println("이메일 : " + email);
+		int rs = service.emailCheck(email);
+		if (rs == 0) {
+			return "nope";
+		}
+		return "ok";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/changePw") // 비밀번호찾기 -> 비밀번호 변경
+	public String changePw(String member_email, String member_pw) throws Exception {
+		System.out.println(member_email + " : " + member_pw);
+		service.changePw(member_email, member_pw);
+		return "success";
+	}
 
 	
 	@RequestMapping(value= "/toError") // 에러페이지로 이동
