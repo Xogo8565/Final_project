@@ -18,7 +18,7 @@
     <select id="selectList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="int">
         select b.*,
                (select FILES_SYS
-                from support_FILES
+                from (select * from SUPPORT_FILES order by 1)
                 where b.SEQ_BOARD = SEQ_BOARD
                   and rownum = 1) as files_sys
         from (select a.*, rownum as num
@@ -43,7 +43,10 @@
     </insert>
     <select id="select" parameterType="int" resultMap="BoardResult">
         select a.*,
-               (select FILES_SYS from SUPPORT_FILES where SEQ_BOARD = a.SEQ_BOARD and rownum = 1) as files_sys
+               (select FILES_SYS from(
+                   select * from SUPPORT_FILES order by 1
+                                     )
+                                     where SEQ_BOARD = a.SEQ_BOARD and rownum = 1) as files_sys
         from SUPPORT_BOARD a
         where SEQ_BOARD = #{seq_board}
     </select>
@@ -62,7 +65,7 @@
     <select id="search" parameterType="map" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap">
         select b.*,
                (select FILES_SYS
-                from support_FILES
+                from (select * from SUPPORT_FILES order by 1)
                 where b.SEQ_BOARD = SEQ_BOARD
                   and rownum = 1) as files_sys
         from (select a.*, rownum as num

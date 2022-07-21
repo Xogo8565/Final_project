@@ -350,6 +350,19 @@
         location.href = "/supportBoard/modify?seq_board=${map.seq_board}"
     });
 
+    document.querySelector("#list").addEventListener("click",()=>{
+        location.href = "/supportBoard/lists";
+    });
+
+    document.querySelector("#write").addEventListener("click",()=>{
+        let brn = "${loginSession.member_brn}";
+        if(!brn||brn===""){
+            alert("기관 회원만 이용할 수 있는 기능입니다");
+            return;
+        }
+        location.href = "/supportBoard/write"
+    })
+
 </script>
 </body>
 </html>
