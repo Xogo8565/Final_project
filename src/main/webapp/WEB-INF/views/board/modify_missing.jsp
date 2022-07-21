@@ -29,6 +29,7 @@
         #summernote{
             resize : none
         }
+       /* 실종관련 정보 받는 폼  */
         .textForm{
         	width: 100px;
         	border : 0px;
@@ -40,7 +41,7 @@
         	margin : 10px;
         	border : 1px solid #cfb988;
         	height: 30px;
-        	width: 500px;
+        	width: 50%;
         }
         .miss_area:focus, .animal_kind:focus, .m_date:focus{
         	outline: none !important;
@@ -51,13 +52,21 @@
         .animal_kind{
         	margin-bottom : 30px;
         }
+        /* 작성, 목록 버튼 */
+        .btns1{
+        	margin-left : 30px;
+        	margin-top : 20px;
+        }
+        .btns2{
+        	margin-top : 20px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="row header">
-            여기는 헤더
+            <jsp:include page="/WEB-INF/views/frame/header.jsp"/>
         </div>
         <div class="row board-title">
             <div class="col">
@@ -82,7 +91,7 @@
                     &nbsp<input type="text" value="${map.MissingBoardDTO.animal_kind}" class="animal_kind" name="animal_kind">
         	</div>
         	<div class="col d-none">
-        		<input type="text" name="seq_board" value="${map.MissingBoardDTO.seq_board}">"
+        		<input type="text" id="seq_board" name="seq_board" value="${map.MissingBoardDTO.seq_board}">"
         		<%-- <input type="text" name="member_id" value="${logionSession.id}">"
 				<input type="text" name="writer_nickname" value="${logionSession.nickname}"> --%> 	
         		<input type="text" class="miss_date" name="miss_date">
@@ -96,19 +105,16 @@
                 </textarea>
             </div>
             <div class="row">
-                <div class="col d-flex justify-content-end">
-                    <button type="button" id="writeOk" class="btn btn-secondary">수정완료</button>
+            	<div class="col btns1">
+                    <button type="button" id="backBtn" class="btn btn-outline-light" style="background-color: #cfb988;">목록</button>
+                </div>
+                <div class="col btns2 d-flex justify-content-end">
+                    <button type="button" id="writeOk" class="btn btn-outline-light" style="background-color: #cfb988;">수정 완료</button>       
                 </div>
             </div>
-            <div class="row">
-                <div class="col d-flex justify-content-left">
-                    <button type="button" id="backBtn" class="btn btn-secondary">취소</button>
-                </div>
-            </div>
-        </div>  
     </form>
         <div class="row footer">
-            여기는 푸터
+          <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         </div>
     </div>
     <script>
@@ -116,7 +122,7 @@
     document.querySelector(".m_date").value = date;
     // 목록버튼을 눌렀을때
     $("#backBtn").click(function(){
-    	lcoation.href="/miss/toMissing";
+    	location.href="/miss/toMissing";
     })
      $(document).ready(function() {
     	// Summernote에 글 내용 추가하는 코드

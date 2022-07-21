@@ -89,7 +89,8 @@ public class MissingBoardService{
 						deleteFiles.get(i).getFiles_upload() + File.separatorChar  + deleteFiles.get(i).getFiles_sys());
 				if(garbageFile.exists()) {
 					garbageFile.delete(); // 실제 파일을 삭제
-					fileService.deleteByFileSys(deleteFiles.get(i).getFiles_sys()); // db에서도 삭제해줌 sysname 으로 명확히 지정해서 삭제
+					System.out.println("db삭제 파일 : " + deleteFiles.get(i).getFiles_sys());
+					fileService.deleteFileMissing(deleteFiles.get(i).getFiles_sys()); // db에서도 삭제해줌 sysname 으로 명확히 지정해서 삭제
 				}
 			}
 		}

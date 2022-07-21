@@ -18,16 +18,21 @@
  
     <title>실종게시판 글작성</title>
     <style>
-      .board-title, .titleBox{
-            margin-bottom: 10px;
+    /* 타이틀 */
+    .board-title{
+    	margin-top : 20px;
+    	border-bottom: 2px solid black;
+    }
+    /* 제목 */
+      .titleBox{
+      		margin-top : 20px;
+            margin-bottom: 20px;
             border-bottom: 1px solid black;
         }
         #title{
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
-        #summernote{
-            resize : none
-        }
+       /* 실종관련 정보 받는 폼  */
         .textForm{
         	width: 100px;
         	border : 0px;
@@ -39,7 +44,7 @@
         	margin : 10px;
         	border : 1px solid #cfb988;
         	height: 30px;
-        	width: 500px;
+        	width: 50%;
         }
         .miss_area:focus, .animal_kind:focus, .m_date:focus{
         	outline: none !important;
@@ -50,13 +55,21 @@
         .animal_kind{
         	margin-bottom : 30px;
         }
+        /* 작성, 목록 버튼 */
+        .btns1{
+        	margin-left : 30px;
+        	margin-top : 20px;
+        }
+        .btns2{
+        	margin-top : 20px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="row header">
-            여기는 헤더
+            <jsp:include page="/WEB-INF/views/frame/header.jsp"/>
         </div>
         <div class="row board-title">
             <div class="col">
@@ -93,19 +106,18 @@
                 </textarea>
             </div>
             <div class="row">
-                <div class="col d-flex justify-content-end">
-                    <button type="button" id="writeOk" class="btn btn-secondary">작성</button>
+            	<div class="col btns1">
+                    <button type="button" id="backBtn" class="btn btn-outline-light" style="background-color: #cfb988;">목록</button>
+                </div>
+                <div class="col btns2 d-flex justify-content-end">
+                    <button type="button" id="writeOk" class="btn btn-outline-light" style="background-color: #cfb988;">작성</button>       
                 </div>
             </div>
-            <div class="row">
-                <div class="col d-flex justify-content-left">
-                    <button type="button" id="backBtn" class="btn btn-secondary">목록</button>
-                </div>
-            </div>
+            
         </div>  
     </form>
         <div class="row footer">
-            여기는 푸터
+          <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         </div>
     </div>
     <script>

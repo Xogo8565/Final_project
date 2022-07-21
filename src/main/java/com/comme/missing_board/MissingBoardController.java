@@ -137,6 +137,7 @@ public class MissingBoardController {
 		
 		return "/board/modify_missing";
 	}
+	@ResponseBody
 	@RequestMapping(value="/modify") // 글 수정요청
 	public String modify(@RequestBody List<Map<String, Object>> jsonData) throws Exception{
 		System.out.println("jsonData : " + jsonData);
@@ -160,7 +161,7 @@ public class MissingBoardController {
 		service.boardFileCheck(jsonData, imgSrc, dto);
 		
 		// db에 인서트되서 해당 글번호에 존재하고 잇는 파일들에 대한 정보를 가져옴
-		List<FileDTO> deleteFiles = fileService.get_fileList(Integer.parseInt(seq_board), "missing_board");
+		List<FileDTO> deleteFiles = fileService.fileListMissing(Integer.parseInt(seq_board));
 		service.boardModifyFileCk(deleteFiles, imgSrc);
 		
 		return "success";
