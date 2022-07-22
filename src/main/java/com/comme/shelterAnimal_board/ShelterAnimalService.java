@@ -182,22 +182,12 @@ public class ShelterAnimalService implements ShelterAnimalDAO {
 		return map;
 	}
 	
-	@Override
-	public void insert(ShelterAnimalDTO dto) {
-	}
-
 	public List<ShelterAnimalDTO> selectAll(int start, int end) { // DB에서 리스트 가져오기
 		Map<String, Object> map = new HashMap<>();
 		map.put("start", start);
 		map.put("end", end);
 		
 		return dao.selectAll(map);
-	}
-
-	@Override
-	public List<ShelterAnimalDTO> selectAll(Map<String, Object> map) { 
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public List<ShelterAnimalDTO> selectKeyword(int start, int end, String Keyword) { // DB에서 검색
@@ -210,19 +200,26 @@ public class ShelterAnimalService implements ShelterAnimalDAO {
 	}
 
 	@Override
-	public List<ShelterAnimalDTO> selectKeyword(Map<String, Object> map) {
-		// TODO Auto-generated method stub
+	public void insert(ShelterAnimalDTO dto) {
+	}
+	
+	@Override
+	public List<ShelterAnimalDTO> selectAll(Map<String, Object> map) { 
 		return null;
 	}
 	
+	@Override
+	public List<ShelterAnimalDTO> selectKeyword(Map<String, Object> map) {
+		return null;
+	}
+	
+	@Override
 	public int selectTotalCnt() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int selectKeywordCount(String keyword) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
