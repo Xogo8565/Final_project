@@ -33,11 +33,6 @@
 body{
     font-family: 'LeferiBaseType-RegularA';
 }
-.header {
-	height: 150px;
-	background-color: rgb(207, 185, 136);
-	color: rgb(207, 147, 111);
-}
 
 /*축종탭*/
 .nav-tabs {
@@ -61,8 +56,12 @@ body{
 }
 
 /* 검색창 */
-.input-group {
+#inputDiv{
+	text-align: -webkit-right;
+}
+#inputGroup {
 	width: 20em;
+	margin-right: 20px;
 }
 #iconNote {
 	margin-top: 10px;
@@ -136,59 +135,54 @@ body{
 }
 </style>
 <body>
-	<div class="container">
-		<div class="header d-flex justify-content-center align-items-center">
-			<a class="btn m-2 btn-secondary"
-				href="/shelterAnimal/toShelterAnimalList?curPage=1">DB</a> <a
-				class="btn m-2 btn-secondary"
-				href="/shelterAnimal/toShelterAnimal?curPage=1">API</a>
-		</div>
-		<div class="col d-flex justify-content-center mt-5">
-			<h4>
-				<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
-				<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물 소식
-			</h4>
-		</div>
-		<div class="col mt-5">
-			<ul class="nav nav-tabs justify-content-center">
-				<li class="nav-item"><a class="nav-link active"
-					href="/shelterAnimal/toShelterAnimal?curPage=1">전체</a></li>
-				<li class="nav-item"><a class="nav-link linkAjax" id="dogList">개</a> <input
-					class="linkAjax d-none" type="text" value="417000">
-				</li>
-				<li class="nav-item"><a class="nav-link linkAjax" id="catList">고양이</a> <input
-					class="linkAjax d-none" type="text" value="422400">
-				</li>
-				<li class="nav-item"><a class="nav-link linkAjax" id="etcList">기타</a> <input
-					class="linkAjax d-none" type="text" value="429900">
-				</li>
-			</ul>
-			<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
-			<div class="row justify-content-end mt-5">
-				<div class="input-group mb-3">
-					<span class="input-group-text material-symbols-outlined" id="iconSearch">search</span> 
-					<input type="search" id="inputSearch" name="keyword" class="form-control" placeholder="검색" aria-describedby="btnSearch">
-					<button class="btn" type="submit" id="btnSearch">검색</button>
-				</div>
-				<input class="d-none" type="text" name="curPage" value="1">
+	<!-- header -->
+	<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
+	<div class="col d-flex justify-content-center mt-5">
+		<h4>
+			<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
+			<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물 소식
+		</h4>
+	</div>
+	<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
+		<div class="col mt-5" id="inputDiv">
+			<div class="input-group mb-3" id="inputGroup">
+				<span class="input-group-text material-symbols-outlined" id="iconSearch">search</span> 
+				<input type="search" id="inputSearch" name="keyword" class="form-control" placeholder="검색" aria-describedby="btnSearch">
+				<button class="btn" type="submit" id="btnSearch">검색</button>
 			</div>
-		</form>
+			<input class="d-none" type="text" name="curPage" value="1">
 		</div>
+	</form>
+	<div class="col mb-5">
+		<ul class="nav nav-tabs justify-content-center">
+			<li class="nav-item">
+				<a class="nav-link active" href="/shelterAnimal/toShelterAnimal?curPage=1">전체</a></li>
+			<li class="nav-item">
+				<a class="nav-link linkAjax" id="dogList">개</a> 
+				<input class="linkAjax d-none" type="text" value="417000">
+			</li>
+			<li class="nav-item">
+				<a class="nav-link linkAjax" id="catList">고양이</a> 
+				<input class="linkAjax d-none" type="text" value="422400">
+			</li>
+			<li class="nav-item">
+				<a class="nav-link linkAjax" id="etcList">기타</a> 
+				<input class="linkAjax d-none" type="text" value="429900">
+			</li>
+		</ul>
+	</div>
+	<div class="container">
 		<%-- 목록 출력 --%>
 		<div class="card-group justify-content-center">
 			<c:forEach items="${data.response.body.items.item}" var="item">
-				<a class="apiLink d-flex justify-content-center"
-					href="/shelterAnimal/toDetail?desertionNo=${item.desertionNo}&curPage=${pageNum}">
+				<a class="apiLink d-flex justify-content-center" href="/shelterAnimal/toDetail?desertionNo=${item.desertionNo}&upkind=${upkind}&curPage=${pageNum}">
 					<div class="card col-3 m-2" style="width: 18rem;">
 						<img src="${item.popfile}" class="cardImg">
 						<ul class="list-group list-group-flush">
-							<li class="list-group-item" id="liPlace">발견장소 :
-								${item.orgNm}&nbsp;${item.happenPlace}</li>
+							<li class="list-group-item" id="liPlace">발견장소 : ${item.orgNm}&nbsp;${item.happenPlace}</li>
 							<li class="list-group-item" id="liKind">품종 : ${item.kindCd}</li>
-							<li class="list-group-item" id="liMark">특징 :
-								${item.specialMark}</li>
-							<li class="list-group-item" id="liDt">보호시작일 :
-								${item.happenDt}</li>
+							<li class="list-group-item" id="liMark">특징 : ${item.specialMark}</li>
+							<li class="list-group-item" id="liDt">보호시작일 : ${item.happenDt}</li>
 						</ul>
 					</div>
 				</a>
@@ -201,21 +195,19 @@ body{
 					<nav aria-label="Page navigation example">
 						<ul class="pagination justify-content-center mt-5">
 							<c:if test="${curPageMap.needPrev eq true}">
-								<li class="page-item" id="navLeft"><a class="page-link"
-									href="/shelterAnimal/toShelterAnimal?curPage=${curPageMap.startNavi-1}" aria-label="Previous">
-								<span aria-hidden="true">&laquo;</span>
-								</a></li>
+								<li class="page-item" id="navLeft">
+									<a class="page-link" href="/shelterAnimal/toShelterAnimal?curPage=${curPageMap.startNavi-1}" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span></a>
+								</li>
 							</c:if>
-							<c:forEach var="pageNum" begin="${curPageMap.startNavi}"
-								end="${curPageMap.endNavi}" step="1">
-								<li class="page-item navCenter"><a class="page-link"
-									href="/shelterAnimal/toShelterAnimal?curPage=${pageNum}">${pageNum}</a></li>
+							<c:forEach var="pageNum" begin="${curPageMap.startNavi}" end="${curPageMap.endNavi}" step="1">
+								<li class="page-item navCenter"><a class="page-link" href="/shelterAnimal/toShelterAnimal?curPage=${pageNum}">${pageNum}</a></li>
 							</c:forEach>
 							<c:if test="${curPageMap.needNext eq true}">
-								<li class="page-item" id="navRight"><a class="page-link"
-									href="/shelterAnimal/toShelterAnimal?curPage=${curPageMap.endNavi+1}" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-								</a></li>
+								<li class="page-item" id="navRight">
+									<a class="page-link" href="/shelterAnimal/toShelterAnimal?curPage=${curPageMap.endNavi+1}" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span></a>
+								</li>
 							</c:if>
 						</ul>
 					</nav>
@@ -226,20 +218,19 @@ body{
 					<nav aria-label="Page navigation example">
 						<ul class="pagination justify-content-center mt-5">
 							<c:if test="${curPageMap.needPrev eq true}">
-								<li class="page-item" id="navLeft"><a class="page-link"
-									href="/shelterAnimal/toSelectUpkind2?upkind=${upkind}&curPage=${curPageMap.startNavi-1}" aria-label="Previous">
-								<span aria-hidden="true">&laquo;</span>
-								</a></li>
+								<li class="page-item" id="navLeft">
+									<a class="page-link" href="/shelterAnimal/toSelectUpkind2?upkind=${upkind}&curPage=${curPageMap.startNavi-1}" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span></a>
+								</li>
 							</c:if>
 							<c:forEach var="pageNum" begin="${curPageMap.startNavi}" end="${curPageMap.endNavi}" step="1">
-								<li class="page-item navCenter"><a class="page-link"
-									href="/shelterAnimal/toSelectUpkind2?upkind=${upkind}&curPage=${pageNum}">${pageNum}</a></li>
+								<li class="page-item navCenter"><a class="page-link" href="/shelterAnimal/toSelectUpkind2?upkind=${upkind}&curPage=${pageNum}">${pageNum}</a></li>
 							</c:forEach>
 							<c:if test="${curPageMap.needNext eq true}">
-								<li class="page-item" id="navRight"><a class="page-link"
-									href="/shelterAnimal/toSelectUpkind2?upkind=${upkind}&curPage=${curPageMap.endNavi+1}" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-								</a></li>
+								<li class="page-item" id="navRight">
+									<a class="page-link" href="/shelterAnimal/toSelectUpkind2?upkind=${upkind}&curPage=${curPageMap.endNavi+1}" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span></a>
+								</li>
 							</c:if>
 						</ul>
 					</nav>
@@ -247,9 +238,11 @@ body{
 			</c:otherwise>
 		</c:choose>
 	</div>
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
 	<script>
 		window.onload = function(){
-			console.log("${upkind}")
+			console.log("${upkind}");
 			if("${upkind}" == ""){
 				console.log("none")
 			}else if("${upkind}" == "417000"){
@@ -271,7 +264,6 @@ body{
     	
     	$(".linkAjax").on("click", function(){
     		const upkind = $(this).next().val();
-    		console.log("this",$(this).next().val());
     		getAjax(1, upkind);
     	})
     	

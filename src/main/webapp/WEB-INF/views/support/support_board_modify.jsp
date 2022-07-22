@@ -108,12 +108,7 @@
 
 
         /* 목록 */
-        .boardList {
-            border-top: 1px solid var(--sil);
-            padding-left: 0px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--sil);
-        }
+
 
         .boardList li {
             margin-top: 5px;
@@ -137,10 +132,22 @@
             height: 30px;
             display: flex;
             justify-content: space-between;
+            margin-top: 50px;
+            border-top: 1px solid var(--sil);
         }
 
         .board_footer button {
             width: 60px;
+            background-color: white;
+            border: 1px solid var(--sil);
+            color: var(--sil);
+            border-radius: 5px;
+        }
+
+
+        .board_footer button:hover {
+            background-color: var(--sil);
+            color: white;
         }
 
 
@@ -170,19 +177,20 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 </head>
 <body>
-
     <div class="content">
         <div class="content_header">
             <h3>후원 게시판</h3>
         </div>
         <div class="board">
-            <form action="/supportBoard/write" id="form" method="post">
+            <form action="/supportBoard/modify" id="form" method="post">
                 <div class="board_header">
+                    <input type="hidden" name="seq_board" id="seq_board" value="${map.seq_board}">
                     <input type="hidden" name="temp_files[]" id="temp_files">
                     <input type="hidden" name="files_name" id="files_name">
-                    <input type="text" name="board_title" id="board_title" placeholder="제목을 입력해주세요" required
-                    oninvalid="this.setCustomValidity('제목을 입력해주세요')"
-                    oninput="this.setCustomValidity('')">
+                    <input type="text" name="board_title" id="board_title" placeholder="제목을 입력해주세요" value="${map.board_title}"
+                           required
+                           oninvalid="this.setCustomValidity('제목을 입력해주세요')"
+                           oninput="this.setCustomValidity('')">
                 </div>
                 <div class="board_content">
                     <label for="support_bank"><span>은행 이름을 입력해주세요</span>
@@ -195,7 +203,9 @@
                             <option value="IBK기업은행">IBK기업은행</option>
                             <option value="카카오뱅크">카카오뱅크</option>
                         </select>
-                        <input type="text" name="support_bank" id="support_bank" placeholder="계좌 번호를 입력해주세요" required
+                        <input type="text" name="support_bank" id="support_bank" placeholder="계좌 번호를 입력해주세요" value="${map.support_bank}"
+                               required
+                               pattern="[0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-]"
                                oninvalid="this.setCustomValidity('계좌 번호를 입력해주세요')"
                                oninput="this.setCustomValidity('')">
                     </label>
@@ -208,35 +218,39 @@
             </div>
         </div>
     </div>
-
     <script>
-
-    document.querySelector("#form").addEventListener("submit",(e) => {
-        let brn = "${loginSession.member_brn}";
-        if(!brn||brn===""){
-            alert("기관 회원만 이용할 수 있는 기능입니다");
-            e.preventDefault();
-            return;
+    // 은행
+    const default_bank = "${map.bank}";
+    const select = document.querySelectorAll("#bank_category option");
+    select.forEach(
+        e => {
+            if(e.value === default_bank) e.selected = true;
         }
+    )
 
-        let check = confirm("계좌 번호 등 등록 정보를 한 번 더 확인해주세요. 잘못된 등록정보로 인한 사건 / 사고의 책임은 본인에게 있습니다.");
+
+    document.querySelector("#form").addEventListener("submit",(e) => {;
+        let check = confirm("계좌 번호 등 등록 정보를 한 번 더 확인해주세요. " +
+            "잘못된 등록정보로 인한 사건 / 사고의 책임은 본인에게 있습니다.");
 
         if(check){
             const content = document.querySelector(".board_content .note-editable");
             let imgs = document.querySelectorAll(".board_content img");
             let str = '';
             let bank_regex = /[0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-]/;
+
             if(!bank_regex.test(document.querySelector("#support_bank").value)){
                 alert("계좌 번호를 잘못 입력하셨습니다");
                 e.preventDefault();
                 return;
             }
-            if(!content.innerText && imgs.length === 0){
+
+            if(content.innerText==='' && imgs.length === 0){
                 alert('내용을 입력해주세요.');
                 e.preventDefault();
                 return;
 
-            }else if(content.children.length > 0 && imgs.length === 0){
+            } else if(content.children.length > 0 && imgs.length === 0){
                 for(let e of content.children){
                     str += e.innerText.replace(/\s/g, "");
                 }
@@ -254,6 +268,7 @@
             });
             document.querySelector("#files_name").value = arr;
             document.querySelector("#temp_files").value = tempImg;
+
         } else e.preventDefault();
     })
 
@@ -261,12 +276,14 @@
     document.querySelector("#list").addEventListener("click", function () {
         let check = confirm("페이지를 이동하면 작성한 글 내용이 저장되지 않습니다. 정말로 이동하시겠습니까?");
         if (check) {
-            location.href = "/volBoard/lists";
+            location.href = "/supportBoard/lists";
         }
     });
 
+    // 서머노트
     const tempImg = [];
 
+    document.querySelector("#board_content").value = '${map.board_content}';
 
     $(() => {
             $('#board_content').summernote({
@@ -293,8 +310,8 @@
                 callbacks: {
                     onImageUpload: function (files) {
                         for (let i = 0; i < files.length; i++) {
-                            if (files[0].size > 1024 * 1024 * 1) {
-                                alert("1MB 이상은 업로드할 수 없습니다.");
+                            if (files[0].size > 1024 * 1024 * 5) {
+                                alert("5MB 이상은 업로드할 수 없습니다.");
                                 return;
                             }
                             uploadSummernoteImageFile(files[i], this);

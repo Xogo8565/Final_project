@@ -7,9 +7,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    request.setCharacterEncoding("UTF-8");
-%>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
 
 <html lang="en">
 <head>
@@ -26,23 +25,10 @@
             box-sizing: border-box;
         }
 
-        .container {
-            width: 100%;
-            min-height: 1800px;
-            height: 1px;
+        .content {
+            margin-top : 50px;
+            min-height: 1200px;
         }
-
-        .header {
-            height: 10%;
-        }
-
-        .footer {
-            height: 10%;
-        }
-
-        /* .content {
-            height: 80%;
-        } */
 
         button {
             background-color: white;
@@ -119,7 +105,7 @@
         }
 
         .board_content button {
-            height: 40px;
+            height: 30px;
             width: 60px;
             align-self: flex-end;
         }
@@ -167,125 +153,116 @@
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          crossorigin="anonymous">
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            rel="stylesheet" />
+    <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 
     <!-- summernote css/js-->
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="header">HEADER</div>
-    <div class="content">
-        <div class="content_header">
-            <h3>봉사 게시판</h3>
-        </div>
-        <div class="board">
-            <form action="/volBoard/write" id="form" method="post">
-                <div class="board_header">
-                    <select name="area" id="area">
-                        <optgroup label="광역시/자치시/특별시">
-                            <option value="서울">서울</option>
-                            <option value="부산">부산</option>
-                            <option value="대구">대구</option>
-                            <option value="인천">인천</option>
-                            <option value="광주">광주</option>
-                            <option value="대전">대전</option>
-                            <option value="울산">울산</option>
-                            <option value="세종">세종</option>
-                        </optgroup>
-                        <optgroup label="도">
-                            <option value="경기도">경기도</option>
-                            <option value="강원도">강원도</option>
-                            <option value="충청북도">충청북도</option>
-                            <option value="충청남도">충청남도</option>
-                            <option value="전라북도">전라남도</option>
-                            <option value="경상북도">경상북도</option>
-                            <option value="제주도">제주도</option>
-                        </optgroup>
-                    </select>
-                    <input type="hidden" name="temp_files[]" id="temp_files">
-                    <input type="hidden" name="files_name" id="files_name">
-                    <input type="text" name="board_title" id="board_title" placeholder="제목을 입력해주세요" required
-                    oninvalid="this.setCustomValidity('제목을 입력해주세요')"
-                    oninput="this.setCustomValidity('')">
-                </div>
-                <div class="board_content">
-                    <label for="vol_deadLine"><span>봉사 날짜를 입력해주세요</span>
-                        <input type="date" name="vol_deadLine" id="vol_deadLine" placeholder="봉사 날짜를 입력해주세요" required
-                               oninvalid="this.setCustomValidity('봉사활동 날짜를 입력해주세요')"
-                               oninput="this.setCustomValidity('')">
-                    </label>
-                    <label for="vol_count"><span>봉사 인원을 입력해주세요</span>
-                        <input type="number" name="vol_count" id="vol_count" placeholder="봉사 최대 정원을 입력해주세요" required
-                               oninvalid="this.setCustomValidity('봉사활동 인원을 입력해주세요')"
-                               oninput="this.setCustomValidity('')">
-                    </label>
-                    <textarea name="board_content" id="board_content"></textarea>
-                    <button type="submit" id="write">작성</button>
-                </div>
-            </form>
-            <ul class="boardList">
-                <c:if test="${list.size()==2}}">
-                    <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                        <li>
-                            <button>Up</button>
-                            <span>${list.get(0).board_title}</span></li>
-                    </a>
-                    <a href="/volBoard/view?seq_board=${list.get(1).seq_board}">
-                        <li>
-                            <button>down</button>
-                            <span>${list.get(1).board_title}</span></li>
-                    </a>
-                </c:if>
-                <c:if test="${list.size()==1}">
-                    <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                        <li>
-                            <button>Up</button>
-                            <span>${list.get(0).board_title}</span></li>
-                    </a>
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
-                </c:if>
-                <c:if test="${empty list}">
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
-                </c:if>
-            </ul>
-            <div class="board_footer">
-                <button id="list" type="button">목록</button>
+
+<div class="content">
+    <div class="content_header">
+        <h3>봉사 게시판</h3>
+    </div>
+    <div class="board">
+        <form action="/volBoard/write" id="form" method="post">
+            <div class="board_header">
+                <select name="area" id="area">
+                    <optgroup label="광역시/자치시/특별시">
+                        <option value="서울">서울</option>
+                        <option value="부산">부산</option>
+                        <option value="대구">대구</option>
+                        <option value="인천">인천</option>
+                        <option value="광주">광주</option>
+                        <option value="대전">대전</option>
+                        <option value="울산">울산</option>
+                        <option value="세종">세종</option>
+                    </optgroup>
+                    <optgroup label="도">
+                        <option value="경기도">경기도</option>
+                        <option value="강원도">강원도</option>
+                        <option value="충청북도">충청북도</option>
+                        <option value="충청남도">충청남도</option>
+                        <option value="전라북도">전라남도</option>
+                        <option value="경상북도">경상북도</option>
+                        <option value="제주도">제주도</option>
+                    </optgroup>
+                </select>
+                <input type="hidden" name="temp_files[]" id="temp_files">
+                <input type="hidden" name="files_name" id="files_name">
+                <input type="text" name="board_title" id="board_title" placeholder="제목을 입력해주세요" required
+                       oninvalid="this.setCustomValidity('제목을 입력해주세요')"
+                       oninput="this.setCustomValidity('')">
             </div>
+            <div class="board_content">
+                <label for="vol_deadLine"><span>봉사 날짜를 입력해주세요</span>
+                    <input type="date" name="vol_deadLine" id="vol_deadLine" placeholder="봉사 날짜를 입력해주세요" required
+                           oninvalid="this.setCustomValidity('봉사활동 날짜를 입력해주세요')"
+                           oninput="this.setCustomValidity('')">
+                </label>
+                <label for="vol_count"><span>봉사 인원을 입력해주세요</span>
+                    <input type="number" name="vol_count" id="vol_count" placeholder="봉사 최대 정원을 입력해주세요" required
+                           min='1'
+                           oninvalid="this.setCustomValidity('봉사활동 인원을 입력해주세요')"
+                           oninput="this.setCustomValidity('')">
+                </label>
+                <textarea name="board_content" id="board_content"></textarea>
+                <button type="submit" id="write">작성</button>
+            </div>
+        </form>
+        <div class="board_footer">
+            <button id="list" type="button">목록</button>
         </div>
     </div>
-    <div class="footer">FOOTER</div>
 </div>
+
 <script>
-
-
     let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
     document.querySelector("#vol_deadLine").value = date;
     document.querySelector("#vol_deadLine").min = date;
 
-    document.querySelector("#form").addEventListener("submit",(e) => {
-        const content = document.querySelector(".board_content .note-editable>p");
+    document.querySelector("#form").addEventListener("submit", (e) => {
+        const content = document.querySelector(".board_content .note-editable");
+        let imgs = document.querySelectorAll(".board_content img");
+        let str = "";
 
-        if (content.innerHTML === "<br>") {
+        let brn = "${loginSession.member_brn}";
+        if(!brn||brn===""){
+            alert("기관 회원만 이용할 수 있는 기능입니다");
             e.preventDefault();
-            alert("내용을 입력해주세요");
             return;
         }
 
-        let imgs = document.querySelectorAll(".board_content img");
+        if (!content.innerText && imgs.length === 0) {
+            alert('내용을 입력해주세요.');
+            e.preventDefault();
+            return;
+        } else if (content.children.length > 0 && imgs.length === 0) {
+            for (let e of content.children) {
+                str += e.innerText.replace(/\s/g, "");
+            }
+            if (str === '') {
+                alert('내용을 입력해주세요');
+                e.preventDefault();
+                return;
+            }
+        }
+
         let arr = [];
         imgs.forEach(e => {
             let uri = decodeURI(e.src);
@@ -352,7 +329,6 @@
             });
 
 
-
             function uploadSummernoteImageFile(file, editor) {
                 let data = new FormData();
                 data.append("file", file);
@@ -367,8 +343,7 @@
                         if (data.responseCode === "success") {
                             $(editor).summernote('insertImage', data.url);
                             tempImg.push(data.url);
-                        }
-                        else alert("업로드에 실패했습니다");
+                        } else alert("업로드에 실패했습니다");
                     }
                 });
             }
@@ -379,3 +354,5 @@
 </script>
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
+

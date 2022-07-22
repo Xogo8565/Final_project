@@ -10,6 +10,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,1,0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+	crossorigin="anonymous"></script>
     <title>유기동물 상세페이지</title>
     <style>
     @font-face {
@@ -32,6 +35,7 @@
     }
     #table{
     	width: 70%;
+    	background-color: #d9d3c52e;
     }
     .table th{
     	width: 120px;
@@ -63,13 +67,15 @@
     #commentM{
     	 color: rgb(207, 147, 111); 
     	 text-shadow: -1px 0 #e5d8bb, 0 1px #e5d8bb, 1px 0 #e5d8bb, 0 -1px #e5d8bb;
+    	 margin-top: 100px;
     }
     
     </style>
 </head>
 <body>
+	<!-- header -->
+	<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
     <div class="container">
-		<div class="header text-center">header</div>
 		<c:choose>
 			<c:when test="${not empty data}">
 				<div class="contentContainer">
@@ -177,7 +183,7 @@
 						</table>
 					</div>
 					<%-- 반응형 모바일 --%>
-					<div class="col d-sm-none text-center mt-5" id="commentM">
+					<div class="col d-sm-none text-center" id="commentM">
 						<h4 id="comment">[해당 유기동물에 관한 모든 문의는 해당 보호소로 부탁드립니다.]</h4>
 					</div>
 					<%-- 반응형 웹 --%>
@@ -195,11 +201,12 @@
 			</c:otherwise>
 		</c:choose>
 		<div class="col d-flex justify-content-center mt-5 mb-5" id="btnSpace">
-            <button type="button" class="btn btn-secondary" id="btnList">목록으로</button>
-        	<button type="button" class="btn btn-secondary" id="btnBack">뒤로가기</button>
+            <button type="button" class="btn btn-secondary m-2" id="btnList">목록으로</button>
+        	<button type="button" class="btn btn-secondary m-2" id="btnBack">뒤로가기</button>
         </div>
-		<div class="footer text-center">footer</div>
     </div>
+	<!-- footer -->
+	<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
     <script>
     	document.getElementById("btnList").onclick = function(){
     		location.href = "/shelterAnimal/toShelterAnimal?curPage="+1;

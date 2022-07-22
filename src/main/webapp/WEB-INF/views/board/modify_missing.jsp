@@ -11,13 +11,10 @@
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
-<!-- include libraries(jQuery, bootstrap) -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<!-- include summernote css/js -->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="/resources/js/summernote/summernote-lite.js"></script>
+<script src="/resources/js/summernote/lang/summernote-ko-KR.js"></script>
+<link rel="stylesheet" href="/resources/css/summernote/summernote-lite.css">
 
  
     <title>실종게시판 글수정</title>
@@ -32,6 +29,7 @@
         #summernote{
             resize : none
         }
+       /* 실종관련 정보 받는 폼  */
         .textForm{
         	width: 100px;
         	border : 0px;
@@ -43,7 +41,7 @@
         	margin : 10px;
         	border : 1px solid #cfb988;
         	height: 30px;
-        	width: 500px;
+        	width: 50%;
         }
         .miss_area:focus, .animal_kind:focus, .m_date:focus{
         	outline: none !important;
@@ -54,13 +52,21 @@
         .animal_kind{
         	margin-bottom : 30px;
         }
+        /* 작성, 목록 버튼 */
+        .btns1{
+        	margin-left : 30px;
+        	margin-top : 20px;
+        }
+        .btns2{
+        	margin-top : 20px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="row header">
-            여기는 헤더
+            <jsp:include page="/WEB-INF/views/frame/header.jsp"/>
         </div>
         <div class="row board-title">
             <div class="col">
@@ -70,56 +76,160 @@
     <form id="modifyForm" method="post" action="/miss/modify">
         <div class="row titleBox">
             <div class="col">
-                <input type="text" id="title" name="board_title" class="form-control" placeholder="제목을 입력하세요.">
+                <input type="text" id="title" name="board_title" class="form-control" value="${map.MissingBoardDTO.board_title}">
             </div>
         </div>  
         <div class="row">
         	<div class="col">
         			<p> *정확한 정보를 입력하지 않을시에 대한 책임은 본인에게 있습니다.*</p>
         			<label class="textForm">실종날짜 :&nbsp </label>
-                	&nbsp<input type="date" class="m_date" >${map.MissingBoardDTO.miss_date}<br>
+                	&nbsp<input type="date" class="m_date" value="${map.MissingBoardDTO.miss_date}"><br>
                 	<label class="textForm">실종지역 :&nbsp</label>
-                	&nbsp<input type="text" placeholder="예)00시/00구/00동" class="miss_area" name="miss_area">${map.MissingBoardDTO.miss_area}
+                	&nbsp<input type="text" value="${map.MissingBoardDTO.miss_area}" class="miss_area" name="miss_area">
                 	<br>
                     <label class="textForm">동물종류 :&nbsp</label>
-                    &nbsp<input type="text" placeholder="예)푸들" class="animal_kind" name="animal_kind">${map.MissingBoardDTO.animal_kind}
+                    &nbsp<input type="text" value="${map.MissingBoardDTO.animal_kind}" class="animal_kind" name="animal_kind">
         	</div>
         	<div class="col d-none">
-        		<input type="text" name="member_id" value="${logionSession.id}">"
-				<input type="text" name="writer_nickname" value="${logionSession.nickname}"> 	
+        		<input type="text" id="seq_board" name="seq_board" value="${map.MissingBoardDTO.seq_board}">"
+        		<%-- <input type="text" name="member_id" value="${logionSession.id}">"
+				<input type="text" name="writer_nickname" value="${logionSession.nickname}"> --%> 	
         		<input type="text" class="miss_date" name="miss_date">
         	</div>
         </div>
         <div class="row">
             <div class="col">
+            	<input type="hidden" id="imgSrc" name="imgSrc[]">
                 <textarea id="summernote" name="board_content">	
-               	 ${map.MissingBoardDTO.board_content}
+                ${map.MissingBoardDTO.board_content}
                 </textarea>
             </div>
             <div class="row">
-                <div class="col d-flex justify-content-end">
-                    <button type="button" id="writeOk" class="btn btn-secondary">수정완료</button>
+            	<div class="col btns1">
+                    <button type="button" id="backBtn" class="btn btn-outline-light" style="background-color: #cfb988;">목록</button>
+                </div>
+                <div class="col btns2 d-flex justify-content-end">
+                    <button type="button" id="writeOk" class="btn btn-outline-light" style="background-color: #cfb988;">수정 완료</button>       
                 </div>
             </div>
-            <div class="row">
-                <div class="col d-flex justify-content-left">
-                    <button type="button" id="backBtn" class="btn btn-secondary">취소</button>
-                </div>
-            </div>
-        </div>  
     </form>
         <div class="row footer">
-            여기는 푸터
+          <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         </div>
     </div>
     <script>
+    let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    document.querySelector(".m_date").value = date;
     // 목록버튼을 눌렀을때
     $("#backBtn").click(function(){
-    	lcoation.href="/miss/toMissing";
+    	location.href="/miss/toMissing";
     })
-    // 수정완료 버튼을 눌렀을때
-    $("#writeOk").click(function(){
-    	if($("#title").val() == ""){
+     $(document).ready(function() {
+    	// Summernote에 글 내용 추가하는 코드
+    	/* $("#summernote").summernote('code',  '${map.MissingBoardDTO.board_content}'); */
+	//여기 아래 부분
+	$('#summernote').summernote({
+        height: 300,                 // 에디터 높이
+        minHeight: 500,             // 최소 높이
+        maxHeight: null,             // 최대 높이
+        focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+        lang: "ko-KR",					// 한글 설정
+        placeholder: '내용을 입력해주세요.',	//placeholder 설정
+        callbacks: {	//여기 부분이 이미지를 첨부하는 부분
+            onImageUpload : function(files) {
+                uploadSummernoteImageFile(files[0],this);
+            },
+            onPaste: function (e) {
+                var clipboardData = e.originalEvent.clipboardData;
+                if (clipboardData && clipboardData.items && clipboardData.items.length) {
+                    var item = clipboardData.items[0];
+                    if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+                        e.preventDefault();
+                    }
+                }
+            }
+        }
+	});
+        
+	
+
+	/**
+	* 이미지 파일 업로드
+	*/
+	function uploadSummernoteImageFile(file, editor) {
+		data = new FormData();
+		data.append("file", file);
+		$.ajax({
+			data : data,
+			type : "POST",
+			url : "/miss/uploadSummernoteImageFile",
+			contentType : false,
+			processData : false,
+			success : function(data) {
+            	//항상 업로드된 파일의 url이 있어야 한다.
+                console.log(data);
+                files.push(data); // 빈배열에 리턴값 파일정보 넣어주기
+                console.log(files[0].url);
+				$(editor).summernote('insertImage', data.url);
+			}
+		});
+	}
+
+    /* 썸머노트 툴바 설정하는거 */
+    $('.summernote').summernote({
+		  toolbar: [
+			    // [groupName, [list of button]]
+			    ['fontname', ['fontname']],
+			    ['fontsize', ['fontsize']],
+			    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+			    ['color', ['forecolor','color']],
+			    ['table', ['table']],
+			    ['para', ['ul', 'ol', 'paragraph']],
+			    ['height', ['height']],
+			    ['insert',['picture','link','video']],
+			    ['view', ['fullscreen', 'help']]
+			  ],
+			fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
+			fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']
+	  });
+
+  
+      // 마지막까지 게시물에 남아잇는 파일 url 스트링 값으로 넘길 빈배열하나 선언
+      const imgSrc = new Array();
+
+      $("#writeOk").click(function(){
+    	  
+        const title = document.getElementById('title');
+        const summernote = document.getElementById('summernote');
+        const content = document.querySelector(".note-editable");
+        let str = "";
+      const imgs = document.querySelectorAll(".note-editable>p img"); // 게시물에 찐막으로 남아잇는 이미지태그
+      
+      if(title.value.replace(/\s/g, "") == ''){
+          alert('제목을 입력해주세요.');
+          return;
+      }else if(!content.innerText && imgSrc.length == 0){
+          alert('내용을 입력해주세요.');
+          return;
+      }else if(content.children.length > 0 && imgSrc.length == 0){
+          for(let e of content.children){
+              str += e.innerText.replace(/\s/g, "");
+          }
+          if(str == ''){
+              alert('내용을 입력해주세요');
+              return;
+          }
+      }
+
+        // console.log("src : " + imgs[0].getAttribute('src'));
+        imgs.forEach(imgs=>{
+            let src = imgs.getAttribute('src');
+            imgSrc.push(src);
+        })
+        console.log(imgSrc);
+        document.getElementById('imgSrc').value = imgSrc; // 폼안에 잇는 인풋에 배열 담아주고
+
+        if($("#title").val() == ""){
     		alert("제목을 작성해주세요.");
     		$("#title").focus();
     		return;
@@ -146,81 +256,59 @@
     	
     	$(".miss_date").val(md);
     	console.log($(".miss_date").val());
-    	
-    	$("#modifyForm").submit();
-    })
-   
-    
-    $(document).ready(function(){
-    	 $('#summernote').summernote({
-    	        // 에디터 높이
-    	        height: 500,
-    	        // 에디터 한글 설정
-    	        lang: "ko-KR",
-    	        disableResizeEditor: true,
-    	        // 에디터에 커서 이동 (input창의 autofocus라고 생각하시면 됩니다.)
-    	        focus : true,
-    	        toolbar: [
-    	                // 글꼴 설정
-    	                ['fontname', ['fontname']],
-    	                // 글자 크기 설정
-    	                ['fontsize', ['fontsize']],
-    	                // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
-    	                ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
-    	                // 글자색
-    	                ['color', ['forecolor','color']],
-    	                // 표만들기
-    	                ['table', ['table']],
-    	                // 글머리 기호, 번호매기기, 문단정렬
-    	                ['para', ['ul', 'ol', 'paragraph']],
-    	                // 줄간격
-    	                ['height', ['height']],
-    	                // 그림첨부, 링크만들기, 동영상첨부
-    	                ['insert',['picture','link','video']],
-    	                // 코드보기, 확대해서보기, 도움말
-    	                ['view', ['codeview','fullscreen', 'help']]
-    	            ],
-    	            // 추가한 글꼴
-    	            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
-    	            // 추가한 폰트사이즈
-    	            fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
-    	            
-    	            callbacks : { //여기 부분이 이미지를 첨부하는 부분
-    	            onImageUpload : function(files, editor,
-    	            welEditable) {
-    	            for (var i = files.length - 1; i >= 0; i--) {
-    	            uploadSummernoteImageFile(files[i],
-    	            this);
-    	            		}
-    	            	}
-    	            }
-    	       
-    		});
-    	
-    	     /*    $('#summernote').summernote('insertText', '실종지역 :');
-    	        $('#summernote').summernote('insertText', '실종된 날짜 :');
-    	        $('#summernote').summernote('insertText', '동물종류 :'); */
-    	        
-    	        function uploadSummernoteImageFile(file, el){
-    	        	data = new FormData();
-    	        	data.append("file", file);
-    	        	console.log(file);
-    	        	$.ajax({
-    	        		url : "/miss/uploadSummernoteImageFile"
-    	        		, data : data
-    	        		, type : "post"
-    	        		, contentType : false
-    	        		, enctype : "multipart/form-data"
-    	        		, processData : false
-    	        		, success : function(data){
-    	        			console.log(data.url);
-    	        			$(el).summernote('editor.insertImage', data.url);
-    	        		}
-    	        	});
-    	        }
-    })
-         
 
+        // 작성하는 과정에서 올렷다 내렷다 한 모든 파일의 대한 정보
+
+        // 폼안에 작성된 데이터도 json객체 형식으로 변환해서 배열에 넣어줌
+        let data = $("#modifyForm").serializeObject();
+        // console.log(data);
+        files.push(data);
+
+        // 모든 파일에 대한 정보와 폼안에 데이터를 보내줌
+	    $.ajax({
+            url    : "/miss/modify"
+            , type : "POST"
+            , traditional :true
+            , data   : JSON.stringify(files)
+            , contentType: 'application/json'
+            , success : function(data){
+                console.log(data);
+			    if(data == "success"){
+			    	alert("수정 완료되었습니다.");
+			    	location.href ="/miss/toDetail?seq_board="+ ${map.MissingBoardDTO.seq_board};
+			    }
+		    },
+            error: function(e){
+                console.log(e);
+            }
+	    });
+
+      })
+
+      const files = new Array();
+
+      // form 데이터 object로 변환하는 함수
+      jQuery.fn.serializeObject = function() {
+            var obj = null;
+            try {
+                if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+                    var arr = this.serializeArray();
+                    if (arr) {
+                        obj = {};
+                        jQuery.each(arr, function() {
+                            obj[this.name] = this.value;
+                        });
+                    }//if ( arr ) {
+                }
+            } catch (e) {
+                alert(e.message);
+            } finally {
+            }
+        
+            return obj;
+        };
+});
+    
     </script>
 </body>
 </html>

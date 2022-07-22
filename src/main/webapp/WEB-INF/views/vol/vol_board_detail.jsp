@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
 
 
 <!DOCTYPE html>
@@ -19,23 +21,6 @@
             box-sizing: border-box;
         }
 
-        .container {
-            width: 100%;
-            min-height: 1800px;
-            height: 1px;
-        }
-
-        .header {
-            height: 10%;
-        }
-
-        .footer {
-            height: 10%;
-        }
-
-        /* .content {
-            height: 80%;
-        } */
 
         button {
             background-color: white;
@@ -47,6 +32,10 @@
         button:hover {
             background-color: var(--sil);
             color: white;
+        }
+
+        .content {
+            margin-top : 50px;
         }
 
         .content_header {
@@ -130,6 +119,7 @@
             height: 65px;
             display: flex;
             flex-direction: column;
+            margin-bottom: 50px;
         }
 
         .volunteer>div {
@@ -191,10 +181,25 @@
 
     </style>
 </head>
+<link rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+      crossorigin="anonymous">
+<link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" />
+<script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <body>
-<div class="container">
-    <div class="header">HEADER</div>
+
+
     <div class="content">
         <div class="content_header">
             <h3>봉사 게시판</h3>
@@ -204,17 +209,49 @@
                 <span class="title"><c:out value="${map.board_title}"/></span>
                 <span class="nickname"><c:out value="${map.writer_nickname}"/></span>
                 <span class="written_date"><fmt:formatDate value="${map.written_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
-                <span class="view_count"><c:out value="${map.view_count}"/></span>
+                <span class="view_count">조회수 <c:out value="${map.view_count}"/></span>
                 <c:if test="${loginSession.member_id eq map.member_id}">
                     <button type="button" id="modify">수정</button>
                     <button type="button" id="delete">삭제</button>
+                    <script>
+                        document.querySelector("#delete").addEventListener("click", () => {
+                            let check = confirm("정말로 삭제하시겠습니까?");
+                            if (check) {
+                                let form = document.createElement("form");
+                                form.method = "post";
+                                form.action = "/volBoard/delete";
+
+                                let input = document.createElement("input");
+                                input.value = '${map.seq_board}';
+                                input.type = "hidden";
+                                input.name = "seq_board";
+
+                                let arr = [];
+                                let imgs = document.querySelectorAll(".board_content img");
+                                imgs.forEach(e => arr.push(decodeURI(e.src)));
+
+                                let file = document.createElement("input");
+                                file.type = "hidden";
+                                file.name = "file_name";
+                                file.value = arr;
+
+                                form.append(input);
+                                form.append(file);
+                                document.body.append(form);
+                                form.submit();
+                            }
+                        });
+
+                        document.querySelector("#modify").addEventListener("click", e => location.href = "/volBoard/modify?seq_board=${map.seq_board}");
+
+                    </script>
                 </c:if>
             </div>
             <div class="board_content">
                 <c:out value="${map.board_content}" escapeXml="false"/>
             </div>
             <div class="volunteer">
-                <span>♥ 총인원 <c:out value="${map.vol_count}"/> / 현재 인원 <c:out value="${map.cur}"/> / 날짜 <fmt:formatDate value="${map.written_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+                <span>♥ 총인원 <c:out value="${map.vol_count}"/> / 신청 인원 <c:out value="${map.applicants}"/> / 선발 인원 <c:out value="${map.accepted}"/> / 봉사활동 날짜 <fmt:formatDate value="${map.vol_deadLine}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
                 <div>
                     <input type="hidden" name="seq_board" value="${map.seq_board}" id="seq_board">
                     <input type="tel" name="writer_phone" placeholder="전화 번호 입력(형식 : 010-1234-1234)" id="tel">
@@ -225,28 +262,28 @@
                 <c:if test="${not empty list}">
                     <c:choose>
                         <c:when test="${list.size()==1}">
-                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                                <li>
-                                    <button>Up</button>
-                                    <span><c:out value="${list.get(0).board_title}"/></span></li>
-                            </a>
                             <a disabled>
                                 <li>
-                                    <button>down</button>
+                                    <button>UP</button>
                                     <span>등록된 게시글이 없습니다</span></li>
+                            </a>
+                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
+                                <li>
+                                    <button>DOWN</button>
+                                    <span><c:out value="${list.get(0).board_title}"/></span></li>
                             </a>
                         </c:when>
                         <c:otherwise>
-                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                                <li>
-                                    <button>Up</button>
-                                    <span><c:out value="${list.get(0).board_title}"/></span></li>
-                            </a>
                             <a href="/volBoard/view?seq_board=${list.get(1).seq_board}">
                                 <li>
-                                    <button>down</button>
+                                    <button>UP</button>
                                     <span><c:out value="${list.get(1).board_title}"/></span></li>
                             </a>
+                            <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
+                            <li>
+                                <button>DOWN</button>
+                                <span><c:out value="${list.get(0).board_title}"/></span></li>
+                        </a>
                         </c:otherwise>
                     </c:choose>
                 </c:if>
@@ -269,13 +306,14 @@
             </div>
         </div>
     </div>
-    <div class="footer">FOOTER</div>
-</div>
-<script>
+
+    <script>
 
     // 봉사활동 유효기간 확인
     let deadLine = "${map.vol_deadLine}";
+
     deadLine = deadLine.substring(0,11);
+
     let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000);
     deadLine = new Date(deadLine);
 
@@ -287,40 +325,16 @@
         document.querySelector("#tel").readOnly = true;
     }
 
-
-    document.querySelector("#delete").addEventListener("click", () => {
-        let check = confirm("정말로 삭제하시겠습니까?");
-        if (check) {
-            let form = document.createElement("form");
-            form.method = "post";
-            form.action = "/volBoard/delete";
-
-            let input = document.createElement("input");
-            input.value = ${map.seq_board};
-            input.type = "hidden";
-            input.name = "seq_board";
-
-            let arr = [];
-            let imgs = document.querySelectorAll(".board_content img");
-            imgs.forEach(e => arr.push(decodeURI(e.src)));
-
-            let file = document.createElement("input");
-            file.type = "hidden";
-            file.name = "file_name";
-            file.value = arr;
-
-            form.append(input);
-            form.append(file);
-            document.body.append(form);
-            form.submit();
-        }
-    });
-
-    document.querySelector("#modify").addEventListener("click", e => location.href = "/volBoard/modify?seq_board=${map.seq_board}");
-
     document.querySelector("#list").addEventListener("click", e => location.href = "/volBoard/lists");
 
-    document.querySelector("#write").addEventListener("click", e => location.href = "/volBoard/write");
+    document.querySelector("#write").addEventListener("click",()=>{
+        let brn = "${loginSession.member_brn}";
+        if(!brn||brn===""){
+            alert("기관 회원만 이용할 수 있는 기능입니다");
+            return;
+        }
+        location.href = "/supportBoard/write"
+    })
 
     //봉사활동 제출
     document.querySelector("#volSubmit").addEventListener("click", e => {
@@ -332,12 +346,19 @@
             return;
         }
 
+        const loginSession = "${loginSession}";
+        if(!loginSession||loginSession===""){
+            alert("회원만 사용할 수 있는 기능입니다");
+            return;
+        }
+
         $.ajax({
             url: "/vol/submit",
             method: 'post',
             data: {seq_board: document.querySelector("#seq_board").value, writer_phone: document.querySelector("#tel").value},
             success: function (data) {
                 if(data==='success') {
+                    alert("봉사활동에 등록했습니다.");
                     getCurrentVolCount();
                 } else if (data === "duplicated"){
                     alert("이미 봉사활동에 등록하셨습니다.")
@@ -372,5 +393,4 @@
 </script>
 </body>
 </html>
-<html>
-<head>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>

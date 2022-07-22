@@ -43,7 +43,16 @@
 	
 	/* 백그라운드 컬러 */
 	.body {
-	    background-color: rgb(231, 231, 231);
+	    background-color: rgb(231, 231, 231);	    
+	}
+	
+	/* 바디부분 패딩 */
+	.body {
+	    padding-left: 10%;
+		padding-right: 10%;
+		padding-top: 5%;
+		padding-bottom: 5%;
+
 	}
 	
 	/* 하이퍼링크 */
@@ -56,17 +65,15 @@
 	.btn-light {
 	    width: 200px;
 	}
-	
-	/* 로그인 전체 */
-	.body {
-	    padding: 20px;
-	}
+
 </style>
 
 <body>
-    <div class="container">
+
+        
+    <div class="">
         <div class="header">
-            여기는 헤더
+            <jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
         </div>
 
         <div class="body">
@@ -84,21 +91,21 @@
             </div>
 
             <div class="bodyContent">
-            	<form id="form-login" action="/toLogin" method="post">
+            	<form id="form-login">
 	                <div class="row cls-row-input d-flex justify-content-center">
 	                    <div class="col-8 col-lg-6 col-xl-4">
-	                        <input type="text" class="form-control" id="id" name="id" placeholder="아이디">
+	                        <input type="text" class="form-control" id="id" placeholder="아이디">
 	                    </div>
 	                </div>
 	                <div class="row cls-row-input d-flex justify-content-center">
 	                    <div class="col-8 col-lg-6 col-xl-4">
-	                        <input type="password" class="form-control" id="pw" name="pw" placeholder="비밀번호">
+	                        <input type="password" class="form-control" id="pw" placeholder="비밀번호">
 	                    </div>
 	                </div>
 	                <div class="row cls-row-check">
 	                    <div class="col d-flex justify-content-center">
-	                        <input type="checkbox" id="CheckRememberId">
-	                        <label for="CheckRememberId">&nbsp;&nbsp;로그인 상태 유지</label>
+	                        <input type="checkbox" id="checkRememberId">
+	                        <label for="checkRememberId">&nbsp;&nbsp;아이디 저장하기</label>
 	                    </div>
 	                </div>
 	                <div class="row">
@@ -106,7 +113,7 @@
 	                        <button type="button" id="btnLogin" class="btn btn-light">로그인</button>
 	                    </div>
 	                </div>
-	
+				</form>
 	                <div class="row d-flex justify-content-center">
 	                    <div class="col-12 col-sm-6 d-flex justify-content-center">
 	                        <a href="/member/toSignupPage" class="cls-href">회원가입</a>
@@ -118,7 +125,7 @@
 	                        <span>찾기</span>
 	                    </div>
 	                </div>
-	
+<!-- 	
 	                <div class="row">
 	                    <div class="col-12">
 	                        <p class="line">또는</p>
@@ -129,17 +136,96 @@
 	                        <button type="button" class="btn btn-light">카카오</button>
 	                    </div>
 					</div>
-				</form>
+-->
             </div>
         </div>
-
-        <div class="footer">
-            여기는 풋터
+         <div class="footer">
+            <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         </div>
+
     </div>
 <script>
 
+	// 일반 로그인
+	$("#btnLogin").on("click", function(){
+		if($("#id").val() === "" || $("#pw").val() === "") {
+			alert("아이디 혹은 비밀번호를 입력하세요.");
+			return;
+		}
+		
+		$.ajax({
+			url : "/member/loginProc"
+			,type : "post"
+			,data : {member_id : $("#id").val(), member_pw : $("#pw").val()}
+			, success: function(data){
+				console.log(data);
+				if(data == "success"){
+					location.href = "/";
+				}else if(data == "fail"){
+					alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+				}
+			}, error : function(e){
+				console.log(e);
+			}
+		})
+		
+	});
 	
+
+	//쿠키 가져오기
+	$(document).ready(function() {
+		
+         let key = getCookie("key");
+         $("#id").val(key);
+         
+         if($("#id").val() != "") { // 그 전에 ID를 저장해서 처음 페이지 로딩 시, 입력 칸에 저장된 ID가 표시된 상태라면,
+            $("#checkRememberId").attr("checked",true); //ID 저장하기를 체크상태로 두기
+         }
+         
+         $("#checkRememberId").change(function(){ //체크박스에 변화가 있다면
+            if($("#checkRememberId").is(":checked")){ //id저장하기 체크했을때
+               setCookie("key",$("#id").val(),30); //30일동안 쿠키 저장
+            }else{
+               deleteCookie("key");
+            }
+         })
+         
+         // ID 저장하기를 체크한 상태에서 id를 입력하는 경우 , 이럴때도 쿠키 저장.
+         $("#id").keyup(function(){ //ID 입력칸에 ID를 입력할 때
+            if($("#checkRememberId").is(":checked")){ //ID 저장하기를 체크한 상태라면
+               setCookie("key", $("#id").val(),30); //30일동안 쿠기 보관
+            }
+         })
+	});
+	
+	// 쿠키 저장하기
+	// setCookie => saveid함수에서 넘겨준 시간이 현재시간과 비교해서 쿠키를 생성하고 지워주는 역할
+	function setCookie(cookieName, value, exdays){
+	    var exdate = new Date();
+	    exdate.setDate(exdate.getDate() + exdays);
+	    var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
+	    document.cookie = cookieName + "=" + cookieValue;
+	}
+	// 쿠키 삭제
+	function deleteCookie(cookieName){
+	    var expireDate = new Date();
+	    expireDate.setDate(expireDate.getDate() - 1);
+	    document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
+	}
+	// 쿠키 가져오기
+	function getCookie(cookieName) {
+	    cookieName = cookieName + '=';
+	    var cookieData = document.cookie;
+	    var start = cookieData.indexOf(cookieName);
+	    var cookieValue = '';
+	    if(start != -1){ // 쿠키가 존재한다면
+	        start += cookieName.length;
+	        var end = cookieData.indexOf(';', start);
+	        if(end == -1)end = cookieData.length; // if(end == -1) -> 쿠키 값의 마지막 위치 인덱스 번호 설정
+	        cookieValue = cookieData.substring(start, end);
+	    }
+	    return unescape(cookieValue);
+	}
 
 </script>
 </body>
