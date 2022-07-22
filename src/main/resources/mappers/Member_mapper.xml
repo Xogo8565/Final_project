@@ -3,5 +3,263 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comme.member.MemberDAO">
-
+	
+	<!-- 회원 정보 조회 -->
+	<select id="ProfileInfo" parameterType="string" resultType="MemberDTO">
+		select * from member where member_id = #{member_id}
+	</select>
+	
+	<!-- 작성한 댓글이 총 몇개나 있는지 불러오기 -->
+	<select id="countComment" parameterType="map" resultType="int">
+		SELECT count(seq_comment) FROM BOARD_COMMENT WHERE COMMENT_ID = #{comment_id}
+		<if test="search_keyword != '' ">
+    		and COMMENT_CONTENT LIKE '%'|| #{search_keyword} ||'%'
+		</if>
+	</select>
+	
+	<!-- 작성한 게시물이 총 몇개인지 갯수세기 -->
+	<select id="countBoard" parameterType="map" resultType="int">
+		SELECT
+		 COUNT(SEQ_BOARD) 
+		FROM BOARD
+		    WHERE MEMBER_ID = #{member_id}
+		<if test="search_keyword != null ">
+    		AND ${search_type} LIKE '%'|| #{search_keyword} ||'%'
+		</if>
+	</select>
+	
+	<!-- 댓글 목록 뿌려주기 -->
+	<select id="selectComment" parameterType="map" resultType="map">
+		SELECT * 
+		FROM (
+		SELECT A.*, ROWNUM RN
+		FROM  (
+		    SELECT b.seq_comment , c.category_name, b.comment_content, b.comment_date, c.category_pk, u.seq_category, b.seq_board 
+		    FROM BOARD_COMMENT B, BOARD U, category C 
+		        WHERE u.seq_category = c.seq_category
+                AND U.SEQ_BOARD = B.SEQ_BOARD
+		        AND b.comment_id = #{comment_id}
+        <if test="search_keyword != '' ">
+        	and b.comment_content LIKE '%'|| #{search_keyword} ||'%'
+        </if>
+        order by b.seq_comment desc 
+		    ) A
+		)
+        WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	
+	
+	<!-- 작성한 게시물 목록 뿌려주기 -->
+	<select id="selectMyBoard" parameterType="map" resultType="map">
+		SELECT * 
+		FROM (
+		SELECT A.*,
+			(SELECT COUNT(*) FROM BOARD_COMMENT cm WHERE cm.seq_board = A.seq_board) cm_count,
+			ROWNUM RN
+		FROM  (
+		    SELECT u.seq_board, c.category_name, u.board_title, u.view_count , u.written_date, c.category_pk, u.seq_category
+		    FROM BOARD U, category C 
+		        WHERE u.seq_category = c.seq_category
+		        AND u.member_id = #{member_id}
+        <if test="search_keyword != null ">
+        	and u.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+        </if>
+        order by u.seq_board desc
+		    ) A
+		)
+        WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 보호소가 올린 봉사 신청글에 대한 신청 갯수 -->
+	<select id="countVolList" parameterType="map" resultType="int">
+		SELECT 
+		    count(seq_submit)
+		FROM
+		    VOL_BOARD A, VOL_SUBMIT B
+		    WHERE A.SEQ_BOARD = B.SEQ_BOARD
+		    AND a.member_id = #{member_id}
+		<if test="search_type != null ">
+			<if test="search_type == 'board_title' ">
+			AND a.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+			</if>
+			<if test="search_type != 'board_title' ">
+			AND b.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+			</if>
+		</if>
+	</select>
+	
+	<!-- 보호소가 올린 봉사신청글에 신청 한 사용자 내역 -->
+	<select id="selectVolList" parameterType="map" resultType="map">
+		SELECT *
+		FROM (
+		SELECT C.*, ROWNUM RN 
+		FROM (SELECT 
+		        A.SEQ_BOARD,A.VOL_DEADLINE, b.member_id, a.board_title, b.writer_name, B.WRITER_PHONE, A.VOL_COUNT, B.vol_status, B.seq_submit,
+		        (SELECT
+		            COUNT(VOL_STATUS)
+		        FROM VOL_SUBMIT B
+		            WHERE B.SEQ_BOARD = A.SEQ_BOARD
+		            AND B.VOL_STATUS = 'Y') select_COUNT, 
+		        (SELECT 
+		            COUNT(SEQ_SUBMIT) 
+		        FROM VOL_SUBMIT B
+		            WHERE B.SEQ_BOARD = A.SEQ_BOARD) signup_count
+		    FROM
+		        VOL_BOARD A, VOL_SUBMIT B
+		        WHERE A.SEQ_BOARD = B.SEQ_BOARD
+		        AND a.member_id = #{member_id}
+			<if test="search_type != null ">
+				<if test="search_type == 'board_title' ">
+				AND a.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+				</if>
+				<if test="search_type != 'board_title' ">
+				AND b.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+				</if>
+			</if>
+		        ORDER BY a.seq_board DESC) C)
+		        WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 이용자의 봉사 신청 승인으로 업데이트 -->
+	<update id="updateVolSt" parameterType="map">
+		update vol_submit set vol_status 
+		<if test='vol_status == "Y" '>
+			= 'N'
+		</if>
+		<if test='vol_status == "N" '>
+			= 'Y'
+		</if>
+		where seq_submit = #{seq_submit}
+	</update>
+	
+	<!-- 해당 서브밋 시퀀스 번호의 상태 값 가져오기 -->
+	<select id="vol_status" parameterType="string" resultType="string">
+		select vol_status from vol_submit where seq_submit = #{seq_submit}
+	</select>
+	
+	<!-- 업데이트된 선발 인원 수 조회하기 -->
+	<select id="countVolSt" parameterType="string" resultType="int">
+		select count(seq_submit) from vol_submit where seq_board = #{seq_board} and vol_status = 'Y'
+	</select>
+	
+	<!-- 보호소가 작성한 후원글이 총 몇개인지 -->
+	<select id="countMySP" parameterType="string" resultType="int">
+		SELECT COUNT(SEQ_BOARD) FROM SUPPORT_BOARD WHERE MEMBER_ID = #{member_id}
+	</select>
+	
+	<!-- 보호소가 작성한 후원글 불러오기 -->
+	<select id="mySupportBoard" parameterType="map" resultType="map">
+		SELECT * 
+		FROM (
+		SELECT A.*, ROWNUM RN 
+		FROM (
+		    SELECT * FROM SUPPORT_BOARD
+		        WHERE MEMBER_ID = 'id'
+		        order by SEQ_BOARD desc) A)
+		    WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 사용자가 후원한 내역이 몇개인지 -->
+	<select id="countPay" parameterType="map" resultType="int">
+		select count(seq_pay) FROM pay P, support_board S WHERE P.seq_board = S.seq_BOARD AND s.member_id = #{member_id}
+		<if test="search_keyword != null ">
+         	<if test="search_type == 'board_title' ">
+         		and s.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+         	</if>
+         	<if test="search_type != 'board_title' ">
+         		and p.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+         	</if>
+        </if>
+	</select>
+	
+	<!-- 사용자가 후원한 후원내역 -->
+	<select id="userPayList" parameterType="map" resultType="map">
+		SELECT * 
+		FROM (
+		SELECT A.*, ROWNUM RN
+		FROM  (
+		    SELECT  p.seq_pay, p.seq_board, s.board_title, p.member_id, p.pay_money, p.pay_date
+		    FROM pay P, support_board S
+		        WHERE P.seq_board = S.seq_BOARD
+		        AND s.member_id = #{member_id}
+         <if test="search_keyword != null ">
+         	<if test="search_type == 'board_title' ">
+         		and s.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+         	</if>
+         	<if test="search_type != 'board_title' ">
+         		and p.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+         	</if>
+        </if>
+        order by P.seq_pay desc 
+		    ) A
+		)
+         WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 사용자가 신청한 봉사 신청 총 갯수 -->
+	<select id="countUserVol" parameterType="map" resultType="int">
+		SELECT 
+		    count(seq_submit)
+		FROM
+		    VOL_SUBMIT B, VOL_BOARD A
+		    WHERE B.SEQ_BOARD = A.SEQ_BOARD
+		    AND b.member_id = #{member_id}
+		<if test="search_keyword != null ">
+			AND A.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+		</if>
+	</select>
+	
+	<!-- 사용자가 신청한 봉사 신청 리스트 -->
+	<select id="selectUserVol" parameterType="map" resultType="map">
+		SELECT *
+		FROM (
+		SELECT C.*, ROWNUM RN 
+		FROM (SELECT 
+		        A.SEQ_BOARD,A.VOL_DEADLINE, b.member_id, a.board_title, A.VOL_COUNT, B.vol_status, B.seq_submit,
+		        (SELECT
+		            COUNT(VOL_STATUS)
+		        FROM VOL_SUBMIT B
+		            WHERE B.SEQ_BOARD = A.SEQ_BOARD
+		            AND B.VOL_STATUS = 'Y') select_COUNT, 
+		        (SELECT 
+		            COUNT(SEQ_SUBMIT) 
+		        FROM VOL_SUBMIT B
+		            WHERE B.SEQ_BOARD = A.SEQ_BOARD) signup_count
+		    FROM
+		        VOL_BOARD A, VOL_SUBMIT B
+		        WHERE A.SEQ_BOARD = B.SEQ_BOARD
+		        AND b.member_id = #{member_id}
+		      	<if test="search_type != null ">
+					<if test="search_type == 'board_title' ">
+					AND a.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+					</if>
+				</if>
+		        ORDER BY a.seq_board DESC) C)
+		        WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 사용자가 후원한 후원 내역의 갯수 -->
+	<select id="countMyPayList" parameterType="string" resultType="int">
+		select count(seq_pay) 
+		FROM 
+			pay P, support_board S 
+			WHERE P.seq_board = S.seq_BOARD 
+			AND p.member_id = #{member_id}
+	</select>
+	
+	<!-- 사용자가 후원한 후원 내역 리스트 -->
+	<select id="myPayList" parameterType="map" resultType="map">
+		SELECT * 
+		FROM (
+		SELECT A.*, ROWNUM RN
+		FROM  (
+		    SELECT  p.seq_pay, p.seq_board, s.board_title, p.member_id, p.pay_money, p.pay_date
+		    FROM pay P, support_board S
+		        WHERE P.seq_board = S.seq_BOARD
+		        AND p.member_id = #{member_id}
+                order by P.seq_pay desc 
+		    ) A
+		)
+         WHERE RN BETWEEN #{start} AND #{end}
+	</select>
 </mapper>

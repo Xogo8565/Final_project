@@ -91,12 +91,13 @@
       const category = document.querySelector('select');
       const title = document.getElementById('title');
       const summernote = document.getElementById('summernote');
-      const content = document.querySelector(".note-editable>p");
+      const content = document.querySelector(".note-editable");
+      let str = "";
       // 마지막까지 게시물에 남아잇는 파일 url 스트링 값으로 넘길 빈배열하나 선언
       const imgSrc = new Array();
 
       document.getElementById('registerBtn').addEventListener('click', function(){
-        const imgs = document.querySelectorAll(".note-editable>p img"); // 게시물에 찐막으로 남아잇는 이미지태그
+        const imgs = document.querySelectorAll(".note-editable img"); // 게시물에 찐막으로 남아잇는 이미지태그
 
         // console.log("src : " + imgs[0].getAttribute('src'));
         imgs.forEach(imgs=>{
@@ -105,17 +106,29 @@
         })
         console.log(imgSrc);
         document.getElementById('imgSrc').value = imgSrc; // 폼안에 잇는 인풋에 배열 담아주고
+        
 
         if(category.value == 0){
             alert('카테고리를 지정해주세요');
             return;
-        }else if(title.value == ""){
+        }else if(title.value.replace(/\s/g, "") == ''){
             alert('제목을 입력해주세요.');
             return;
-        }else if(content.innerHTML == '<br>'){
+        }else if(!content.innerText && imgSrc.length == 0){
             alert('내용을 입력해주세요.');
             return;
+        }else if(content.children.length > 0 && imgSrc.length == 0){
+            for(let e of content.children){
+                str += e.innerText.replace(/\s/g, "");
+            }
+            if(str == ''){
+                alert('내용을 입력해주세요');
+                return;
+            }
         }
+
+
+        
 
         // 작성하는 과정에서 올렷다 내렷다 한 모든 파일의 대한 정보
 
@@ -258,7 +271,7 @@
                         </select>
                     </span>
                     <span id="titleBox">
-                        <input type="text" id="title" name="board_title" placeholder="제목" />
+                        <input type="text" id="title" name="board_title" placeholder="제목" value="" />
                     </span>
                     <br><br>
                     <input type="hidden" id="imgSrc" name="imgSrc[]">

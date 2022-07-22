@@ -147,7 +147,7 @@ public class BoardController {
 		String board_content = (String)jsonData.get(jsonData.size()-1).get("board_content"); // 게시물 내용
 		int seq_category = Integer.parseInt((String) jsonData.get(jsonData.size()-1).get("seq_category")); // 게시물이 속한 소분류 카테고리 
 		
-		BoardDTO dto = new BoardDTO(0, board_title, board_content, "id2", "nickname", null, 0, seq_category); // 아이디랑 닉네임은 나중에 세션에서 따오기
+		BoardDTO dto = new BoardDTO(0, board_title, board_content, "id", "nickname", null, 0, seq_category); // 아이디랑 닉네임은 나중에 세션에서 따오기
 		service.insertBoard(dto); // db에 저장
 		
 		service.boardFileCheck(jsonData, imgSrc, dto); // 파일 최종체크해서 인서트하거나 도중에 지운애들 디렉토리에서 삭제하는 메서드

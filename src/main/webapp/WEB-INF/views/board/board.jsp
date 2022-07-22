@@ -116,7 +116,7 @@
                 color: rgb(43, 133, 250);
             }
 
-            #search, #searchBtn, select{
+            #search, #searchBtn, #search_type{
                 position: relative;
                 top: 0;
                 border-style: none;
@@ -203,13 +203,13 @@
                                                         <c:when test="${etcMap.search_type eq null}">
                                                                 <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
                                                                 <c:if test="${dto.CM_COUNT != 0}" > <!-- 댓글 수 체크해서 0개 보다 많을 때만 게시물 옆에 추가해줌 -->
-                                                                <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
+                                                                <span style="font-size: 6px; font-weight: bold;">&nbsp;&nbsp;${dto.CM_COUNT}</span>
                                                                 </c:if> </td>
                                                         </c:when>
                                                         <c:otherwise>
                                                                 <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
                                                                 <c:if test="${dto.CM_COUNT != 0}" >
-                                                                <span style="font-size: 6px; font-weight: bold;">${dto.CM_COUNT}</span>
+                                                                <span style="font-size: 6px; font-weight: bold;">&nbsp;&nbsp;${dto.CM_COUNT}</span>
                                                                 </c:if> </td>
                                                         </c:otherwise>
                                                     </c:choose>
@@ -236,7 +236,7 @@
                             <button type="submit" id="searchBtn" value="${etcMap.category}" name="seq_category"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </span>
                         <span class="searchBox">
-                            <select name="search_type">
+                            <select name="search_type" id="search_type">
                                 <option value="board_title">제목</option>
                                 <option value="board_content">내용</option>
                                 <option value="writer_nickname">닉네임</option>
@@ -344,6 +344,14 @@
                     $("#topBtn").hide();
                 }
             });
+
+            const select = '${etcMap.search_type}';
+            const option = document.querySelectorAll('#search_type option');
+            option.forEach(option=>{
+                if(option.value === select){
+                    option.selected = true;
+                }
+            })
         </script>
 
         </html>
