@@ -31,9 +31,6 @@ public class VolBoardController {
 
     @GetMapping("/lists")
     public String volBoard(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
-        // test 용
-        logger.info("테스트 중 세션 발생");
-        httpSession.setAttribute("loginSession", new MemberDTO("test","test","test","test","test","0100000000","n","1","사업자"));
 
         Map<String, Object> map = volBoardService.selectList(curPage);
         model.addAttribute("map", map);
