@@ -8,6 +8,16 @@
 	<select id="selectByMissing" parameterType="int" resultType="FileDTO">
 		select * from missing_file where seq_board = #{seq_board}
 	</select>
+	<!-- 삭제 할 파일 정보 불러오기 -->
+	<select id="fileListMissing" parameterType="int" resultType="FileDTO">
+		select * from missing_file where seq_board = #{seq_board}
+	</select>
+	
+	<!-- 실종파일 삭제 -->
+	<select id="deleteFileMissing" parameterType="string">
+		delete from missing_file where files_sys = #{files_sys}
+	</select>
+	
     <insert id="insert_file">
         insert into ${table_name}
         values (seq_file.nextval , #{fileDTO.seq_board}, #{fileDTO.files_upload}, #{fileDTO.files_ori}, #{fileDTO.files_sys})

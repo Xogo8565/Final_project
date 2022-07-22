@@ -13,6 +13,10 @@ public interface FileDAO {
 	
 	// 실종게시판 파일 상세보기
 	List<FileDTO> selectByMissing(int seq_board);
+	
+	List<FileDTO> fileListMissing(int seq_board);
+	
+	void deleteFileMissing(String files_sys);
 
     void insert_file(@Param("fileDTO") FileDTO fileDTO, @Param("table_name") String table_name) throws Exception;
 

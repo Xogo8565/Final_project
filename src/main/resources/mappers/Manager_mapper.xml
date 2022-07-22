@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.comme.manager.ManagerDAO">
+	<!-- 전체 검색 -->
+	<select id="selectAll" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="map">
+		SELECT * 
+      FROM (
+      SELECT A.*,
+      	(SELECT TO_CHAR(blacklist_date, 'YY/MM/DD') FROM blacklist WHERE member_id = A.member_id) AS blacklist_date,
+        (SELECT blacklist_content FROM blacklist bk WHERE bk.member_id = A.member_id) AS blacklist_content, ROWNUM RN 
+      FROM  (
+          SELECT *
+          FROM member m
+          ) A
+      )
+         WHERE RN BETWEEN #{start} and #{end}  
+	</select>
+	<select id="selectAllBlackList" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="map">
+		SELECT * 
+      FROM (
+      SELECT A.*,
+        (SELECT member_nickname FROM member WHERE member_id = A.member_id) AS member_nickname,
+        (SELECT member_email FROM member WHERE member_id = A.member_id) AS member_email,
+        (SELECT member_name FROM member WHERE member_id = A.member_id) AS member_name,
+        (SELECT member_phone FROM member WHERE member_id = A.member_id) AS member_phone,
+        (SELECT member_grade FROM member WHERE member_id = A.member_id) AS member_grade,
+        (SELECT member_brn FROM member WHERE member_id = A.member_id) AS member_brn
+        ,ROWNUM RN 
+      FROM  (
+          (SELECT TO_CHAR(blacklist_date, 'YY/MM/DD') AS blacklist_date, blacklist_content, member_id FROM blacklist bk)
+          order by blacklist_date
+          ) A
+      )
+         WHERE RN BETWEEN #{start} and #{end}  
+	</select>
+	<!-- 키워드 검색 -->
+	<select id="search" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="map">
+		SELECT * 
+      FROM (
+      SELECT A.*,
+      	(SELECT TO_CHAR(blacklist_date, 'YY/MM/DD') FROM blacklist WHERE member_id = A.member_id) AS blacklist_date,
+        (SELECT blacklist_content FROM blacklist bk WHERE bk.member_id = A.member_id) AS blacklist_content, ROWNUM RN 
+      FROM  (
+          SELECT *
+          FROM member m
+          where
+		<if test="category =='all'">
+ 			member_id like '%'||#{keyword}||'%'
+ 			or member_name like '%'||#{keyword}||'%'
+ 			or member_nickname like '%'||#{keyword}||'%'
+ 			order by m.member_id
+ 		</if>
+ 		<if test="category == 'member_id'">
+ 			${category} like '%'||#{keyword}||'%'
+ 			order by m.${category}
+ 		</if>
+ 		<if test="category == 'member_name'">
+ 			${category} like '%'||#{keyword}||'%'
+ 			order by m.${category}
+ 		</if>
+ 		<if test="category == 'member_nickname'">
+ 			${category} like '%'||#{keyword}||'%'
+ 			order by m.${category}
+ 		</if>
+          ) A
+      )
+         WHERE RN BETWEEN #{start} and #{end}
+	</select>
+	<!-- 등급 검색 -->
+	<select id="searchGrade" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap" parameterType="map">
+		SELECT * 
+      FROM (
+      SELECT A.*,
+      	(SELECT TO_CHAR(blacklist_date, 'YY/MM/DD') FROM blacklist WHERE member_id = A.member_id) AS blacklist_date,
+        (SELECT blacklist_content FROM blacklist bk WHERE bk.member_id = A.member_id) AS blacklist_content, ROWNUM RN 
+      FROM  (
+          SELECT *
+          FROM member m
+          where 
+ 			member_grade=#{member_grade}
+          ) A
+      )
+         WHERE RN BETWEEN #{start} and #{end}
+	</select>
+	<select id="totalCnt" resultType="int">
+		select count(*) from member
+	</select>
+	<select id="searchKeywordCnt" resultType="int" parameterType="map">
+		select count(*) as totalCnt from member where 
+			<if test="category =='all'">
+ 				member_id like '%'||#{keyword}||'%'
+ 				or member_name like '%'||#{keyword}||'%'
+ 				or member_nickname like '%'||#{keyword}||'%'
+ 			</if>
+ 			<if test="category == 'member_id'">
+ 				${category} like '%'||#{keyword}||'%'
+ 			</if>
+ 			<if test="category == 'member_name'">
+ 				${category} like '%'||#{keyword}||'%'
+ 			</if>
+ 			<if test="category == 'member_nickname'">
+ 				${category} like '%'||#{keyword}||'%'
+ 			</if>
+	</select>
+	<select id="searchGradeCnt" resultType="int" parameterType="String">
+		select count(*) as totalCnt from member where member_grade=#{member_grade}
+	</select>
+	<select id="blackListCnt" resultType="int">
+		select count(*) as totalCnt from blacklist
+	</select>
+	
+	<update id="modifyGrade" parameterType="map">
+		update member set member_grade=#{member_grade} where member_id=#{member_id}
+	</update>
+	
+	<!-- 블랙리스트 기등록 확인 후 insert or update -->
+	<insert id="insertBlackList" parameterType="BlackListDTO">
+		merge into blacklist using dual on (member_id = #{member_id})
+		when matched then 
+			update set blacklist_content=#{blacklist_content}, blacklist_date=sysdate
+		when not matched then
+			insert (member_id, blacklist_content, blacklist_date) values(#{member_id}, #{blacklist_content}, sysdate)
+	</insert>
+	<delete id="deleteBlackList" parameterType="String">
+		delete from blacklist where member_id=#{member_id}
+	</delete>
+</mapper>

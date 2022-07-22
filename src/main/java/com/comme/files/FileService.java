@@ -50,6 +50,7 @@ public class FileService implements FileDAO {
 
         return jsonObject;
     }
+   
 
     // 테이블 저장
     public void insert_file(int seq_board, List<String> files_name, String[] temp_files, String path, String table_name) throws Exception {
@@ -127,6 +128,13 @@ public class FileService implements FileDAO {
 
     }
 
+	public void deleteFileMissing(String files_sys) {
+		fileDAO.deleteFileMissing(files_sys);
+	}
+	public List<FileDTO> fileListMissing(int seq_board){
+		return fileDAO.fileListMissing(seq_board);
+	}
+	
     public void insertFile(FileDTO dto){
 		fileDAO.insertFile(dto);
 	}
@@ -158,5 +166,7 @@ public class FileService implements FileDAO {
     public int delete_file(@Param("seq_file") int seq_file,@Param("table_name") String table_name) throws Exception {
         return fileDAO.delete_file(seq_file, table_name);
     }
+
+
 
 }

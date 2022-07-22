@@ -11,14 +11,20 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.comme.files.FileDTO;
+import com.comme.files.FileService;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @RequestMapping("/miss")
 @Controller
@@ -27,24 +33,28 @@ public class MissingBoardController {
 	private MissingBoardService service;
 	@Autowired
 	private HttpSession session;
+	@Autowired
+	private FileService fileService;
 
-	@RequestMapping(value = "/toMissing") // 실종게시판 요청
-	public String toMissing(Model model) throws Exception {
-		List<MissingBoardDTO> list = service.selectAllMissing();
-		model.addAttribute("list", list);
+	@RequestMapping(value = "/toMissing") // 실종게시판 요청 -> 이미지 꺼내기..?
+	public String toMissing(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
+		Map<String, Object> map = service.selectAllMissing(curPage);
+	    model.addAttribute("map", map);
 		return "/board/missing_board";
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/search") // 검색
-	public List<MissingBoardDTO> search(String category, String keywordMissing) throws Exception {
+	@RequestMapping(value = "/search", produces="application/json; charset=utf-8") // 검색
+	public Map<String, Object> search(@RequestParam(value = "category") String category, @RequestParam(value = "keywordMissing") String keywordMissing, 
+			@RequestParam(value = "curPage", defaultValue = "1") int curPage) throws Exception {
 		System.out.println("카테고리 : " + category);
 		System.out.println("키워드 : " + keywordMissing);
-
-		List<MissingBoardDTO> list = service.search(category, keywordMissing);
-		System.out.println(list.toString());
-		return list;
-
+		
+		Map<String, Object> map = service.search(curPage, category, keywordMissing);
+        map.put("category", category);
+        map.put("keywordMissing", keywordMissing);
+        System.out.println(map.get("list"));       
+        return map;
 	}
 
 	@RequestMapping(value = "/toWrite") // 글쓰기 페이지 요청
@@ -75,9 +85,12 @@ public class MissingBoardController {
 		
 		  try { 
 			  InputStream fileStream = file.getInputStream();
-			  FileUtils.copyInputStreamToFile(fileStream, targetFile); //파일 저장
-			  jsonObject.addProperty("url", "/summernoteImage/"+savedFileName);
-			  jsonObject.addProperty("responseCode", "success");
+			  FileUtils.copyInputStreamToFile(fileStream, targetFile); //파일 저장 
+			  	jsonObject.addProperty("url", "/mbFile/"+savedFileName); // 파일 url 값
+				jsonObject.addProperty("responseCode", "success"); 
+				jsonObject.addProperty("files_ori", originalFileName); // 파일 오리지널 네임 값
+				jsonObject.addProperty("files_sys", savedFileName); // 실제 서버에 저장되는 파일명 
+				jsonObject.addProperty("files_upload", path); // 파일이 저장되는 경우
 		  
 		  } catch (IOException e) { 
 			  FileUtils.deleteQuietly(targetFile); //저장된 파일 삭제
@@ -87,17 +100,33 @@ public class MissingBoardController {
 		return jsonObject.toString();
 
 	}
+	@ResponseBody
 	@RequestMapping(value="/toInsert") // 글작성
-	public String toInsert(MissingBoardDTO dto) throws Exception{
-		System.out.println(dto.toString());
-		service.insert(dto);
-		return "redirect:/miss/toMissing";
+	public String toInsert(@RequestBody List<Map<String, Object>> jsonData) throws Exception{
+		System.out.println("jsonData : " + jsonData); // 한번이라도 업로드된 파일정보 + 폼데이타 폼 데이터는 마지막에 오브젝트로 변환하고 푸시해줫기 때문에 항상 마지막 인자값임
+		String[] imgSrc = ((String)jsonData.get(jsonData.size()-1).get("imgSrc[]")).split(","); // 게시물에 등록할때 남아잇는 파일의 정보를 구분자를 기준으로 잘라서 배열에 담아줌
+		for(int i = 0; i < imgSrc.length; i++) {
+			System.out.println("imgSrc : " + imgSrc[i]);
+		}
+		String board_title = (String)jsonData.get(jsonData.size()-1).get("board_title"); // 게시물 제목
+		String board_content = (String)jsonData.get(jsonData.size()-1).get("board_content"); // 게시물 내용
+		String miss_area = (String)jsonData.get(jsonData.size()-1).get("miss_area"); // 실종지역
+		String miss_date = (String)jsonData.get(jsonData.size()-1).get("miss_date"); // 실종 날짜
+		String animal_kind = (String)jsonData.get(jsonData.size()-1).get("animal_kind"); // 동물 종류
+		
+		MissingBoardDTO dto = new MissingBoardDTO(0, board_title, board_content, "test", "test", null, miss_area, miss_date, animal_kind, 0); // 아이디랑 닉네임은 나중에 세션에서 따오기
+		service.insert(dto); // db에 저장
+		
+		service.boardFileCheck(jsonData, imgSrc, dto); // 파일 최종체크해서 인서트하거나 도중에 지운애들 디렉토리에서 삭제하는 메서드
+		return "success";
 	}
 	
 	@RequestMapping(value="/delete") // 글 삭제
 	public String delete(int seq_board) throws Exception{
 		System.out.println("글 삭제 번호 : " +seq_board);
 		service.delete(seq_board);
+		// 삭제하려는 글번호로 저장된 파일 db 데이터들 불러와서 싹 삭제함
+		fileService.delete_file(seq_board, "missing_file"); // 해당 글번호에 해당하는 모든 파일을 삭제할때 사용하는 메서드
 		return "redirect:/miss/toMissing";
 	}
 	@RequestMapping(value="/toModify") // 글 수정페이지 요청
@@ -106,12 +135,36 @@ public class MissingBoardController {
 		Map<String, Object> map = service.selectOne(seq_board);
 		model.addAttribute("map", map);
 		
-		return "/board/write_missing";
+		return "/board/modify_missing";
 	}
-	@RequestMapping(value="/modify") // 글 수정요청 -> 더해야함..^^
-	public String modify(MissingBoardDTO dto) throws Exception{
-		System.out.println("글수정 : " + dto.toString());
-		return "";
+	@ResponseBody
+	@RequestMapping(value="/modify") // 글 수정요청
+	public String modify(@RequestBody List<Map<String, Object>> jsonData) throws Exception{
+		System.out.println("jsonData : " + jsonData);
+		String[] imgSrc = ((String)jsonData.get(jsonData.size()-1).get("imgSrc[]")).split(",");
+		if(imgSrc.length > 0) {
+			for(int i = 0; i < imgSrc.length; i++) {
+				System.out.println("imgSrc : " + imgSrc[i]);
+			}
+		}
+		
+		String seq_board = (String)jsonData.get(jsonData.size()-1).get("seq_board");
+		String board_title = (String)jsonData.get(jsonData.size()-1).get("board_title"); // 게시물 제목
+		String board_content = (String)jsonData.get(jsonData.size()-1).get("board_content"); // 게시물 내용
+		String miss_area = (String)jsonData.get(jsonData.size()-1).get("miss_area"); // 실종지역
+		String miss_date = (String)jsonData.get(jsonData.size()-1).get("miss_date"); // 실종 날짜
+		String animal_kind = (String)jsonData.get(jsonData.size()-1).get("animal_kind"); // 동물 종류
+		System.out.println(seq_board);
+		MissingBoardDTO dto = new MissingBoardDTO(Integer.parseInt(seq_board), board_title, board_content, "test", "test", null, miss_area, miss_date, animal_kind, 0); // 아이디랑 닉네임은 나중에 세션에서 따오기
+		service.modify(dto);
+		
+		service.boardFileCheck(jsonData, imgSrc, dto);
+		
+		// db에 인서트되서 해당 글번호에 존재하고 잇는 파일들에 대한 정보를 가져옴
+		List<FileDTO> deleteFiles = fileService.fileListMissing(Integer.parseInt(seq_board));
+		service.boardModifyFileCk(deleteFiles, imgSrc);
+		
+		return "success";
 	}
 
 	@RequestMapping(value = "/toDetail") // 상세보기 페이지 요청
@@ -122,6 +175,7 @@ public class MissingBoardController {
 		System.out.println(map.get("MissingBoardDTO"));
 		System.out.println(map.get("FileDTO"));
 		System.out.println(map.get("commentDTO"));
+		System.out.println(map.get("commentCount"));
 		model.addAttribute("map", map);
 		return "/board/missing_detail";
 	}

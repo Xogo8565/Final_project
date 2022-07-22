@@ -35,6 +35,7 @@
     }
     #table{
     	width: 70%;
+    	background-color: #d9d3c52e;
     }
     .table th{
     	width: 120px;
@@ -66,6 +67,7 @@
     #commentM{
     	 color: rgb(207, 147, 111); 
     	 text-shadow: -1px 0 #e5d8bb, 0 1px #e5d8bb, 1px 0 #e5d8bb, 0 -1px #e5d8bb;
+    	 margin-top: 100px;
     }
     
     </style>
@@ -181,7 +183,7 @@
 						</table>
 					</div>
 					<%-- 반응형 모바일 --%>
-					<div class="col d-sm-none text-center mt-5" id="commentM">
+					<div class="col d-sm-none text-center" id="commentM">
 						<h4 id="comment">[해당 유기동물에 관한 모든 문의는 해당 보호소로 부탁드립니다.]</h4>
 					</div>
 					<%-- 반응형 웹 --%>
