@@ -94,7 +94,8 @@
       const category = document.querySelector('select');
       const title = document.getElementById('title');
       const summernote = document.getElementById('summernote');
-      const content = document.querySelector(".note-editable>p");
+      const content = document.querySelector(".note-editable");
+      let str = "";
       // 마지막까지 게시물에 남아잇는 파일 url 스트링 값으로 넘길 빈배열하나 선언
       const imgSrc = new Array();
 
@@ -111,12 +112,20 @@
         if(category.value == 0){
             alert('카테고리를 지정해주세요');
             return;
-        }else if(title.value == ""){
+        }else if(title.value.replace(/\s/g, "") == ''){
             alert('제목을 입력해주세요.');
             return;
-        }else if(content.innerHTML == '<br>'){
+        }else if(!content.innerText && imgSrc.length == 0){
             alert('내용을 입력해주세요.');
             return;
+        }else if(content.children.length > 0 && imgSrc.length == 0){
+            for(let e of content.children){
+                str += e.innerText.replace(/\s/g, "");
+            }
+            if(str == ''){
+                alert('내용을 입력해주세요');
+                return;
+            }
         }
 
         // 폼안에 작성된 데이터도 json객체 형식으로 변환해서 배열에 넣어줌
