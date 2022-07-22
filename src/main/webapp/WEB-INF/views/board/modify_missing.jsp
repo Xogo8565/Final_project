@@ -19,6 +19,13 @@
  
     <title>실종게시판 글수정</title>
     <style>
+        .content {
+            margin-top: 50px;
+        }
+        .board-title {
+            display: flex;
+            align-items: center;
+        }
       .board-title, .titleBox{
             margin-bottom: 10px;
             border-bottom: 1px solid black;
@@ -64,10 +71,7 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row header">
-            <jsp:include page="/WEB-INF/views/frame/header.jsp"/>
-        </div>
+    <div class="content">
         <div class="row board-title">
             <div class="col">
                 <h3>실종 게시판</h3>
@@ -112,10 +116,8 @@
                     <button type="button" id="writeOk" class="btn btn-outline-light" style="background-color: #cfb988;">수정 완료</button>       
                 </div>
             </div>
-    </form>
-        <div class="row footer">
-          <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
         </div>
+    </form>
     </div>
     <script>
     let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
@@ -312,3 +314,5 @@
     </script>
 </body>
 </html>
+
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>

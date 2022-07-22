@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,9 +26,15 @@
 .header {
 	margin-bottom: 20px;
 }
+
+.content {
+	margin-top: 50px;
+}
 /*실종 게시판 타이틀*/
 .title {
 	border-bottom: 1px solid black;
+	display: flex;
+	align-items: center;
 }
 
 /* 검색 select */
@@ -116,14 +124,11 @@
 </style>
 </head>
 <body>
-	<div class="container">
-		<div class="row header">
-			<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
-		</div>
+	<div class="content">
 		<div class="row body">
 			<div class="row title">
 				<div class="col-7">
-					<h1>실종 게시판</h1>
+					<h3>실종 게시판</h3>
 				</div>
 				<div class="col-12 col-sm-5 searchDiv">
 				<form id="searchForm">
@@ -246,9 +251,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="row footer">
-			<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
-		</div>
 	</div>
 	<script>
 		// 글쓰기 버튼눌렀을때
@@ -365,3 +367,4 @@
 	
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>

@@ -2,7 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +20,14 @@
 * {
 	box-sizing: border-box;
 }
+
+.content {
+    margin-top: 50px;
+}
+.board-title {
+    display: flex;
+    align-items: center;
+}
 /* 타이틀 */
 .title-body {
 	margin-top: 20px;
@@ -25,13 +35,13 @@
 
 .content-title h5 {
 	margin-top: 20px;
-	font-size: 30px;
 }
 /* 글수정 / 삭제 커서*/
 .writerBtn span {
 	cursor: pointer;
 	color: #cf936f;
 	font-weight: bold;
+    min-width: 60px;
 }
 
 .content-box {
@@ -135,19 +145,16 @@ input[readonly].comment_content{
 </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row header">
-               <jsp:include page="/WEB-INF/views/frame/header.jsp"/>
-        </div>
+    <div class="content">
         <div class="row title-body">
             <div class="col board-title">
-                <h4>실종 게시판</h4>
+                <h3>실종 게시판</h3>
             </div>
         </div>
         <div class="row content-body">
             <div class="row content-title">
                 <div class="col">
-                    <h5><strong>[${map.MissingBoardDTO.miss_area}]&nbsp&nbsp${map.MissingBoardDTO.board_title}</strong></h5>
+                    <h5>[${map.MissingBoardDTO.miss_area}]&nbsp&nbsp${map.MissingBoardDTO.board_title}</h5>
                 </div>
                 <div class="row">
                     <div class="col writer">
@@ -236,9 +243,6 @@ input[readonly].comment_content{
                 <button type="button" id="writeBtn" class="btn btn-outline-light" style="background-color: #cfb988;">글쓰기</button>
             </div>
         </div>
-        <div class="row footer">
-               <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
-        </div>
     </div>
     <script>
     	// 마지막 댓글은 줄 없게
@@ -325,3 +329,5 @@ input[readonly].comment_content{
     </script>
 </body>
 </html>
+
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>

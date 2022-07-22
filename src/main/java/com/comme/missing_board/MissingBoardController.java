@@ -69,7 +69,7 @@ public class MissingBoardController {
 
 		String path = session.getServletContext().getRealPath("mbFile");
 		File filePath = new File(path);
-		System.out.println(filePath);
+//		System.out.println(filePath);
 		if (!filePath.exists())
 			filePath.mkdir();
 

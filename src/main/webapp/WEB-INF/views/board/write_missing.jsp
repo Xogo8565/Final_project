@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +20,13 @@
  
     <title>실종게시판 글작성</title>
     <style>
+        .content {
+            margin-top: 50px;
+        }
+        .board-title {
+            display: flex;
+            align-items: center;
+        }
     /* 타이틀 */
     .board-title{
     	margin-top : 20px;
@@ -67,10 +76,7 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row header">
-            <jsp:include page="/WEB-INF/views/frame/header.jsp"/>
-        </div>
+    <div class="content">
         <div class="row board-title">
             <div class="col">
                 <h3>실종 게시판</h3>
@@ -116,9 +122,6 @@
             
         </div>  
     </form>
-        <div class="row footer">
-          <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
-        </div>
     </div>
     <script>
     // 목록 버튼을 눌렀을때
@@ -310,3 +313,6 @@
     </script>
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
+
+
