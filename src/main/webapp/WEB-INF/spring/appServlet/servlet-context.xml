@@ -8,6 +8,7 @@
 
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:resources mapping="/files/**" location="/files/"/>
+    <mvc:resources mapping="/mbFile/**" location="/mbFile/"/>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>

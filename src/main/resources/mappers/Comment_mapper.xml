@@ -8,16 +8,19 @@
 	<select id="selectByMc" parameterType="int" resultType="CommentDTO">
 		select * from missing_comment where seq_board = #{seq_board}
 	</select>
-	
+	<!-- 실종게시판 댓글 갯수 -->
+	<select id="selectCount" parameterType="int" resultType="int">
+		select count(*) from missing_comment where seq_board = #{seq_board}
+	</select>
 	<!-- 실종게시판 댓글 입력 -->
 	<insert id="insertMissing" parameterType="CommentDTO">
-		insert into missing_comment values(seq_commet.nextval, #{seq_board}, #{comment_content},
-		 #{comment_id}, #{commet_nickname}, sysdate)
+		insert into missing_comment values(seq_comment.nextval, #{seq_board}, #{comment_content},
+		 #{comment_id}, #{comment_nickname}, sysdate)
 	</insert>
 	
 	<!-- 실종게시판 댓글 삭제 -->
 	<delete id="deleteMissing" parameterType="int">
-		delete from missing_comment where seq_commet = #{seq_commet}
+		delete from missing_comment where seq_comment = #{seq_comment}
 	</delete>
 	
 	<!-- 실종게시판 댓글 수정 -->

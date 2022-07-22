@@ -15,7 +15,7 @@ public class CommentController {
 	public String missing_comment(CommentDTO dto) throws Exception{
 		System.out.println(dto.toString());
 		service.insertMissing(dto);
-		return "redirect:/miss/toDetail";
+		return "redirect:/miss/toDetail?seq_board="+dto.getSeq_board();
 	}
 	@ResponseBody
 	@RequestMapping(value="/deleteMissingComment") // 실종게시판 댓글 삭제

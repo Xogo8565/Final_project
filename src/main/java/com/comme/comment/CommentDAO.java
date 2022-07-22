@@ -21,5 +21,6 @@ public interface CommentDAO {
 	
 	// 실종게시판 댓글 수정
 	void modifyMissing(Map<String, Object> map);
-	
+	// 실종게시판 댓글 갯수
+	int selectCount(int seq_board);
 }
