@@ -255,9 +255,9 @@ td{
 							<span class="material-symbols-outlined">accessibility_new</span>
 						</c:when>
 						<c:otherwise>
-							<span class="material-symbols-outlined">emoji_people</span>				
+							<span class="material-symbols-outlined">skull</span>				
 							블랙 리스트 
-							<span class="material-symbols-outlined">accessibility_new</span>
+							<span class="material-symbols-outlined">skull</span>
 						</c:otherwise>
 					</c:choose>
 				</span>
