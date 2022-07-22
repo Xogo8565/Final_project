@@ -10,7 +10,7 @@ import java.util.Map;
 public interface VolBoardDAO {
     List<Map<String, Object>> selectList(@Param("start") int start, @Param("end") int end) throws Exception;
 
-    int selectTotalCnt() throws Exception;
+    int selectTotalCnt(@Param("category") String category, @Param("search") String search) throws Exception;
 
     int insert(VolBoardDTO volBoardDTO) throws Exception;
 
@@ -22,6 +22,7 @@ public interface VolBoardDAO {
 
     int update(VolBoardDTO volBoardDTO) throws Exception;
 
-    List<Map<String, Object>> search(Map<String, Object> map) throws Exception;
+    List<Map<String, Object>> search(@Param("start") int start, @Param("end") int end,@Param("category") String category, @Param("search") String search ) throws Exception;
 
+    List<Map<String, Object>> selectListByDistance(int seq_board) throws Exception;
 }

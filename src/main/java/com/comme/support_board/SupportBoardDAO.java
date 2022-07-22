@@ -15,4 +15,8 @@ public interface SupportBoardDAO {
     int insert(SupportBoardDTO supportBoardDTO) throws Exception;
 
     Map<String, Object> select(int seq_board) throws Exception;
+
+    int delete(int seq_board) throws Exception;
+
+    int update(SupportBoardDTO supportBoardDTO) throws Exception;
 }

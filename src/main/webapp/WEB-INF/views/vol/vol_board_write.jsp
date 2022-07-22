@@ -217,6 +217,7 @@
                     </label>
                     <label for="vol_count"><span>봉사 인원을 입력해주세요</span>
                         <input type="number" name="vol_count" id="vol_count" placeholder="봉사 최대 정원을 입력해주세요" required
+                               min = '1'
                                oninvalid="this.setCustomValidity('봉사활동 인원을 입력해주세요')"
                                oninput="this.setCustomValidity('')">
                     </label>
@@ -224,44 +225,6 @@
                     <button type="submit" id="write">작성</button>
                 </div>
             </form>
-            <ul class="boardList">
-                <c:if test="${list.size()==2}}">
-                    <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                        <li>
-                            <button>Up</button>
-                            <span>${list.get(0).board_title}</span></li>
-                    </a>
-                    <a href="/volBoard/view?seq_board=${list.get(1).seq_board}">
-                        <li>
-                            <button>down</button>
-                            <span>${list.get(1).board_title}</span></li>
-                    </a>
-                </c:if>
-                <c:if test="${list.size()==1}">
-                    <a href="/volBoard/view?seq_board=${list.get(0).seq_board}">
-                        <li>
-                            <button>Up</button>
-                            <span>${list.get(0).board_title}</span></li>
-                    </a>
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
-                </c:if>
-                <c:if test="${empty list}">
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
-                    <a disabled>
-                        <li>
-                            <button>Up</button>
-                            <span>등록된 게시글이 없습니다</span></li>
-                    </a>
-                </c:if>
-            </ul>
             <div class="board_footer">
                 <button id="list" type="button">목록</button>
             </div>
@@ -277,9 +240,10 @@
     document.querySelector("#vol_deadLine").min = date;
 
     document.querySelector("#form").addEventListener("submit",(e) => {
-        const content = document.querySelector(".board_content .note-editable>p");
+        const content = document.querySelector(".board_content .note-editable");
+        let str = "";
 
-        if (content.innerHTML === "<br>") {
+        if (content.innerHTML === "") {
             e.preventDefault();
             alert("내용을 입력해주세요");
             return;
@@ -294,6 +258,13 @@
         document.querySelector("#files_name").value = arr;
         document.querySelector("#temp_files").value = tempImg;
 
+    })
+
+    document.querySelector(".boardList").addEventListener("click",(e)=>{
+        let check = confirm("페이지를 이동하면 작성한 글 내용이 저장되지 않습니다. 정말로 이동하시겠습니까?");
+        if (!check) {
+            e.preventDefault();
+        }
     })
 
 
