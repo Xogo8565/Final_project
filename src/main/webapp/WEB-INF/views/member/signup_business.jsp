@@ -84,6 +84,17 @@
                                 <input type="text" class="form-control" id="name" name="member_name">
                             </div>
                         </div>
+                        <div class="row cls-inputRow">
+                            <div class="col-3 align-self-center">
+                                <label for="name">
+                                    <span class="cls-required">*</span>
+                                    <span class="cls-labelTitle">사업자 등록번호</span>
+                                </label>
+                            </div>
+                            <div class="col-9">
+                                <input type="text" class="form-control" id="business" name="member_brn">
+                            </div>
+                        </div>
                         <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
                         	<div class="col-3"></div>
                         	<div class="col-9"><span id="checkName"></span></div>
@@ -100,7 +111,7 @@
                                 <input type="text" class="form-control" id="id" name="member_id">
                             </div>
                             <div class="col-2">
-                                <button type="button" class="btn btn-secondary">중복확인</button>
+                                <button type="button" class="btn btn-secondary" id="idCheckBtn">중복확인</button>
                             </div>
                         </div>
                         <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
@@ -116,7 +127,7 @@
                                 </label>        
                             </div>
                             <div class="col-9">
-                                <input type="text" class="form-control" id="pw" name="member_pw">
+                                <input type="password" class="form-control" id="pw" name="member_pw">
                             </div>
                         </div>
                         <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
@@ -132,7 +143,7 @@
                                 </label>        
                             </div>
                             <div class="col-9">
-                                <input type="text" class="form-control" id="pw2">
+                                <input type="password" class="form-control" id="pw2">
                             </div>
                         </div>
                         
@@ -227,7 +238,7 @@
                         <div class="row cls-btnRow">
                             <div class="col d-flex justify-content-center">
                                 <!-- <button class="btn btn-secondary" id="btn-cancel">취소</button> -->
-                                <button class="btn btn-warning" id="btn-signup">회원가입</button>
+                                <button type="button" class="btn btn-warning" id="btn-signup">회원가입</button>
                             </div>
                         </div>
                     </div>
@@ -379,12 +390,24 @@
 		let regexPw = /^[a-zA-z0-9~!@#$]{6,12}$/;
 		let regexEmail = /^[a-zA-z0-9][\w]+@[a-zA-z]+\.(com|net|co\.kr|or\.kr)$/;
 		let regexPhone = /^[0-9]{11}$/;
+
+        //사업자 등록번호 검사
+        // bizID는 숫자만 10자리로 해서 문자열로 넘긴다.
+        let checkID = [1, 3, 7, 1, 3, 7, 1, 3, 5, 1];
+        let tmpBizID, i, chkSum=0, c2, remander;
+        let bizID = document.querySelector("#business").value;
+        bizID = bizID.replace(/-/gi,'');
+
+        for (i=0; i<=7; i++) chkSum += checkID[i] * bizID.charAt(i);
+        c2 = "0" + (checkID[8] * bizID.charAt(8));
+        c2 = c2.substring(c2.length - 2, c2.length);
+        chkSum += Math.floor(c2.charAt(0)) + Math.floor(c2.charAt(1));
+        remander = (10 - (chkSum % 10)) % 10 ;
 		
 		// phone번호 합쳐주는 작업
 		// select박스에서 선택된 값을 가져오는 방법
 		//console.log($("#phone1 option:selected").val());
 		let phone = $("#phone1 option:selected").val() + $("#phone2").val() + $("#phone3").val();
-		console.log(phone);
 		$("#phone").val(phone);
 		
 		if($("#name").val() === ""){
@@ -395,7 +418,12 @@
 			alert("이름은 한글 및 영문으로 2~10자 이내로 작성해주세요.");
 			$("#name").focus();
 			return;
-		}else if(!regexId.test($("#id").val())){
+		} else if (Math.floor(bizID.charAt(9)) !== remander){
+            alert("사업자 번호가 유효하지 않습니다");
+            $("#business").focus();
+            return;
+        }
+        else if(!regexId.test($("#id").val())){
 			alert("아이디는 영어소문자와 숫자로 5~12자 이내로 작성해주세요.");
 			$("#id").focus();
 			return;
@@ -429,8 +457,8 @@
 		
 		$("#signupForm").submit();
 		alert("회원가입이 완료되었습니다.");
-		
 	});
+
 </script>
 </body>
 </html>

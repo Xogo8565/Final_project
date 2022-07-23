@@ -406,12 +406,11 @@
         target.style.textDecoration = "none"
     }))
     document.querySelector("#write").addEventListener("click",()=>{
-        let brn = "${loginSession.member_brn}";
-        if(!brn||brn===""){
-            alert("기관 회원만 이용할 수 있는 기능입니다");
-            return;
+        let brn = "${loginSession.member_grade}";
+        if(brn==="3"){
+            location.href = "/supportBoard/write"
         }
-        location.href = "/supportBoard/write"
+        alert("기관 회원만 이용할 수 있는 기능입니다.");
     })
 
 </script>

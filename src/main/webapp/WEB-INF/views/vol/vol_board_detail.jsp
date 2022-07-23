@@ -210,7 +210,7 @@
                 <span class="nickname"><c:out value="${map.writer_nickname}"/></span>
                 <span class="written_date"><fmt:formatDate value="${map.written_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
                 <span class="view_count">조회수 <c:out value="${map.view_count}"/></span>
-                <c:if test="${loginSession.member_id eq map.member_id}">
+                <c:if test="${loginSession.member_id eq map.member_id || map.member_grade=='4'}">
                     <button type="button" id="modify">수정</button>
                     <button type="button" id="delete">삭제</button>
                     <script>
@@ -328,12 +328,11 @@
     document.querySelector("#list").addEventListener("click", e => location.href = "/volBoard/lists");
 
     document.querySelector("#write").addEventListener("click",()=>{
-        let brn = "${loginSession.member_brn}";
-        if(!brn||brn===""){
-            alert("기관 회원만 이용할 수 있는 기능입니다");
-            return;
+        let brn = "${loginSession.member_grade}";
+        if(brn==="3"){
+            location.href = "/supportBoard/write"
         }
-        location.href = "/supportBoard/write"
+        alert("기관 회원만 이용할 수 있는 기능입니다.");
     })
 
     //봉사활동 제출

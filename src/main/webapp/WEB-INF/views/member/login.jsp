@@ -147,30 +147,44 @@
 <script>
 
 	// 일반 로그인
-	$("#btnLogin").on("click", function(){
-		if($("#id").val() === "" || $("#pw").val() === "") {
+	$("#btnLogin").on("click", ()=>{
+		login();
+	});
+
+	let input = document.querySelectorAll("#form-login input");
+	input.forEach(e=>{
+		e.onkeypress = function (a){
+			if(a.keyCode===13){
+				login();
+			}
+		}
+	})
+
+
+
+	function login () {
+		if ($("#id").val() === "" || $("#pw").val() === "") {
 			alert("아이디 혹은 비밀번호를 입력하세요.");
 			return;
 		}
-		
+
 		$.ajax({
-			url : "/member/loginProc"
-			,type : "post"
-			,data : {member_id : $("#id").val(), member_pw : $("#pw").val()}
-			, success: function(data){
-				console.log(data);
-				if(data == "success"){
+			url: "/member/loginProc"
+			, type: "post"
+			, data: {member_id: $("#id").val(), member_pw: $("#pw").val()}
+			, success: function (data) {
+				if (data == "success") {
 					location.href = "/";
-				}else if(data == "fail"){
+				} else if (data == "fail") {
 					alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+				} else if (data === "await") {
+					alert("관리자의 승인이 필요합니다.");
 				}
-			}, error : function(e){
+			}, error: function (e) {
 				console.log(e);
 			}
-		})
-		
-	});
-	
+		});
+	}
 
 	//쿠키 가져오기
 	$(document).ready(function() {
