@@ -13,6 +13,7 @@
         --sil: #d5d5d5;
         --bro: #CFB988;
     }
+
     .content {
         display: flex;
         align-items: center;
