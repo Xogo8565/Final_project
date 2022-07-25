@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.comme.member.BlackListDTO;
-import com.comme.member.MemberDTO;
 
 @Service
 public class ManagerService implements ManagerDAO {
@@ -48,6 +47,10 @@ public class ManagerService implements ManagerDAO {
 		map.put("start", start);
 		map.put("end", end);	
 		return dao.searchGrade(map);
+	}
+	
+	public BlackListDTO selectId(String member_id) throws Exception {
+		return dao.selectId(member_id);
 	}
 	
 	public int modifyGrade(String member_id, String member_grade) throws Exception {
@@ -169,7 +172,6 @@ public class ManagerService implements ManagerDAO {
 
 	@Override
 	public int modifyGrade(Map<String, String> map) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

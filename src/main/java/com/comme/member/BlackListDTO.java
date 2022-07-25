@@ -4,14 +4,14 @@ public class BlackListDTO {
 
 	private String member_id;
 	private String blacklist_content;
-	private String date;
+	private String blacklist_date;
 	
 	public BlackListDTO() {}
-	public BlackListDTO(String member_id, String blacklist_content, String date) {
+	public BlackListDTO(String member_id, String blacklist_content, String blacklist_date) {
 		super();
 		this.member_id = member_id;
 		this.blacklist_content = blacklist_content;
-		this.date = date;
+		this.blacklist_date = blacklist_date;
 	}
 	public String getMember_id() {
 		return member_id;
@@ -27,16 +27,16 @@ public class BlackListDTO {
 	public void setBlacklist_content(String blacklist_content) {
 		this.blacklist_content = blacklist_content;
 	}
-	public String getDate() {
-		return date;
+	public String getBlacklist_date() {
+		return blacklist_date;
 	}
-	public void setDate(String date) {
-		this.date = date;
+	public void setBlacklist_date(String blacklist_date) {
+		this.blacklist_date = blacklist_date;
 	}
 	
 	@Override
 	public String toString() {
-		return "BlackListDTO [member_id=" + member_id + ", blacklist_content=" + blacklist_content + ", date=" + date
+		return "BlackListDTO [member_id=" + member_id + ", blacklist_content=" + blacklist_content + ", blacklist_date=" + blacklist_date
 				+ "]";
 	}
 	
