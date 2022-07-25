@@ -90,7 +90,7 @@
                         <ul id="profileTap">
                             <li><a href="/member/toMyPage">회원정보</a></li>
                             <c:choose>
-                               <c:when test="${loginSession.member_grade eq 3}">
+                               <c:when test="${loginSession.member_grade eq 2}">
                                     <li><a href="/member/toShelterVolList">봉사 신청 관리</a></li>
                                     <li><a href="/member/toMyBoard">내 글</a></li>
                                     <li><a href="/member/toMyComment">내 댓글</a></li>
@@ -132,7 +132,7 @@
                                     <td class="col-10">${loginSession.member_nickname}</td>
                                 </tr>
                                 <c:choose>
-                                   <c:when test="${loginSession.member_grade eq '3'}">
+                                   <c:when test="${loginSession.member_grade eq '2'}">
                                         <tr>
                                             <th class="col-2 profileTap">대표자</th>
                                             <td class="col-10">${loginSession.member_name}</td>
@@ -154,7 +154,7 @@
                                     <td class="col-10">${loginSession.member_phone}</td>
                                 </tr>
                                 
-                                <c:if test="${loginSession.member_grade eq 3}" >
+                                <c:if test="${loginSession.member_grade eq '2'}" >
                                     <tr>
                                         <th class="col-2 profileTap">사업자번호</th>
                                         <c:choose>

@@ -169,7 +169,7 @@
                         <ul id="profileTap">
                             <li><a href="/member/toMyPage">회원정보</a></li>
                             <c:choose>
-                               <c:when test="${loginSession.member_grade eq 3}">
+                               <c:when test="${loginSession.member_grade eq 2}">
                                     <li><a href="/member/toShelterVolList">봉사 신청 관리</a></li>
                                     <li><a href="/member/toMyBoard">내 글</a></li>
                                     <li><a href="/member/toMyComment">내 댓글</a></li>
