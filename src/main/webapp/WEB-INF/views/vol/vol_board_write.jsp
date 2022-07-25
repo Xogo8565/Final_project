@@ -241,9 +241,9 @@
         let imgs = document.querySelectorAll(".board_content img");
         let str = "";
 
-        let brn = "${loginSession.member_brn}";
-        if(!brn||brn===""){
-            alert("기관 회원만 이용할 수 있는 기능입니다");
+        let brn = "${loginSession.member_grade}";
+        if(brn!=="2"){
+            alert("기관 회원만 이용할 수 있는 기능입니다.");
             e.preventDefault();
             return;
         }

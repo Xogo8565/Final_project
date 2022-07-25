@@ -220,7 +220,6 @@
             <div class="board_content">
                 <label for="vol_deadLine"><span>봉사 날짜를 입력해주세요</span>
                     <input type="date" name="vol_deadLine" id="vol_deadLine" placeholder="봉사 날짜를 입력해주세요"
-                           value="${map.vol_deadLine}"
                            required
                            oninvalid="this.setCustomValidity('봉사활동 날짜를 입력해주세요')"
                            oninput="this.setCustomValidity('')">
@@ -296,9 +295,10 @@
         }
     )
 
+    let date_val = "${map.vol_deadLine}";
+    document.querySelector("#vol_deadLine").value = date_val.substring(0,10);
 
     let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-    document.querySelector("#vol_deadLine").value = date;
     document.querySelector("#vol_deadLine").min = date;
 
     document.querySelector("#form").addEventListener("submit", (e) => {
@@ -375,8 +375,8 @@
                 callbacks: {
                     onImageUpload: function (files) {
                         for (let i = 0; i < files.length; i++) {
-                            if (files[0].size > 1024 * 1024 * 5) {
-                                alert("5MB 이상은 업로드할 수 없습니다.");
+                            if (files[0].size > 1024 * 1024 * 1) {
+                                alert("1MB 이상은 업로드할 수 없습니다.");
                                 return;
                             }
                             uploadSummernoteImageFile(files[i], this);

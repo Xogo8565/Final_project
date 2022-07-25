@@ -191,7 +191,7 @@
                                 <c:choose>
                                    <c:when test="${empty list}">
                                     <tr>
-                                        <td colspan="6">등록 된 글이 없습니다.</td>
+                                        <td colspan="5">봉사 신청 내역이 없습니다.</td>
                                     </tr>
                                    </c:when>
                                 

@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,9 +26,15 @@
 .header {
 	margin-bottom: 20px;
 }
+
+.content {
+	margin-top: 50px;
+}
 /*실종 게시판 타이틀*/
 .title {
 	border-bottom: 1px solid black;
+	display: flex;
+	align-items: center;
 }
 
 /* 검색 select */
@@ -116,14 +124,11 @@
 </style>
 </head>
 <body>
-	<div class="container">
-		<div class="row header">
-			<jsp:include page="/WEB-INF/views/frame/header.jsp"/>
-		</div>
+	<div class="content">
 		<div class="row body">
 			<div class="row title">
 				<div class="col-7">
-					<h1>실종 게시판</h1>
+					<h3>실종 게시판</h3>
 				</div>
 				<div class="col-12 col-sm-5 searchDiv">
 				<form id="searchForm">
@@ -141,7 +146,7 @@
 						</div>
 						<div class="col shMissing">
 							<input type="text" name="keywordMissing" id="keywordMissing" class="form-control"
-								placeholder="검색어 입력" onkeypress="enterKey(event)" > 
+								placeholder="검색어 입력">
 								<img class="lookup" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 						</div>	
 					</div>
@@ -246,34 +251,40 @@
 				</div>
 			</div>
 		</div>
-		<div class="row footer">
-			<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
-		</div>
 	</div>
 	<script>
 		// 글쓰기 버튼눌렀을때
 		$(".writeBtn").click(function(){
-			location.href = "/miss/toWrite";
+			if(${not empty loginSession.member_id}){
+				location.href = "/miss/toWrite";
+			} else alert("회원에게만 제공되는 기능입니다.");
 		})
+
+		document.querySelector("#searchForm").addEventListener("submit", e=>{
+			e.preventDefault();
+			search();
+		});
+
+		document.querySelector(".lookup").addEventListener("click", e=> search());
+
+
 	
 		// 검색
-		$(".lookup").click(function(){
-
+		let search = function() {
 			if ($("#keywordMissing").val() == "") {
-				location.href = "/miss/toMissing";
-			}else {
+				alert("검색어를 입력하세요");
+			} else {
 				let formData = $("#searchForm").serialize();
-				console.log(formData);
 
 				$.ajax({
-					url : "/miss/search"
-					,type: "get"
-					,data : formData
-					, success : function(data) {
+					url: "/miss/search"
+					, type: "get"
+					, data: formData
+					, success: function (data) {
 						console.log(data);
 						//mkElement(data);
 						$(".missingContent").empty();
-						if(data.list.length == 0){ // 검색 결과 없음
+						if (data.list.length == 0) { // 검색 결과 없음
 							let divRow = $("<div>").addClass("col d-flex justify-content-center");
 							let p2 = $("<p>")
 							let strong = $("<strong>").html("검색된 결과가 없습니다.");
@@ -281,53 +292,53 @@
 							p2.appendTo(divRow);
 							$(".missingContent").append(divRow);
 							$(".page").addClass("d-none");
-						}else{
-							for(let dto of data.list){
+						} else {
+							for (let dto of data.list) {
 								console.log(typeof dto.miss_date);
 								let miss_date = new Date(dto.miss_date - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 								let written_date = new Date(dto.written_date).toISOString().slice(0, 10);
-				
+
 								let col2 = $("<div>").addClass("col-6 d-none d-sm-flex justify-content-center");
 								let card = $("<div>").addClass("card").css("width", "18rem");
-								let a = $("<a>").attr("href","/miss/toDetail?seq_board="+dto.seq_board);
-								if(dto.files_sys == null){
+								let a = $("<a>").attr("href", "/miss/toDetail?seq_board=" + dto.seq_board);
+								if (dto.files_sys == null) {
 									let img = $("<img>").attr("src", "/resources/images/No_image.png").addClass("card-img-top");
 									a.append(img);
-								}else if(dto.files_sys != null){
-									let img = $("<img>").attr("src", "/mbFile/"+dto.files_sys).addClass("card-img-top");
+								} else if (dto.files_sys != null) {
+									let img = $("<img>").attr("src", "/mbFile/" + dto.files_sys).addClass("card-img-top");
 									a.append(img);
 								}
 								console.log();
 								let cardBody = $("<div>").addClass("card-body");
 								let h5 = $("<h5>").addClass("card-title").html(dto.board_title);
-								let pMiss = $("<p>").html("실종 지역 : " );
+								let pMiss = $("<p>").html("실종 지역 : ");
 								let sMiss = $("<strong>").html(dto.miss_area);
-								let pKind = $("<p>").html("동물 종류 : " );
+								let pKind = $("<p>").html("동물 종류 : ");
 								let sKind = $("<strong>").html(dto.animal_kind);
 								let cardText = $("<p>").addClass("card-text").html("실종일 : ");
 								let scardText = $("<strong>").html(miss_date);
-								let cardText2 = $("<p>").addClass("card-text").html("작성일 : " );
+								let cardText2 = $("<p>").addClass("card-text").html("작성일 : ");
 								let scardText2 = $("<strong>").html(written_date);
-								
+
 								pMiss.append(sMiss);
 								pKind.append(sKind);
 								cardText.append(scardText);
 								cardText2.append(scardText2);
 								cardBody.append(h5, pMiss, pKind, cardText, cardText2);
-								
+
 								card.append(a, cardBody);
 								col2.append(card);
 								col2.appendTo(".missingContent");
-								
+
 								let div3 = $("<div>").addClass("col-12 d-sm-none");
 								let row = $("<div>").addClass("row resMissing");
 								let col3 = $("<div>").addClass("col");
-								let a2 = $("<a>").attr("href","/miss/toDetail?seq_board="+dto.seq_board);
-								if(dto.files_sys == null){
+								let a2 = $("<a>").attr("href", "/miss/toDetail?seq_board=" + dto.seq_board);
+								if (dto.files_sys == null) {
 									let img2 = $("<img>").attr("src", "/resources/images/No_image.png").addClass("card-img-top");
 									a2.append(img2);
-								}else if(dto.files_sys != null){
-									let img2 = $("<img>").attr("src", "/mbFile/"+dto.files_sys).addClass("card-img-top");
+								} else if (dto.files_sys != null) {
+									let img2 = $("<img>").attr("src", "/mbFile/" + dto.files_sys).addClass("card-img-top");
 									a2.append(img2);
 								}
 								let col4 = $("<div>").addClass("col");
@@ -340,12 +351,12 @@
 								let sP1 = $("<strong>").html(miss_date);
 								let p2 = $("<p>").html("작성일 : ");
 								let sP2 = $("<strong>").html(written_date);
-								
+
 								p3.append(sP3);
 								p4.append(sP4);
 								p1.append(sP1);
 								p2.append(sP2);
-								
+
 								col4.append(h5_1, p3, p4, p1, p2);
 								col3.append(a2);
 								row.append(col3, col4);
@@ -354,14 +365,15 @@
 								$(".page").removeClass("d-none");
 							}
 						}
-						
-					}, error : function(e) {
+
+					}, error: function (e) {
 						console.log(e);
 					}
 				})
 			}
-		})
+		}
 	</script>
 	
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>

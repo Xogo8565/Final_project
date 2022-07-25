@@ -212,12 +212,13 @@
     <script>
 
     document.querySelector("#form").addEventListener("submit",(e) => {
-        let brn = "${loginSession.member_brn}";
-        if(!brn||brn===""){
-            alert("기관 회원만 이용할 수 있는 기능입니다");
+        let brn = "${loginSession.member_grade}";
+        if(brn!=="2"){
+            alert("기관 회원만 이용할 수 있는 기능입니다.");
             e.preventDefault();
             return;
         }
+
 
         let check = confirm("계좌 번호 등 등록 정보를 한 번 더 확인해주세요. 잘못된 등록정보로 인한 사건 / 사고의 책임은 본인에게 있습니다.");
 

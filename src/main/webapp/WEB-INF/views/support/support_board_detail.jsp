@@ -235,7 +235,7 @@
                 </div>
                 <div class="title">
                     <c:out value="${map.board_title}"/>
-                    <c:if test="${loginSession.member_id eq map.member_id}">
+                    <c:if test="${loginSession.member_id eq map.member_id||map.member_grade=='4'}">
                         <div class="boardButton">
                             <button type="button" id="modify">수정하기</button>
                             <button type="button" id="delete">삭제하기</button>
@@ -355,12 +355,12 @@
     });
 
     document.querySelector("#write").addEventListener("click",()=>{
-        let brn = "${loginSession.member_brn}";
-        if(!brn||brn===""){
-            alert("기관 회원만 이용할 수 있는 기능입니다");
-            return;
+        let brn = "${loginSession.member_grade}";
+        if(brn==="2"){
+            location.href = "/supportBoard/write"
+        } else{
+            alert("기관 회원만 이용할 수 있는 기능입니다.");
         }
-        location.href = "/supportBoard/write"
     })
 
 </script>

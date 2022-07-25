@@ -310,8 +310,8 @@
                 callbacks: {
                     onImageUpload: function (files) {
                         for (let i = 0; i < files.length; i++) {
-                            if (files[0].size > 1024 * 1024 * 5) {
-                                alert("5MB 이상은 업로드할 수 없습니다.");
+                            if (files[0].size > 1024 * 1024 * 1) {
+                                alert("1MB 이상은 업로드할 수 없습니다.");
                                 return;
                             }
                             uploadSummernoteImageFile(files[i], this);

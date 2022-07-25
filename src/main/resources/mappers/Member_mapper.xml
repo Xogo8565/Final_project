@@ -283,7 +283,7 @@
 	
 	<!-- 기관회원가입 -->
 	<insert id="signupBusiness" parameterType="com.comme.member.MemberDTO">
-		insert into member values(#{member_id}, #{member_pw}, #{member_nickname}, #{member_email}, #{member_name}, #{member_phone}, 'N', '2', '')
+		insert into member values(#{member_id}, #{member_pw}, #{member_nickname}, #{member_email}, #{member_name}, #{member_phone}, 'N', '3', #{member_brn})
 	</insert>
 	
 	

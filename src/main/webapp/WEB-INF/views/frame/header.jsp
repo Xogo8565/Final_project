@@ -39,7 +39,7 @@
 					<a id="community"><li>커뮤니티</li></a>
 					<a href="/volBoard/lists"><li>봉사</li></a>
 					<a href="/supportBoard/lists"><li>후원</li></a>
-					<a href=""><li>실종동물</li></a>
+					<a href="/miss/toMissing"><li>실종동물</li></a>
 					<a href="/shelterAnimal/toShelterAnimal?curPage=1"><li>유기동물</li></a>
 					<a href="/board/toBoard?seq_category=${inquiry.seq_category}&category_name=${inquiry.category_name}"><li>문의/신고</li></a>
 				</ul>
@@ -61,7 +61,7 @@
 						<a href="/myPage"><img src="/resources/mainImg/user.png"></a>
 					</c:when>
 					<c:otherwise>
-						<a href="/loginPage"><img src="/resources/mainImg/user.png"></a>
+						<a href="/member/toLoginPage"><img src="/resources/mainImg/user.png"></a>
 					</c:otherwise>
 				</c:choose>
 				<a href="https://www.youtube.com/watch?v=6oB1iGV3L_0"
@@ -78,10 +78,12 @@
 					<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 					<!-- 사이드 네비 메뉴-->
 					<div class="row search-menuH">
-						<span>Comme</span> <a href=""><span>Comme에 대하여</span></a> <span>Community</span>
-						<a href=""><span>자유게시판</span></a> <span>Volunteer</span> <a
-							href=""><span>봉사신청</span></a> <a href=""><span>봉사후기</span></a> <span>support</span>
-						<a href=""><span>후원신청</span></a>
+						<span>Comme</span> <a href=""><span>Comme에 대하여</span></a>
+						<span>Community</span><a href=""><span>자유게시판</span></a>
+						<span>봉사신청</span></a> <a href="/volBoard/lists">
+						<span>봉사후기</span></a>
+						<span>support</span>
+						<a href="/supportBoard/lists"><span>후원신청</span></a>
 					</div>
 				</div>
 				<span style="font-size: 20px; cursor: pointer" onclick="openNav()">&#9776;</span>

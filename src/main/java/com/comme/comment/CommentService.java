@@ -1,6 +1,7 @@
 package com.comme.comment;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,4 +27,8 @@ public class CommentService {
 		map.put("comment_content", comment_content);
 		dao.modifyMissing(map);
 	}
+
+    public List<CommentDTO> missingComment(int seq_board) {
+		return dao.selectByMc(seq_board);
+    }
 }
