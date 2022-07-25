@@ -35,6 +35,7 @@
                 display: inline-block;
                 padding: 7px 7px 7px 7px;
                 min-width: 70px;
+                text-decoration: none;
             }
 
             #profileTap li a:hover{
@@ -53,6 +54,11 @@
 
             #commentBox a{
                 color: black;
+                text-decoration: none;
+            }
+
+            #commentBox a:hover{
+                text-decoration: underline;
             }
 
             .comment_date,
@@ -160,12 +166,22 @@
                 <div class="row mt-5" id="tapBox">
                     <div class="col">
                         <ul id="profileTap">
-                            <li><a href="/member/toShelterPage">회원정보</a></li>
-                            <li><a href="/member/toShelterVolList">봉사 신청 관리</a></li>
-                            <li><a href="/member/toMyBoard">내 글</a></li>
-                            <li><a href="/member/toMyComment">내 댓글</a></li>
-                            <li><a href="/member/toMySupport">후원 글 조회</a></li>
-                            <li><a href="/member/toMyPay">후원 내역 조회</a></li>
+                            <li><a href="/member/toMyPage">회원정보</a></li>
+                            <c:choose>
+                               <c:when test="${loginSession.member_grade eq 3}">
+                                    <li><a href="/member/toShelterVolList">봉사 신청 관리</a></li>
+                                    <li><a href="/member/toMyBoard">내 글</a></li>
+                                    <li><a href="/member/toMyComment">내 댓글</a></li>
+                                    <li><a href="/member/toMySupport">후원 글 조회</a></li>
+                                    <li><a href="/member/toMyPay">후원 내역 조회</a></li>
+                               </c:when>
+                               <c:otherwise>
+                                    <li><a href="/member/toCheckVol">봉사 신청 확인</a></li>
+                                    <li><a href="/member/toMyBoard">내 글</a></li>
+                                    <li><a href="/member/toMyComment">내 댓글</a></li>
+                                    <li><a href="/member/toMyPayList">후원 내역 조회</a></li>
+                               </c:otherwise>
+                            </c:choose>
                             <li><a href="/">홈으로</a></li>
                             <li><a href="javascript:history.back()">이전페이지</a></li>
                         </ul>
@@ -192,7 +208,7 @@
                                 <c:choose>
                                    <c:when test="${empty list}">
                                     <tr>
-                                        <td colspan="4">등록 된 글이 없습니다.</td>
+                                        <td colspan="4">등록 된 댓글이 없습니다.</td>
                                     </tr>
                                    </c:when>
                                 
@@ -200,7 +216,17 @@
                                         <c:forEach items="${list}" var="dto">
                                             <tr>
                                                 <td class="seq_comment">${dto.SEQ_COMMENT}</td>
-                                                <td><a class="tap" href="/board/toBoard?nowPage=1&seq_category=${dto.CATEGORY_PK}&small_category=${dto.SEQ_CATEGORY}&category_name=${dto.CATEGORY_NAME}"> 
+                                                <td>
+                                                <c:choose>
+                                                   <c:when test="${dto.CATEGORY_NAME eq '문의'}">
+                                                    <a class="tap" href="/board/toBoard?nowPage=1&seq_category=${dto.CATEGORY_PK}&small_category=${dto.SEQ_CATEGORY}&category_name=${dto.CATEGORY_NAME}"> 
+                                                   </c:when>
+                                                
+                                                   <c:otherwise>
+                                                    <a class="tap" href="/board/toBoard?nowPage=1&seq_category=${dto.CATEGORY_PK}&small_category=${dto.SEQ_CATEGORY}"> 
+                                                   </c:otherwise>
+                                                </c:choose>
+
                                                     <c:choose>
                                                        <c:when test="${dto.CATEGORY_PK eq null}">
                                                         공지
@@ -210,7 +236,17 @@
                                                         ${dto.CATEGORY_NAME}
                                                        </c:otherwise>
                                                     </c:choose> </a></td>
-                                                <td><a href="/board/detailPost?nowPage=1&seq_board=${dto.SEQ_BOARD}&seq_category=${dto.CATEGORY_PK}&category_name=${dto.CATEGORY_NAME}">${dto.COMMENT_CONTENT}</a></td>
+
+                                                <td>
+                                                <c:choose>
+                                                   <c:when test="${dto.CATEGORY_NAME eq '문의'}">
+                                                   <a href="/board/detailPost?nowPage=1&seq_board=${dto.SEQ_BOARD}&seq_category=${dto.CATEGORY_PK}&category_name=${dto.CATEGORY_NAME}">${dto.COMMENT_CONTENT}</a>
+                                                   </c:when>
+                                                
+                                                   <c:otherwise>
+                                                   <a href="/board/detailPost?nowPage=1&seq_board=${dto.SEQ_BOARD}&seq_category=${dto.CATEGORY_PK}">${dto.COMMENT_CONTENT}</a>
+                                                   </c:otherwise>
+                                                </c:choose>
                                                 <td class="comment_date"><fmt:formatDate value="${dto.COMMENT_DATE}" pattern="yyyy-MM-dd"/></td>
                                             </tr>
                                         </c:forEach>

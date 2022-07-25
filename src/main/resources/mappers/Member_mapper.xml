@@ -154,7 +154,7 @@
 		SELECT A.*, ROWNUM RN 
 		FROM (
 		    SELECT * FROM SUPPORT_BOARD
-		        WHERE MEMBER_ID = 'id'
+		        WHERE MEMBER_ID = #{member_id}
 		        order by SEQ_BOARD desc) A)
 		    WHERE RN BETWEEN #{start} AND #{end}
 	</select>

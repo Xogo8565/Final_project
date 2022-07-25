@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.comme.comment.CommentDTO;
 import com.comme.files.FileDTO;
 import com.comme.files.FileService;
+import com.comme.member.MemberDTO;
 import com.comme.utils.PagingVO;
 import com.google.gson.JsonObject;
 
@@ -54,11 +55,23 @@ public class BoardController {
 			small_category = "0";
 		}
 		
+		if(category_name != null) {
+			if(category_name.length() == 0) {
+				category_name = null;
+			}
+		}
+		
+		String memberId = null;
+		if((session.getAttribute("loginSession")) != null) {
+			memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+		}
+		
+		
 		int total = 0; // 뿌려줄 게시물의 총 개수 계산하는거 검색 유무에 따라서 뿌려줄 게시물에 개수가 달라짐 소분류 카테고리 처리 유무는 위에서 0으로 처리해서 매퍼에 예외처리해줫음
 		if(search_keyword == null) {
-			total = service.countBoard(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, "id");
+			total = service.countBoard(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, memberId);
 		}else {
-			total = service.countBySearch(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name , "id" ,search_type, search_keyword);
+			total = service.countBySearch(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name , memberId ,search_type, search_keyword);
 		}
 		
 		
@@ -82,9 +95,9 @@ public class BoardController {
 		etcMap.put("category_name", category_name); // 문의 게시판만 걸려주려고 추가
 		
 		if(search_keyword == null) { // 검색유무에 따라 뿌려주는 페이지 갯수가 달라져서 두가지 경우의수로 나눈거
-			model.addAttribute("list", service.selectAllBoard(vo, Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, "id"));
+			model.addAttribute("list", service.selectAllBoard(vo, Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, memberId));
 		}else {
-			model.addAttribute("list", service.searchBoard(vo, Integer.parseInt(seq_category), Integer.parseInt(small_category), search_type, search_keyword, category_name, "id"));
+			model.addAttribute("list", service.searchBoard(vo, Integer.parseInt(seq_category), Integer.parseInt(small_category), search_type, search_keyword, category_name, memberId));
 		}
 		model.addAttribute("paging", vo); // 페이징정보
 		model.addAttribute("categoryMenu", service.selectCategory(Integer.parseInt(seq_category))); // 대분류 카테고리에 속한 소분류 카테고리의 목록
@@ -143,11 +156,23 @@ public class BoardController {
 		for(int i = 0; i < imgSrc.length; i++) {
 			System.out.println("imgSrc : " + imgSrc[i]);
 		}
+		
+		String memberId = null;
+		String nickName = null;
+		if((session.getAttribute("loginSession")) != null) {
+			memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+			nickName = (((MemberDTO)session.getAttribute("loginSession")).getMember_nickname());
+		}
+		
 		String board_title = (String)jsonData.get(jsonData.size()-1).get("board_title"); // 게시물 제목
 		String board_content = (String)jsonData.get(jsonData.size()-1).get("board_content"); // 게시물 내용
 		int seq_category = Integer.parseInt((String) jsonData.get(jsonData.size()-1).get("seq_category")); // 게시물이 속한 소분류 카테고리 
+		String notice = (String)jsonData.get(jsonData.size()-1).get("notice"); // 공지 상단에 고정여부
+		if(notice == null) {
+			notice = "N";
+		}
 		
-		BoardDTO dto = new BoardDTO(0, board_title, board_content, "id", "nickname", null, 0, seq_category); // 아이디랑 닉네임은 나중에 세션에서 따오기
+		BoardDTO dto = new BoardDTO(0, board_title, board_content, memberId, nickName, null, 0, seq_category, notice); // 아이디랑 닉네임은 나중에 세션에서 따오기
 		service.insertBoard(dto); // db에 저장
 		
 		service.boardFileCheck(jsonData, imgSrc, dto); // 파일 최종체크해서 인서트하거나 도중에 지운애들 디렉토리에서 삭제하는 메서드
@@ -167,12 +192,20 @@ public class BoardController {
 			}
 		}
 		
+		String memberId = null;
+		String nickName = null;
+		if((session.getAttribute("loginSession")) != null) {
+			memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+			nickName = (((MemberDTO)session.getAttribute("loginSession")).getMember_nickname());
+		}
+		
 		String seq_board = (String)jsonData.get(jsonData.size()-1).get("seq_board");
 		String board_title = (String)jsonData.get(jsonData.size()-1).get("board_title");
 		String board_content = (String)jsonData.get(jsonData.size()-1).get("board_content");
 		int seq_category = Integer.parseInt((String) jsonData.get(jsonData.size()-1).get("seq_category"));
+		String notice = (String)jsonData.get(jsonData.size()-1).get("notice"); // 공지 상단에 고정여부
 		
-		BoardDTO dto = new BoardDTO(Integer.parseInt(seq_board), board_title, board_content, "id", "nickname", null, 0, seq_category);
+		BoardDTO dto = new BoardDTO(Integer.parseInt(seq_board), board_title, board_content, memberId, nickName, null, 0, seq_category, notice);
 		service.updateBoard(dto);
 		
 		service.boardFileCheck(jsonData, imgSrc, dto);
@@ -233,6 +266,7 @@ public class BoardController {
 		System.out.println("small_category : " + small_category);
 		System.out.println("search_keyword : " + search_keyword);
 		System.out.println("search_type : " + search_type);
+		System.out.println("category_name : " + category_name);
 		System.out.println("상세보기게시판접속");
 		
 		
@@ -240,11 +274,22 @@ public class BoardController {
 			small_category = "0";
 		}
 		
+		if(category_name != null) {
+			if(category_name.length() == 0) {
+				category_name = null;
+			}
+		}
+		
+		String memberId = null;
+		if((session.getAttribute("loginSession")) != null) {
+			memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+		}
+		
 		int total = 0;
 		if(search_keyword == null) {
-			total = service.countBoard(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, "id");
+			total = service.countBoard(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, memberId);
 		}else {
-			total = service.countBySearch(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, "id" ,search_type, search_keyword);
+			total = service.countBySearch(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name , memberId ,search_type, search_keyword);
 		}
 		
 		System.out.println(total);
@@ -270,9 +315,9 @@ public class BoardController {
 		etcMap.put("category_name", category_name);
 		
 		if(search_keyword == null) {
-			model.addAttribute("list", service.selectAllBoard(vo, Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, "id"));
+			model.addAttribute("list", service.selectAllBoard(vo, Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, memberId));
 		}else {
-			model.addAttribute("list", service.searchBoard(vo, Integer.parseInt(seq_category), Integer.parseInt(small_category), search_type, search_keyword, category_name, "id"));
+			model.addAttribute("list", service.searchBoard(vo, Integer.parseInt(seq_category), Integer.parseInt(small_category), search_type, search_keyword, category_name, memberId));
 		}
 		model.addAttribute("paging", vo); // 페이지정보
 		model.addAttribute("categoryMenu", service.selectCategory(Integer.parseInt(seq_category))); // 게시판 카테고리 메뉴
@@ -290,9 +335,17 @@ public class BoardController {
 		System.out.println("seq_board : " + dto.getSeq_board());
 		System.out.println("comment_content : " + dto.getComment_content());
 		
-		dto.setSeq_comment(0);
-		dto.setComment_id("id"); // 나중에 세션값으로 세팅
-		dto.setComment_nickname("nickname"); // 나중에 세션값으로 세팅
+		
+		String memberId = null;
+		String nickName = null;
+		if((session.getAttribute("loginSession")) != null) {
+			memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+			nickName = (((MemberDTO)session.getAttribute("loginSession")).getMember_nickname());
+		}
+		
+//		dto.setSeq_comment(0);
+		dto.setComment_id(memberId); // 나중에 세션값으로 세팅
+		dto.setComment_nickname(nickName); // 나중에 세션값으로 세팅
 		service.commentInsert(dto); // 댓글 디비에 저장
 		System.out.println(dto.getSeq_comment());
 		return String.valueOf(dto.getSeq_comment());

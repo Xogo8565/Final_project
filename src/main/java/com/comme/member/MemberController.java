@@ -124,28 +124,12 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/toMyPage")
-	public String toMypage() throws Exception{
-		return "member/myPage";
-	}
-	
-	@RequestMapping(value = "/toShelterPage")
-	public String toShelterPage(Model model) throws Exception{
-		System.out.println("보호소 마이페이지 접속");
+	public String toMyPage(Model model) throws Exception{
+		System.out.println("회원 마이페이지 접속");
 		
-		model.addAttribute("info", service.ProfileInfo("id"));
-		model.addAttribute("mainCategory", boardService.mainCategory());
-        model.addAttribute("inquiry", boardService.inquiryCategory());
-		return "member/shelterMyPage";
-	}
-	
-	@RequestMapping(value = "/toUserPage")
-	public String toUserPage(Model model) throws Exception{
-		System.out.println("일반 회원 마이페이지 접속");
-		
-		model.addAttribute("info", service.ProfileInfo("id"));
 		model.addAttribute("mainCategory", boardService.mainCategory());
 		model.addAttribute("inquiry", boardService.inquiryCategory());
-		return "member/userMyPage";
+		return "member/myPage";
 	}
 	
 	@RequestMapping(value = "/toMyComment")
@@ -153,7 +137,9 @@ public class MemberController {
 			@RequestParam(value="nowPage", required=false)String nowPage,
 			@RequestParam(value="cntPerPage", required=false)String cntPerPage) throws Exception{
 		
-		int total = service.countComment("id", search_keyword); // 뿌려 줄 댓글의 총 갯수
+		String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+		
+		int total = service.countComment(memberId, search_keyword); // 뿌려 줄 댓글의 총 갯수
 		
 		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
 			nowPage = "1";
@@ -172,7 +158,7 @@ public class MemberController {
 		model.addAttribute("mainCategory", boardService.mainCategory());
         model.addAttribute("inquiry", boardService.inquiryCategory());
         model.addAttribute("paging", vo); // 페이징정보
-        model.addAttribute("list", service.selectComment(vo, "id", search_keyword));
+        model.addAttribute("list", service.selectComment(vo, memberId, search_keyword));
 		model.addAttribute("etcMap", etcMap);
 		
 		return "member/MyComment";
@@ -186,7 +172,9 @@ public class MemberController {
 		System.out.println("search_keyword : " + search_keyword);
 		System.out.println("search_type : " + search_type);
 		
-		int total = service.countBoard("id", search_type, search_keyword); // 뿌려 줄 댓글의 총 갯수
+		String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+		
+		int total = service.countBoard(memberId, search_type, search_keyword); // 뿌려 줄 댓글의 총 갯수
 		
 		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
 			nowPage = "1";
@@ -205,7 +193,7 @@ public class MemberController {
 		model.addAttribute("mainCategory", boardService.mainCategory());
 		model.addAttribute("inquiry", boardService.inquiryCategory());
 		model.addAttribute("paging", vo); // 페이징정보
-		model.addAttribute("list", service.selectMyBoard(vo, "id", search_type, search_keyword));
+		model.addAttribute("list", service.selectMyBoard(vo, memberId, search_type, search_keyword));
 		model.addAttribute("etcMap", etcMap);
 		
 		return "member/myBoard";
@@ -219,7 +207,9 @@ public class MemberController {
 		System.out.println("search_keyword : " + search_keyword);
 		System.out.println("search_type : " + search_type);
 		
-		int total = service.countPay("id", search_type, search_keyword); // 뿌려 줄 댓글의 총 갯수
+		String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+		
+		int total = service.countPay(memberId, search_type, search_keyword); // 뿌려 줄 댓글의 총 갯수
 		
 		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
 			nowPage = "1";
@@ -238,7 +228,7 @@ public class MemberController {
 		model.addAttribute("mainCategory", boardService.mainCategory());
 		model.addAttribute("inquiry", boardService.inquiryCategory());
 		model.addAttribute("paging", vo); // 페이징정보
-		model.addAttribute("list", service.userPayList(vo, "id", search_type, search_keyword));
+		model.addAttribute("list", service.userPayList(vo, memberId, search_type, search_keyword));
 		model.addAttribute("etcMap", etcMap);
 		
 		return "member/shelterPay";
@@ -249,7 +239,9 @@ public class MemberController {
 			@RequestParam(value="nowPage", required=false)String nowPage,
 			@RequestParam(value="cntPerPage", required=false)String cntPerPage) throws Exception{
 		
-		int total = service.countMyPayList("id"); // 뿌려 줄 댓글의 총 갯수
+		String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+		
+		int total = service.countMyPayList(memberId); // 뿌려 줄 댓글의 총 갯수
 		
 		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
 			nowPage = "1";
@@ -264,7 +256,7 @@ public class MemberController {
 		model.addAttribute("mainCategory", boardService.mainCategory());
 		model.addAttribute("inquiry", boardService.inquiryCategory());
 		model.addAttribute("paging", vo); // 페이징정보
-		model.addAttribute("list", service.myPayList(vo, "id"));
+		model.addAttribute("list", service.myPayList(vo, memberId));
 		
 		return "member/myPayList";
 	}
@@ -274,7 +266,9 @@ public class MemberController {
 			@RequestParam(value="nowPage", required=false)String nowPage,
 			@RequestParam(value="cntPerPage", required=false)String cntPerPage) throws Exception{
 		
-		int total = service.countMySP("id"); // 뿌려 줄 댓글의 총 갯수
+		String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+		
+		int total = service.countMySP(memberId); // 뿌려 줄 댓글의 총 갯수
 		
 		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
 			nowPage = "1";
@@ -289,7 +283,7 @@ public class MemberController {
 		model.addAttribute("mainCategory", boardService.mainCategory());
 		model.addAttribute("inquiry", boardService.inquiryCategory());
 		model.addAttribute("paging", vo); // 페이징정보
-		model.addAttribute("list", service.mySupportBoard(vo ,"id"));
+		model.addAttribute("list", service.mySupportBoard(vo ,memberId));
 		
 		return "member/mySupport";
 	}
@@ -302,7 +296,9 @@ public class MemberController {
 		System.out.println("search_keyword : " + search_keyword);
 		System.out.println("search_type : " + search_type);
 		
-		int total = service.countVolList("test", search_type, search_keyword); // 뿌려 줄 댓글의 총 갯수
+		String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+		
+		int total = service.countVolList(memberId, search_type, search_keyword); // 뿌려 줄 댓글의 총 갯수
 		System.out.println("total : " + total);
 		
 		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
@@ -322,7 +318,7 @@ public class MemberController {
 		model.addAttribute("mainCategory", boardService.mainCategory());
 		model.addAttribute("inquiry", boardService.inquiryCategory());
 		model.addAttribute("paging", vo); // 페이징정보
-		model.addAttribute("list", service.selectVolList(vo, "test", search_type, search_keyword));
+		model.addAttribute("list", service.selectVolList(vo, memberId, search_type, search_keyword));
 		model.addAttribute("etcMap", etcMap);
 		
 		return "member/shelterVolList";
@@ -336,7 +332,9 @@ public class MemberController {
 		System.out.println("search_keyword : " + search_keyword);
 		System.out.println("search_type : " + search_type);
 		
-		int total = service.countUserVol("id", search_type, search_keyword); // 뿌려 줄 댓글의 총 갯수
+		String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+		
+		int total = service.countUserVol(memberId, search_type, search_keyword); // 뿌려 줄 댓글의 총 갯수
 		System.out.println("total : " + total);
 		
 		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
@@ -356,7 +354,7 @@ public class MemberController {
 		model.addAttribute("mainCategory", boardService.mainCategory());
 		model.addAttribute("inquiry", boardService.inquiryCategory());
 		model.addAttribute("paging", vo); // 페이징정보
-		model.addAttribute("list", service.selectUserVol(vo, "id", search_type, search_keyword));
+		model.addAttribute("list", service.selectUserVol(vo, memberId, search_type, search_keyword));
 		model.addAttribute("etcMap", etcMap);
 		
 		return "member/myVolList";

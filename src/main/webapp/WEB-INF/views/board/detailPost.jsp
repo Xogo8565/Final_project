@@ -328,11 +328,13 @@
                     </div>
                 </div>
 
-                <div class="row" style="margin: 0 10vw 0 10vw;">
-                    <div class="col"> <!-- 게시물 수정 삭제 버튼 -->
-                        <button type="button" id="removePost"><i class="fa-solid fa-xmark"></i>  삭제</button>
-                        <button type="button" id="modifyPost"><i class="fa-solid fa-pen"></i>  수정</button>
-                    </div>
+                <div class="row" style="margin: 0 10vw 0 10vw;" id>
+                    <c:if test="${loginSession.member_id eq post.member_id}" >
+                        <div class="col"> <!-- 게시물 수정 삭제 버튼 -->
+                            <button type="button" id="removePost"><i class="fa-solid fa-xmark"></i>  삭제</button>
+                            <button type="button" id="modifyPost"><i class="fa-solid fa-pen"></i>  수정</button>
+                        </div>
+                    </c:if>
                 </div>
 
                 <c:if test="${post.cm_count != 0}" > <!-- 댓글이 존재할 시 나오는 댓글갯수 나타내는 박스 -->
@@ -353,8 +355,11 @@
                         <c:forEach items="${comment}" var="list">
                                 <div class="col-12 commentBox">
                                     <p class="comment_Nk">${list.comment_nickname}   <span class="comment_Date" >${list.comment_date}</span> 
-                                        <button type="button" class="comment_delete" value="${list.seq_comment}"><i class="fa-solid fa-eraser"></i> 삭제</button>
-                                        <button type="button" class="comment_modify" value="${list.seq_comment}"><i class="fa-solid fa-pen"></i>  수정</button> </p>
+                                        <c:if test="${loginSession.member_id eq list.comment_id}" >
+                                            <button type="button" class="comment_delete" value="${list.seq_comment}"><i class="fa-solid fa-eraser"></i> 삭제</button>
+                                            <button type="button" class="comment_modify" value="${list.seq_comment}"><i class="fa-solid fa-pen"></i>  수정</button> 
+                                        </c:if>
+                                    </p>
                                     <p class="comment_content"><c:out value="${list.comment_content}" /></p>
                                 </div>
                         </c:forEach>
@@ -473,9 +478,11 @@
                         </c:if>
                         </form>
                     </div>
-                    <div class="col" style="margin: 0 10vw 0 10vw;">
-                        <button type="button" id="write" ><i class="fa-solid fa-pen"></i>  쓰기</button>
-                    </div>
+                    <c:if test="${not empty loginSession}" >
+                        <div class="col" style="margin: 0 10vw 0 10vw;">
+                            <button type="button" id="write" ><i class="fa-solid fa-pen"></i>  쓰기</button>
+                        </div>
+                    </c:if>
                 </div>
 
                 <div class="page_wrap mb-5">
@@ -552,29 +559,24 @@
                 }
             };
 
-            // 게시물 작성 버튼 클릭
-            document.getElementById('write').addEventListener('click', function(){
-                if('${etcMap.search_type}' == ''){
-                    location.href = "/board/toWrite?nowPage=${paging.nowPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}";
-                }else{
-                    location.href = "/board/toWrite?nowPage=${paging.nowPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}";
-                }
-            })
-
-            // 게시물 삭제 이벤트
-            document.getElementById('removePost').addEventListener('click', function(){
-                let check = confirm('해당 게시물을 삭제하시겠습니까?');
-                if(check){
-                    location.href = "/board/deletePost?seq_board=${post.seq_board}&seq_category=${etcMap.category}&category_name=${etcMap.category_name}";
-                }
-            })
-
-            // 게시물 수정 이벤트
-            document.getElementById('modifyPost').addEventListener('click', function(){
-                if('${etcMap.search_type}' == ''){
-                    location.href = "/board/toModifyBoard?nowPage=${paging.nowPage}&seq_board=${post.seq_board}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}";
-                }else{
-                    location.href = "/board/toModifyBoard?nowPage=${paging.nowPage}&seq_board=${post.seq_board}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}";
+            document.addEventListener('click', function(e){
+                if(e.target.id == 'write'){ // 글작성
+                    if('${etcMap.search_type}' == ''){
+                        location.href = "/board/toWrite?nowPage=${paging.nowPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}";
+                    }else{
+                        location.href = "/board/toWrite?nowPage=${paging.nowPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}";
+                    } 
+                }else if(e.target.id == 'removePost'){ // 글삭제
+                    let check = confirm('해당 게시물을 삭제하시겠습니까?');
+                    if(check){
+                        location.href = "/board/deletePost?seq_board=${post.seq_board}&seq_category=${etcMap.category}&category_name=${etcMap.category_name}";
+                    }
+                }else if(e.target.id == 'modifyPost'){ // 글수정
+                    if('${etcMap.search_type}' == ''){
+                        location.href = "/board/toModifyBoard?nowPage=${paging.nowPage}&seq_board=${post.seq_board}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}";
+                    }else{
+                        location.href = "/board/toModifyBoard?nowPage=${paging.nowPage}&seq_board=${post.seq_board}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}";
+                    }
                 }
             })
 
@@ -677,6 +679,11 @@
 
             // 댓글 등록 이벤트
             document.getElementById('registerBtn').addEventListener('click', function(){
+                if(!'${loginSession.member_id}'){
+                    alert('로그인 후 이용 부탁드립니다.');
+                    return;
+                }
+
                 if(!document.getElementById('comment_content').value){
                     alert('내용을 입력해주세요.');
                     return;
@@ -705,7 +712,7 @@
 
 
                         let div = $('<div>').attr('class', 'col-12 commentBox');
-                        let p1 =  $('<p>').attr('class', 'comment_Nk').append('세션으로 받을거');
+                        let p1 =  $('<p>').attr('class', 'comment_Nk').append('${loginSession.member_id}');
                         let p2 =  $('<p>').attr('class', 'comment_content').append($('#comment_content').val());
                         let span = $('<span>').attr('class', 'comment_Date').append(' 방금 전');
                         let button1 = $('<button>').attr({
