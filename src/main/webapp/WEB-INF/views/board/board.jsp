@@ -247,9 +247,11 @@
                         </c:if>
                         </form>
                     </div>
-                    <div class="col" style="padding: 0 10vw 0 10vw;">
-                        <button type="button" id="write" ><i class="fa-solid fa-pen"></i>  쓰기</button>
-                    </div>
+                    <c:if test="${not empty loginSession}" >
+                        <div class="col" style="padding: 0 10vw 0 10vw;">
+                            <button type="button" id="write" ><i class="fa-solid fa-pen"></i>  쓰기</button>
+                        </div>
+                    </c:if>
                 </div>
 
                 <!-- 페이지네이션 이녀석도 마찬가지로 검색 유무에 따라서 길에 주소로 정보를 보냇는데.. 흠 더러워 진걸 보니 100% 옳은 방향은 아닌듯 -->
@@ -323,14 +325,16 @@
                 }
             };
 
-            // 게시물 작성 버튼 클릭
-            document.getElementById('write').addEventListener('click', function(){
-                if('${etcMap.search_type}' == ''){
+            document.addEventListener('click', function(e){
+                if(e.target.id == 'write'){ // 글작성버튼
+                    if('${etcMap.search_type}' == ''){
                     location.href = "/board/toWrite?nowPage=${paging.nowPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}";
-                }else{
-                    location.href = "/board/toWrite?nowPage=${paging.nowPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}";
+                    }else{
+                        location.href = "/board/toWrite?nowPage=${paging.nowPage}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}";
+                    }
                 }
             })
+            
 
             document.getElementById('topBtn').addEventListener('click', function(){
 			window.scrollTo({ left: 0, top: 0, behavior: "smooth" });

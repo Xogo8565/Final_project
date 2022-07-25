@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.comme.board.BoardService;
 import com.comme.member.BlackListDTO;
 
 @Controller
@@ -17,6 +18,8 @@ import com.comme.member.BlackListDTO;
 public class ManagerController {
 	@Autowired
 	private ManagerService service;
+	@Autowired
+	private BoardService boardService;
 	
 	@RequestMapping(value="/memberList") // 회원 전체목록 출력
 	public String memberList(Model model, int curPage) throws Exception {
@@ -25,6 +28,8 @@ public class ManagerController {
 		
 		List<Map<String, Object>> list = service.selectAll(curPage*10-9, curPage*10);
 		model.addAttribute("list", list);
+		model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 		
 		return "/manager/memberList";
 	}
@@ -65,6 +70,8 @@ public class ManagerController {
 		
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("category", category);
+		model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 		return "/manager/memberList";
 	}
 	
@@ -76,6 +83,8 @@ public class ManagerController {
 		model.addAttribute("list", list);
 		
 		model.addAttribute("member_grade", member_grade);
+		model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 		return "/manager/memberList";
 	}
 	
@@ -86,6 +95,8 @@ public class ManagerController {
 		
 		List<Map<String, Object>> list = service.selectAllBlackList(curPage*10-9, curPage*10);
 		model.addAttribute("list", list);
+		model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 		return "/manager/memberList";
 	}
 }

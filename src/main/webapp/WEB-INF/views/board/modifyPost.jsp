@@ -259,6 +259,9 @@
                     <span id="categoryBox">
                         <select name="seq_category" id="seq_category">
                             <option value="0">탭</option>
+                            <c:if test="${loginSession.member_grade eq 4}" >
+                                <option value="${etcMap.category}">공지</option>
+                            </c:if>
                             <c:forEach items="${categoryMenu}" var="dto">
                                 <option value="${dto.seq_category}">${dto.category_name}</option>
                             </c:forEach>
@@ -267,6 +270,13 @@
                     <span id="titleBox">
                         <input type="text" id="title" name="board_title" placeholder="제목" value="${dto.board_title}" />
                     </span>
+
+                    <c:if test="${loginSession.member_grade eq 4}" >
+                        <p style="display: inline-block; margin-left: 30px;">
+                            <input type="checkbox" id="notice" name="notice" value="y">&nbsp;&nbsp;공지 상단 고정
+                        </p>
+                    </c:if>
+
                     <br><br>
                     <input type="hidden" id="imgSrc" name="imgSrc[]">
                     <input type="hidden" id="seq_board" name="seq_board" value="${dto.seq_board}">
@@ -294,6 +304,11 @@
             option.selected = true;
         }
     })
+
+    const noticeSelect = '${dto.notice}';
+    if(noticeSelect == 'y'){
+        document.getElementById('notice').checked = true;
+    }
 
 </script>
 </html>

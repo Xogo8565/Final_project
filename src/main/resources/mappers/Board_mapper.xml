@@ -178,7 +178,7 @@
 		<selectKey order="BEFORE" keyProperty="seq_board" resultType="int">
 			select seq_board.nextval from dual
 		</selectKey>
-		insert into board values(#{seq_board}, #{board_title}, #{board_content}, #{member_id}, #{writer_nickname}, sysdate, default, #{seq_category}, default)
+		insert into board values(#{seq_board}, #{board_title}, #{board_content}, #{member_id}, #{writer_nickname}, sysdate, default, #{seq_category}, #{notice})
 	</insert>
 	
 	<!-- 정보 보기용 매퍼객체, clob 타입을 매핑하기 위해서는 일반 Map형태로는 잘 되지 않는다. -->
@@ -239,7 +239,7 @@
 	
 	<!-- 게시물 수정 내용 업데이트 처리 -->
 	<update id="updateBoard" parameterType="BoardDTO">
-		update board set board_title = #{board_title}, board_content = #{board_content}, seq_category = #{seq_category} where seq_board = #{seq_board}
+		update board set board_title = #{board_title}, board_content = #{board_content}, seq_category = #{seq_category}, notice = #{notice} where seq_board = #{seq_board}
 	</update>
 	
 	<!-- 댓글 삭제 -->

@@ -15,7 +15,7 @@
                 integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
                 crossorigin="anonymous"></script>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-            <title>내 글 - Comme</title>
+            <title>후원 내역 조회 - Comme</title>
         </head>
         <style>
             #profileTap {
@@ -35,6 +35,7 @@
                 display: inline-block;
                 padding: 7px 7px 7px 7px;
                 min-width: 70px;
+                text-decoration: none;
             }
 
             #profileTap li a:hover{
@@ -53,6 +54,7 @@
 
             #boardBox a{
                 color: black;
+                text-decoration: none;
             }
 
             .pay_date,
@@ -161,7 +163,7 @@
                 <div class="row mt-5" id="tapBox">
                     <div class="col">
                         <ul id="profileTap">
-                            <li><a href="/member/toShelterPage">회원정보</a></li>
+                            <li><a href="/member/toMyPage">회원정보</a></li>
                             <li><a href="/member/toCheckVol">봉사 신청 확인</a></li>
                             <li><a href="/member/toMyBoard">내 글</a></li>
                             <li><a href="/member/toMyComment">내 댓글</a></li>
@@ -193,7 +195,7 @@
                                 <c:choose>
                                    <c:when test="${empty list}">
                                     <tr>
-                                        <td colspan="5">등록 된 글이 없습니다.</td>
+                                        <td colspan="5">후원 내역이 없습니다.</td>
                                     </tr>
                                    </c:when>
                                 

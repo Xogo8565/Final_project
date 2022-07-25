@@ -55,6 +55,7 @@ public class ShelterAnimalService implements ShelterAnimalDAO {
 		urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /* xml(기본값) 또는 json */
 		
 		String rs = callAPI(urlBuilder);
+		System.out.println(rs);
 		
 		// 반환받은 json 형태의 문자열을 실제 Gson 라이브러리가 가지고 있는 JsonElement 형태로 변환
 		JsonElement obj = JsonParser.parseString(rs);
