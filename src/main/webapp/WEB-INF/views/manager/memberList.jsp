@@ -21,7 +21,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"
 	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
 	crossorigin="anonymous"></script>
-<title>Document</title>
+<title>회원관리</title>
 <style>
 #titleSpan{
 	font-size: 1.6em;
@@ -107,23 +107,58 @@ option {
 }
 
 /* 반응형 웹 사이드 내비 */
+#sidNavWrapper{
+	position: relative;
+}
 .sideNav {
-	background-color: rgb(207, 185, 136);
+	position: absolute;
+	background-color: #cfb988d1;
 	text-align: center;
-	padding-top: 50px;
+	padding-top: 100px;
 	width: 200px;
+    height: 99.2%;
+    display: none;
+    padding-right: 0;
+	/*transition-property: all;
+    transition-timing-function: ease;
+    transition-duration: 1s;*/
+}
+
+#btnNav1{
+	position: absolute;
+	width: 200px;
+	padding-right: 0;
+	text-align: center;
+	height: 100px;
+	line-height: 5;
+}
+
+#btnNav{
+	color: rgb(207, 147, 111);
+	width: 100%;
+	font-size: large;
+    font-weight: 600;
+    cursor: pointer;
+    height: 80px;
+}
+
+#btnNav:hover {
+	border-radius: 30px;
+    border: 1px solid rgb(207, 147, 111);
+    padding: 3px 10px;
+    background-color: white;
+}
+
+#line{
+	width: 150px;
+	height: 2px;
+	background-color: white;
+    margin: 0px 20px;
 }
 
 .sideNav-Abox {
 	background-color: rgb(207, 185, 136);
 	width: 100%;
-}
-
-.sideNav a {
-	font-size: medium;
-	color: white;
-	text-decoration: none;
-	margin-top: 50px;
 }
 
 .sideNav p {
@@ -132,7 +167,12 @@ option {
 	color: white;
 }
 
-
+.sideNav a {
+	font-size: medium;
+	color: white;
+	text-decoration: none;
+	margin-top: 50px;
+}
 
 /* 반응형 모바일 내비 */
 .topNav{
@@ -231,21 +271,27 @@ td{
 	<!-- header -->
 	<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
 	<div class="wrapper">
-		<div class="row">
+		<div class="row" id="sidNavWrapper">
 			<%-- 반응형 웹 --%>
-			<div class="sideNav d-none d-sm-block justify-content-center">
+			<div class="sideNav justify-content-center">
 				<p>회원관리</p>
 				<div class="sideNav-A">
 					<a href="/manager/memberList?curPage=1">전체 회원 목록</a><br>
 					<a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a>
 				</div>
 			</div>
+			<div class="d-none d-sm-block" id="btnNav1">
+				<span id="btnNav">
+				<span class="material-symbols-outlined" style="vertical-align: sub;">edit_note</span>
+				관리자 메뉴</span>
+				<div id="line"> </div>			
+			</div>
 			<%-- 반응형 모바일 --%>
 			<div class="topNav d-sm-none justify-content-center">
 				<a id="aTitle" href="/manager/memberList?curPage=1">회원목록</a>&nbsp;&nbsp;
 				<a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a>	
 			</div>
-			<div class="col listContainer">
+			<div class="col listContainer m-2">
 			<div class="col listHeader text-center mt-5">
 				<span id="titleSpan">
 					<c:choose>
@@ -489,6 +535,10 @@ td{
 	        	$("#gManager").attr("selected", true);
 			}
 		}
+		
+		$("#btnNav").on("click", function(){
+			$(".sideNav").toggle("fast");
+		})
 		
 		$("td").on("click", function(e) { // 선택한 회원 회색 배경 표시
 			if (btnModify.style.display != "none") {
