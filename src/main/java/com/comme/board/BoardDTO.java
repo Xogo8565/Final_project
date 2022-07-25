@@ -1,7 +1,5 @@
 package com.comme.board;
 
-import java.util.Date;
-
 public class BoardDTO {
 	private int seq_board;
 	private String board_title;
@@ -11,11 +9,12 @@ public class BoardDTO {
 	private String written_date;
 	private int view_count;
 	private int seq_category;
+	private String notice;
 	
 	public BoardDTO() {}
 
 	public BoardDTO(int seq_board, String board_title, String board_content, String member_id, String writer_nickname,
-			String written_date, int view_count, int seq_category) {
+			String written_date, int view_count, int seq_category, String notice) {
 		super();
 		this.seq_board = seq_board;
 		this.board_title = board_title;
@@ -25,6 +24,7 @@ public class BoardDTO {
 		this.written_date = written_date;
 		this.view_count = view_count;
 		this.seq_category = seq_category;
+		this.notice = notice;
 	}
 
 	public int getSeq_board() {
@@ -91,12 +91,19 @@ public class BoardDTO {
 		this.seq_category = seq_category;
 	}
 
+	public String getNotice() {
+		return notice;
+	}
+
+	public void setNotice(String notice) {
+		this.notice = notice;
+	}
+
 	@Override
 	public String toString() {
-		return seq_board + " : " + board_title + " : " + board_content
-				+ " : " + member_id + " : " + writer_nickname + " : " + written_date
-				+ " : " + view_count + " : " + seq_category;
+		return "BoardDTO [seq_board=" + seq_board + ", board_title=" + board_title + ", board_content=" + board_content
+				+ ", member_id=" + member_id + ", writer_nickname=" + writer_nickname + ", written_date=" + written_date
+				+ ", view_count=" + view_count + ", seq_category=" + seq_category + ", notice=" + notice + "]";
 	}
-	
-	
+
 }

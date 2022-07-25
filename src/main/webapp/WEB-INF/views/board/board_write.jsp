@@ -265,6 +265,9 @@
                     <span id="categoryBox">
                         <select name="seq_category">
                             <option value="0">탭</option>
+                            <c:if test="${loginSession.member_grade eq 4}" >
+                                <option value="${etcMap.category}">공지</option>
+                            </c:if>
                             <c:forEach items="${categoryMenu}" var="dto">
                                 <option value="${dto.seq_category}">${dto.category_name}</option>
                             </c:forEach>
@@ -273,6 +276,13 @@
                     <span id="titleBox">
                         <input type="text" id="title" name="board_title" placeholder="제목" value="" />
                     </span>
+
+                    <c:if test="${loginSession.member_grade eq 4}" >
+                        <p style="display: inline-block; margin-left: 30px;">
+                            <input type="checkbox" id="notice" name="notice" value="y">&nbsp;&nbsp;공지 상단 고정
+                        </p>
+                    </c:if>
+                    
                     <br><br>
                     <input type="hidden" id="imgSrc" name="imgSrc[]">
                     <textarea class="board_content" id="summernote" name="board_content"></textarea>
