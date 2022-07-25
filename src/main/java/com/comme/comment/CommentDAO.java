@@ -11,7 +11,7 @@ import com.comme.files.FileDTO;
 public interface CommentDAO {
 	
 	// 실종게시판 댓글
-	List<FileDTO> selectByMc(int seq_board);
+	List<CommentDTO> selectByMc(int seq_board);
 	
 	// 실종게시판 댓글 입력
 	void insertMissing(CommentDTO dto);

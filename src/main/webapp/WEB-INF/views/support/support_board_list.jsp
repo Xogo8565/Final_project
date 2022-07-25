@@ -407,10 +407,11 @@
     }))
     document.querySelector("#write").addEventListener("click",()=>{
         let brn = "${loginSession.member_grade}";
-        if(brn==="3"){
+        if(brn==="2"){
             location.href = "/supportBoard/write"
+        } else{
+            alert("기관 회원만 이용할 수 있는 기능입니다.");
         }
-        alert("기관 회원만 이용할 수 있는 기능입니다.");
     })
 
 </script>

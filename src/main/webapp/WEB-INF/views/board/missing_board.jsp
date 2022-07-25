@@ -255,7 +255,9 @@
 	<script>
 		// 글쓰기 버튼눌렀을때
 		$(".writeBtn").click(function(){
-			location.href = "/miss/toWrite";
+			if(${not empty loginSession.member_id}){
+				location.href = "/miss/toWrite";
+			} else alert("회원에게만 제공되는 기능입니다.");
 		})
 	
 		// 검색
