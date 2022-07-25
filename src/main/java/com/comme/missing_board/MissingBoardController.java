@@ -50,10 +50,11 @@ public class MissingBoardController {
 	@RequestMapping(value = "/search", produces="application/json; charset=utf-8") // 검색
 	public Map<String, Object> search(@RequestParam(value = "category") String category, @RequestParam(value = "keywordMissing") String keywordMissing, 
 			@RequestParam(value = "curPage", defaultValue = "1") int curPage) throws Exception {
-		
+		System.out.println(category+ " : " + keywordMissing);
 		Map<String, Object> map = service.search(curPage, category, keywordMissing);
         map.put("category", category);
         map.put("keywordMissing", keywordMissing);
+		System.out.println(map);
         return map;
 	}
 
@@ -150,8 +151,7 @@ public class MissingBoardController {
 		String member_id = ((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id();
 		MissingBoardDTO dto = new MissingBoardDTO(Integer.parseInt(seq_board), board_title, board_content, member_id, member_nickname, null, miss_area, miss_date, animal_kind, 0); // 아이디랑 닉네임은 나중에 세션에서 따오기
 		service.modify(dto);
-		System.out.println(dto.toString());
-		
+
 		service.boardFileCheck(jsonData, imgSrc, dto);
 		
 		// db에 인서트되서 해당 글번호에 존재하고 잇는 파일들에 대한 정보를 가져옴
