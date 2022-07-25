@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.comme.member.BlackListDTO;
-import com.comme.member.MemberDTO;
 
 @Mapper
 public interface ManagerDAO {
@@ -20,6 +19,8 @@ public interface ManagerDAO {
 	List<Map<String, Object>> search(Map<String, Object> map);
 	
 	List<Map<String, Object>> searchGrade(Map<String, Object> map);
+
+	BlackListDTO selectId(String member_id) throws Exception;
 	
 	int totalCnt();
 	

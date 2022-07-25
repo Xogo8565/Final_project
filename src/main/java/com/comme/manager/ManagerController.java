@@ -31,21 +31,31 @@ public class ManagerController {
 	
 	@ResponseBody
 	@RequestMapping(value="/toModify") // 회원 수정
-	public int memberModify(String member_id, String member_grade, String blackListChk, String blackListCtt, Model model) throws Exception {
+	public BlackListDTO memberModify(String member_id, String member_grade, String blackListChk, String blackListCtt, Model model) throws Exception {
 		int rs = service.modifyGrade(member_id, member_grade);
+		BlackListDTO dto = service.selectId(member_id);
 		
 		if(blackListChk.equals("false")) { // 체크박스 해제상태일 때
 			System.out.println("해제");
 			service.deleteBlackList(member_id);
 		}else { // 블랙리스트 체크박스 체크됐을 때
 			System.out.println("체크");
-			service.insertBlackList(new BlackListDTO(member_id, blackListCtt, null));
+			if(dto == null) {
+				System.out.println("블랙 인서트");
+				service.insertBlackList(new BlackListDTO(member_id, blackListCtt, null));	
+			}else if(dto != null && !dto.getBlacklist_content().equals(blackListCtt)) {
+				System.out.println("블랙 업데이트");
+				service.insertBlackList(new BlackListDTO(member_id, blackListCtt, null));	
+			}else {
+				System.out.println("블랙 저장 안함");				
+			}
 		}
 		
-		return rs;
+		
+		return service.selectId(member_id);
 	}
 	
-	@RequestMapping(value="/toSearch", method=RequestMethod.GET) // 회원 검색
+	@RequestMapping(value="/toSearch") // 회원 검색
 	public String searchKeyword(String category, String keyword, int curPage1, Model model) throws Exception {
 		Map<String, Object> getPage = service.getSearchPage(curPage1, category, keyword);
 		model.addAttribute("curPageMapSearch", getPage);

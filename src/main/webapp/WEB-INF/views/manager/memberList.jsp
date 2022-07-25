@@ -21,7 +21,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"
 	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
 	crossorigin="anonymous"></script>
-<title>Document</title>
+<title>회원관리</title>
 <style>
 #titleSpan{
 	font-size: 1.6em;
@@ -107,23 +107,58 @@ option {
 }
 
 /* 반응형 웹 사이드 내비 */
+#sidNavWrapper{
+	position: relative;
+}
 .sideNav {
-	background-color: rgb(207, 185, 136);
+	position: absolute;
+	background-color: #cfb988d1;
 	text-align: center;
-	padding-top: 50px;
+	padding-top: 100px;
 	width: 200px;
+    height: 99.2%;
+    display: none;
+    padding-right: 0;
+	/*transition-property: all;
+    transition-timing-function: ease;
+    transition-duration: 1s;*/
+}
+
+#btnNav1{
+	position: absolute;
+	width: 200px;
+	padding-right: 0;
+	text-align: center;
+	height: 100px;
+	line-height: 5;
+}
+
+#btnNav{
+	color: rgb(207, 147, 111);
+	width: 100%;
+	font-size: large;
+    font-weight: 600;
+    cursor: pointer;
+    height: 80px;
+}
+
+#btnNav:hover {
+	border-radius: 30px;
+    border: 1px solid rgb(207, 147, 111);
+    padding: 3px 10px;
+    background-color: white;
+}
+
+#line{
+	width: 150px;
+	height: 2px;
+	background-color: white;
+    margin: 0px 20px;
 }
 
 .sideNav-Abox {
 	background-color: rgb(207, 185, 136);
 	width: 100%;
-}
-
-.sideNav a {
-	font-size: medium;
-	color: white;
-	text-decoration: none;
-	margin-top: 50px;
 }
 
 .sideNav p {
@@ -132,7 +167,12 @@ option {
 	color: white;
 }
 
-
+.sideNav a {
+	font-size: medium;
+	color: white;
+	text-decoration: none;
+	margin-top: 50px;
+}
 
 /* 반응형 모바일 내비 */
 .topNav{
@@ -231,21 +271,27 @@ td{
 	<!-- header -->
 	<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
 	<div class="wrapper">
-		<div class="row">
+		<div class="row" id="sidNavWrapper">
 			<%-- 반응형 웹 --%>
-			<div class="sideNav d-none d-sm-block justify-content-center">
+			<div class="sideNav justify-content-center">
 				<p>회원관리</p>
 				<div class="sideNav-A">
 					<a href="/manager/memberList?curPage=1">전체 회원 목록</a><br>
 					<a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a>
 				</div>
 			</div>
+			<div class="d-none d-sm-block" id="btnNav1">
+				<span id="btnNav">
+				<span class="material-symbols-outlined" style="vertical-align: sub;">edit_note</span>
+				관리자 메뉴</span>
+				<div id="line"> </div>			
+			</div>
 			<%-- 반응형 모바일 --%>
 			<div class="topNav d-sm-none justify-content-center">
 				<a id="aTitle" href="/manager/memberList?curPage=1">회원목록</a>&nbsp;&nbsp;
 				<a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a>	
 			</div>
-			<div class="col listContainer">
+			<div class="col listContainer m-2">
 			<div class="col listHeader text-center mt-5">
 				<span id="titleSpan">
 					<c:choose>
@@ -279,7 +325,7 @@ td{
 					</div>
 				</form>
 			</div>
-			<form id="list" action="/manager/toModify" method="post">
+			<form id="list" action="/manager/toModify" method="get">
 				<div class="tblContainer mt-5">
 					<div class="col btnSpace d-flex justify-content-end">
 						<button class="btn" type="button" id="btnModify">수정</button>
@@ -302,7 +348,7 @@ td{
 										<option class="gradeOpt" id="gManager" value="4">매니저</option>
 								</select></th>
 								<th class="d-none d-lg-table-cell" scope="col">사업자번호</th>
-								<th class="blackList" scope="col">블랙리스트</th>
+								<th class="blackListTh" scope="col">블랙리스트</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -351,18 +397,18 @@ td{
 										</select>
 									</td>
 									<td class="member_brn d-none d-lg-table-cell">${list.member_brn}</td>
-									<td class="blackList">
+									<td class="blackList${list.member_id} blacklist">
 										<div class="form-check blackDate d-flex justify-content-center">
 											<c:choose>
 												<c:when test="${not empty list.blacklist_content}">
 													<input class="form-check-input checkBlack" type="checkbox" value="Y" name="checkBlack" checked disabled>&nbsp;<p>${list.blacklist_date}</p>
 												</c:when>
 												<c:otherwise>
-													<input class="form-check-input checkBlack" type="checkbox" value="N" name="checkBlack" disabled>
+													<input class="form-check-input checkBlack" type="checkbox" value="N" name="checkBlack" disabled><p></p>
 												</c:otherwise>
 											</c:choose>
 										</div>
-										<input type="text" class="blacklist_content" value="${list.blacklist_content}" title="${list.blacklist_content}" disabled>
+										<input type="text" class="blacklist_content" name="blackListCtt" value="${list.blacklist_content}" title="${list.blacklist_content}" disabled>
 									</td>
 								</tr>
 								</c:forEach>
@@ -490,6 +536,10 @@ td{
 			}
 		}
 		
+		$("#btnNav").on("click", function(){
+			$(".sideNav").toggle("fast");
+		})
+		
 		$("td").on("click", function(e) { // 선택한 회원 회색 배경 표시
 			if (btnModify.style.display != "none") {
 				for (let i = 0; i < listTr.length; i++) {
@@ -522,22 +572,44 @@ td{
 				}
 			}
 		})
-
+		
 		btnSave.addEventListener("click", function(e) {
 			const lastCheck = confirm("정말 수정하시겠습니까?");
+			
+			let arrGrade = new Array(); // 현재 jstl 리스트의 값 배열로 저장
+			let arrBLDate = new Array(); // 현재 jstl 리스트의 값 배열로 저장
+			<c:forEach items="${list}" var="item">
+				arrGrade.push("${item.member_grade}");
+				arrBLDate.push("${item.blacklist_date}");
+			</c:forEach>
+			
 			if (lastCheck === true) {
 				for (i = 0; i < checkBox.length; i++) {
 					if(listTr[i].style.background === "none rgb(222, 226, 230)"){
 						let td = listTr[i].childNodes;
 						let blackList = td[15].childNodes;
 						let blackListChk = blackList[1].firstElementChild.checked;
+						let blackListDate = blackList[1].lastElementChild;
 						let blackListCtt = blackList[3].value;
-						let member_grade = td[11].firstElementChild.value;
+						let member_grade = selectGrade[i].value;
 						let member_id = listTr[i].firstElementChild.innerHTML;
-
-						if(blackListCtt === ""){
-							alert("블랙리스트 사유를 입력해주세요");
-							return;
+						
+						if(arrGrade[i] === member_grade){
+							if(blackListChk === true && blackListCtt === ""){
+								alert("블랙리스트 사유를 입력해주세요");
+								return;
+							}else if(blackListChk === false){
+								blackListDate.innerHTML = "";
+								blackList[3].setAttribute("value", "");
+							}
+						}else if(arrGrade[i] !== member_grade){
+							if(blackListChk === true && blackListCtt === ""){
+								alert("블랙리스트 사유를 입력해주세요");
+								return;
+							}else if(blackListChk === false){
+								blackListDate.innerHTML = "";
+								blackList[3].setAttribute("value", "");
+							}
 						}
 						
 						$.ajax({
@@ -545,8 +617,24 @@ td{
 							data: {member_id : member_id, member_grade : member_grade, 
 								blackListChk : blackListChk, blackListCtt : blackListCtt},
 							type: "get",
+							dataType: "json",
 							success: function(data){
-								console.log(data);
+								
+								$(".blackList"+member_id).empty();
+								let emptyBox1 = $("<input hidden>");
+								let emptyBox2 = $("<input hidden>");
+								let div = $("<div class='form-check blackDate d-flex justify-content-center'>");
+								if(blackListChk === true){
+									let input1 = $("<input class='form-check-input checkBlack' type='checkbox' value='Y' name='checkBlack' checked disabled>");
+									let p = $("<p>").append("&nbsp;").append(data.blacklist_date);
+									div.append(input1, p);
+								}else{
+									let input1 = $("<input class='form-check-input checkBlack' type='checkbox' value='N' name='checkBlack' disabled>");
+									div.append(input1);
+								}
+								let input2 = $("<input type='text' class='blacklist_content' name='blackListCtt' value="+(data.blacklist_content)+" title="+(data.blacklist_content)+" disabled>")
+								$(".blackList"+member_id).append(emptyBox1, div, emptyBox2, input2);
+								
 							},error: function(e){
 								console.log(e);
 							}
@@ -576,7 +664,6 @@ td{
 		
 		$("#selectGrade").on("change", function(){
 			let rs = $("#selectGrade").val();
-			console.log(rs);
 			if(rs > 0){
 				location.href="/manager/toSearchGrade?member_grade="+rs+"&curPage=1";
 			}else{
