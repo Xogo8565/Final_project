@@ -85,6 +85,9 @@
       )
          WHERE RN BETWEEN #{start} and #{end}
 	</select>
+	<select id="selectId" resultType="BlackListDTO" parameterType="String">
+		select member_id, TO_CHAR(blacklist_date, 'YY/MM/DD') AS blacklist_date, blacklist_content from blacklist where member_id=#{member_id}
+	</select>
 	<select id="totalCnt" resultType="int">
 		select count(*) from member
 	</select>
