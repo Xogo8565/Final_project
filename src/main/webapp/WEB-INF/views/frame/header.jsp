@@ -43,7 +43,6 @@
 					<a href="/shelterAnimal/toShelterAnimal?curPage=1"><li>유기동물</li></a>
 					<a href="/board/toBoard?seq_category=${inquiry.seq_category}&category_name=${inquiry.category_name}"><li>문의/신고</li></a>
 				</ul>
-
 				<ul id="drop-ul" class="d-none">
 					<li style="margin-right: 10px;"><i class="fa-solid fa-arrow-right-long"></i></li>
 					<c:forEach items="${mainCategory}" var="dto">

@@ -212,7 +212,6 @@
 
 		<!-- header -->
 		<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
-		
 		<!--body 컨텐츠 영역-->
 		<div class="mainP-Body">
 			<!--비반응형(md) 첫번째 콘텐츠(강아지발가락튀어나온사진) 봉사-->
