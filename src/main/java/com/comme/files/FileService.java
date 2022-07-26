@@ -57,8 +57,9 @@ public class FileService implements FileDAO {
         List<String> list = convertFileUrlToPath.convertTofullPath(files_name);
         System.out.println(list);
         for(String filename : list){
-            String[] strings = filename.split("/");
-            insert_file(new FileDTO(0,seq_board, path,null, strings[3]), table_name);
+            String[] strings = filename.split(File.separator);
+            System.out.println(strings[1]+":"+strings[2]);
+            insert_file(new FileDTO(0,seq_board,path+strings[1]+File.separator+strings[2],null, strings[3]), table_name);
         }
 
         for(String temp : temp_files){
@@ -99,18 +100,17 @@ public class FileService implements FileDAO {
                 delete_file(fileDTO.getSeq_file(), table_name);
 
                 File file = new File(path+File.separator+fileDTO.getFiles_sys());
+                System.out.println(file);
                 if(file.exists()) {
                     file.delete();
                 }
             }
         }
 
-        logger.info(" :" +String.valueOf(seq_board) + "/" + table_name);
-
         // 게시글에 저장된 리스트 중 테이블에 없는 항목 저장
         for(String s : list){
             if(!fileList2.contains(s)){
-                fileDAO.insert_file(new FileDTO(0, seq_board,path,null,s), table_name);
+                fileDAO.insert_file(new FileDTO(0, seq_board, path,null,s), table_name);
             }
         }
 

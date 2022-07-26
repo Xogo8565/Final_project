@@ -57,9 +57,9 @@ public class MissingBoardService{
 	public Map<String, Object> selectOne(int seq_board) throws Exception{
 		Map<String, Object> map = new HashMap<>();
 		map.put("MissingBoardDTO", dao.selectOne(seq_board));
-		map.put("FileDTO", fileService.selectByMissing(seq_board));
 		map.put("commentDTO", commentdao.selectByMc(seq_board));
 		map.put("commentCount", commentdao.selectCount(seq_board));
+		map.put("files", fileService.selectByMissing(seq_board));
 		return map;
 	}
 	// 글 작성

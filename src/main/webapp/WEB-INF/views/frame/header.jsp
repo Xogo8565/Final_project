@@ -76,7 +76,7 @@
 					<c:when test="${not empty loginSession}">
 						<label id="logout" style="cursor:pointer;">로그아웃</label>
 						<div class="row" id="iconBox">
-							<a href="/myPage"><img src="/resources/mainImg/user.png"></a>
+							<a href="/member/toMyPage"><img src="/resources/mainImg/user.png"></a>
 						</div>
 						<div class="row" id="helloBox">
 							<p>${loginSession.member_nickname} 님,<br> 안녕하세요 
@@ -96,11 +96,16 @@
 					<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 					<!-- 사이드 네비 메뉴-->
 					<div class="row search-menuH">
-						<span>Comme</span><a href=""><span>Comme에 대하여</span></a>
-						<span>Community</span><a href=""><span>자유게시판</span></a>
-						<a><span>봉사신청</span></a> <a href="/volBoard/lists">
-						<span>봉사후기</span></a>
-						<span>support</span>
+						<span>Comme</span>
+						<span>Community</span>
+						<c:forEach items="${mainCategory}" var="dto">
+							<a href="/board/toBoard?seq_category=${dto.seq_category}">
+								<span>${dto.category_name}</span>
+							</a>
+						</c:forEach>
+						<span>Volunteer</span>
+						<a href="/volBoard/lists"><span>봉사신청</span></a>
+						<span>Support</span>
 						<a href="/supportBoard/lists"><span>후원신청</span></a>
 					</div>
 				</div>

@@ -1,5 +1,6 @@
 package com.comme.pay;
 
+import com.comme.board.BoardService;
 import com.comme.member.MemberDTO;
 import com.google.gson.JsonObject;
 import oracle.jdbc.proxy.annotation.Post;
@@ -25,6 +26,9 @@ public class PayController {
     @Autowired
     private HttpSession httpSession;
 
+    @Autowired
+    private BoardService boardService;
+
     Logger logger = LoggerFactory.getLogger(PayController.class);
 
     @PostMapping("/insert")
@@ -41,6 +45,9 @@ public class PayController {
     public String result(int seq_pay, Model model) throws Exception {
         Map<String, Object> map = payService.select(seq_pay);
         model.addAttribute("map", map);
+
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
         return "pay/result";
     }
 

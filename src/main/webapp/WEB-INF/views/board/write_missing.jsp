@@ -25,6 +25,8 @@
     <style>
         .content {
             margin-top: 50px;
+            padding-left: 90px;
+            padding-right: 90px;
         }
 
         .board-title {
@@ -156,7 +158,8 @@
             minHeight: 500,             // 최소 높이
             maxHeight: null,             // 최대 높이
             focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-            lang: "ko-KR",					// 한글 설정
+            disableResizeEditor: true,
+            lang: "ko-kr",
             placeholder: '내용을 입력해주세요.',	//placeholder 설정
             callbacks: {	//여기 부분이 이미지를 첨부하는 부분
                 onImageUpload: function (files) {

@@ -93,8 +93,6 @@
 	
 	<!-- 상세보기 글조회 -->
 	<select id="selectOne" parameterType="int" resultType="MissingBoardDTO">
-		select * from missing_board where seq_board = #{seq_board}
+		select * from MISSING_BOARD where seq_board = #{seq_board}
 	</select>
-	
-	
 </mapper>

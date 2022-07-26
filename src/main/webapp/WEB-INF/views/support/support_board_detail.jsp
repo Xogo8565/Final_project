@@ -28,18 +28,17 @@
             box-sizing: border-box;
         }
 
-        .container {
-            width: 100%;
-            min-height: 1800px;
-            height: 1px;
+        .content {
+            min-height: 1400px;
+            margin-top: 50px;
+            padding-left: 90px;
+            padding-right: 90px;
         }
-
-        .header {
-            height: 10%;
-        }
-
-        .footer {
-            height: 10%;
+        .content_header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 3px;
+            border-bottom: 1px solid var(--sil);
         }
 
         .title button {
@@ -55,10 +54,10 @@
         }
 
         .board {
-            height: 80%;
-            margin-top: 50px;
-            padding: 50px;
+            margin-top : 20px;
             border-bottom: 1px solid var(--sil);
+            margin-bottom: 20px;
+
         }
 
         .board_header {
@@ -200,6 +199,12 @@
             background-color: var(--sil);
             color: white;
         }
+
+        @media screen and (max-width: 640px){
+            .board_header {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <link rel="stylesheet"
@@ -219,62 +224,68 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <body>
-    <div class="board">
-        <div class="board_header">
-            <div class="representativeImg">
-                <c:if test="${not empty map.files_sys}">
-                    <img src="/files/support/${map.files_sys}">
-                </c:if>
-                <c:if test="${empty map.files_sys}">
-                    <img src="/resources/images/No_image.png">
-                </c:if>
-            </div>
-            <form class="orderForm" action="/supportBoard/order">
-                <div class="shelter">
-                    <span><c:out value="${map.writer_nickname}"/> </span>
-                </div>
-                <div class="title">
-                    <c:out value="${map.board_title}"/>
-                    <c:if test="${loginSession.member_id eq map.member_id||map.member_grade=='4'}">
-                        <div class="boardButton">
-                            <button type="button" id="modify">수정하기</button>
-                            <button type="button" id="delete">삭제하기</button>
-                        </div>
+    <div class="content">
+        <div class="content_header">
+            <h3>후원 게시판</h3>
+        </div>
+        <div class="board">
+            <div class="board_header">
+                <div class="representativeImg">
+                    <c:if test="${not empty map.files_sys}">
+                        <img src="/files/support/${map.files_sys}">
+                    </c:if>
+                    <c:if test="${empty map.files_sys}">
+                        <img src="/resources/images/No_image.png">
                     </c:if>
                 </div>
-                <div class="order_number">
-                    <div class="order_number1">
-                        <span>수량</span>
+                <form class="orderForm" action="/supportBoard/order">
+                    <div class="shelter">
+                        <span><c:out value="${map.writer_nickname}"/> </span>
                     </div>
-                    <div class="order_number2">
-                        <div class="selection">
-                            <button type="button" id="minus">-</button>
-                            <input type="number" id="order_number" name="order_number" required="required" min="1">
-                            <input type="hidden" id="price" name ="price">
-                            <input type="hidden" name ="seq_board" value="${map.seq_board}">
-                            <button type="button" id="plus">+</button>
+                    <div class="title">
+                        <c:out value="${map.board_title}"/>
+                        <c:if test="${loginSession.member_id eq map.member_id||map.member_grade=='4'}">
+                            <div class="boardButton">
+                                <button type="button" id="modify">수정하기</button>
+                                <button type="button" id="delete">삭제하기</button>
+                            </div>
+                        </c:if>
+                    </div>
+                    <div class="order_number">
+                        <div class="order_number1">
+                            <span>수량</span>
                         </div>
-                        <span> </span>
+                        <div class="order_number2">
+                            <div class="selection">
+                                <button type="button" id="minus">-</button>
+                                <input type="number" id="order_number" name="order_number" required="required" min="1">
+                                <input type="hidden" id="price" name ="price">
+                                <input type="hidden" name ="seq_board" value="${map.seq_board}">
+                                <button type="button" id="plus">+</button>
+                            </div>
+                            <span> </span>
+                        </div>
                     </div>
-                </div>
-                <div class="total">
-                    <span>총 상품금액</span>
-                    <span id="total">원</span>
-                </div>
-                <div class="order">
-                    <button type="submit" id="order">신청(후원)하기</button>
-                </div>
-            </form>
-        </div>
-        <div class="info">상세 정보</div>
-        <div class="board_content">
-            ${map.board_content}
-        </div>
-        <div class="board_footer">
-            <button id="list" type="button">목록</button>
-            <button id="write" type="button">글쓰기</button>
+                    <div class="total">
+                        <span>총 상품금액</span>
+                        <span id="total">원</span>
+                    </div>
+                    <div class="order">
+                        <button type="submit" id="order">신청(후원)하기</button>
+                    </div>
+                </form>
+            </div>
+            <div class="info">상세 정보</div>
+            <div class="board_content">
+                ${map.board_content}
+            </div>
+            <div class="board_footer">
+                <button id="list" type="button">목록</button>
+                <button id="write" type="button">글쓰기</button>
+            </div>
         </div>
     </div>
+
 
 <script>
     const plus = document.querySelector("#plus");

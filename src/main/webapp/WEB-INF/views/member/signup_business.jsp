@@ -84,6 +84,10 @@
                                 <input type="text" class="form-control" id="name" name="member_name">
                             </div>
                         </div>
+                        <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
+                        	<div class="col-3"></div>
+                        	<div class="col-9"><span id="checkName"></span></div>
+                        </div>
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="name">
@@ -95,11 +99,6 @@
                                 <input type="text" class="form-control" id="business" name="member_brn">
                             </div>
                         </div>
-                        <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
-                        	<div class="col-3"></div>
-                        	<div class="col-9"><span id="checkName"></span></div>
-                        </div>
-
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="id">
