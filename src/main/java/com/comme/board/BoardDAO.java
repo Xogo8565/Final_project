@@ -47,6 +47,6 @@ public interface BoardDAO {
 	
 	CategoryDTO inquiryCategory();
 	
-	
+	List<Map<String, Object>> mainContent();
 	
 }

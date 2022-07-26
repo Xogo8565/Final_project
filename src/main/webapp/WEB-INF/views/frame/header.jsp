@@ -30,12 +30,12 @@
 	<div class="mainP-Header">
 		<!--비반응형 logo-->
 		<div class="row">
-			<div class="col-2 d-none d-sm-block Header-logo-md">
+			<div class="col-2 d-none d-md-block Header-logo-md">
 				<a href="/"><img src="/resources/mainImg/comme-md-Logo.png"></a>
 			</div>
 			<!-- 비반응형 네비바-->
-			<div id="mainP-nav" class="col-8 d-none d-sm-block">
-				<ul class="mainP-nav">
+			<div id="mainP-navLg" class="col-8 d-none d-lg-block">
+				<ul class="mainP-navLg">
 					<a id="community"><li>커뮤니티</li></a>
 					<a href="/volBoard/lists"><li>봉사</li></a>
 					<a href="/supportBoard/lists"><li>후원</li></a>
@@ -52,24 +52,43 @@
 					</c:forEach>
 				</ul>
 			</div>
-
+			<div id="mainP-navMd" class="col-8 d-none d-md-block d-lg-none">
+				<ul class="mainP-navMd">
+					<a id="community"><li>커뮤니티</li></a>
+					<a href="/volBoard/lists"><li>봉사</li></a>
+					<a href="/supportBoard/lists"><li>후원</li></a>
+					<a href="/miss/toMissing"><li>실종동물</li></a>
+					<a href="/shelterAnimal/toShelterAnimal?curPage=1"><li>유기동물</li></a>
+					<a href="/board/toBoard?seq_category=${inquiry.seq_category}&category_name=${inquiry.category_name}"><li>문의/신고</li></a>
+				</ul>
+				<ul id="drop-ul" class="d-none">
+					<li style="margin-right: 10px;"><i class="fa-solid fa-arrow-right-long"></i></li>
+					<c:forEach items="${mainCategory}" var="dto">
+						<a href="/board/toBoard?seq_category=${dto.seq_category}">
+							<li class="drop-li">${dto.category_name}</li>
+						</a>
+					</c:forEach>
+				</ul>
+			</div>
 			<!--비반응형 소셜 아이콘 / 마이페이지 아이콘-->
-			<div class="col-2 d-none d-sm-block Header-Img-md p-0">
+			<div class="col-2 d-none d-md-block Header-Img-md p-0">
 				<c:choose>
 					<c:when test="${not empty loginSession}">
-						<a href="/myPage"><img src="/resources/mainImg/user.png"></a>
+						<label id="logout" style="cursor:pointer;">로그아웃</label>
+						<div class="row" id="iconBox">
+							<a href="/myPage"><img src="/resources/mainImg/user.png"></a>
+						</div>
+						<div class="row" id="helloBox">
+							<p>${loginSession.member_nickname} 님,<br> 안녕하세요 
+							<i class="fa-solid fa-paw"></i></p>
+						</div>
 					</c:when>
 					<c:otherwise>
 						<a href="/member/toLoginPage"><img src="/resources/mainImg/user.png"></a>
 					</c:otherwise>
 				</c:choose>
-				<a href="https://www.youtube.com/watch?v=6oB1iGV3L_0"
-					target="_blank"> <img src="/resources/mainImg/youtube.png"></a>
-				<a href="https://www.instagram.com/" target="_blank"><img
-					src="/resources/mainImg/instagram.png"></a>
 			</div>
 		</div>
-
 		<!--반응형 헤더-->
 		<div class="row">
 			<div class="col-1 d-md-none header-side">
@@ -77,9 +96,9 @@
 					<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 					<!-- 사이드 네비 메뉴-->
 					<div class="row search-menuH">
-						<span>Comme</span> <a href=""><span>Comme에 대하여</span></a>
+						<span>Comme</span><a href=""><span>Comme에 대하여</span></a>
 						<span>Community</span><a href=""><span>자유게시판</span></a>
-						<span>봉사신청</span></a> <a href="/volBoard/lists">
+						<a><span>봉사신청</span></a> <a href="/volBoard/lists">
 						<span>봉사후기</span></a>
 						<span>support</span>
 						<a href="/supportBoard/lists"><span>후원신청</span></a>
@@ -122,6 +141,11 @@
 			}
 			
 		})
+		
+		document.getElementById("logout").onclick = function(){
+			alert("로그아웃 되었습니다.");
+			location.href="/member/logout";
+		}
 	</script>
 </body>
 </html>

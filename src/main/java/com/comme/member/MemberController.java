@@ -47,6 +47,13 @@ public class MemberController {
         }
         return "fail";
     }
+    
+    @RequestMapping(value="/logout") // 로그아웃
+    public String logout() throws Exception{
+    	session.invalidate();
+    	System.out.println("로그아웃");
+    	return "redirect:/";
+    }
 
     @RequestMapping(value = "/toSignupPage") // 회원가입 페이지 요청
     public String toSignup() {

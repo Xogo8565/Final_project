@@ -1,5 +1,8 @@
 package com.comme.utils;
 
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ public class HomeController {
     @RequestMapping(value =  "/")
     public String home(Model model) throws Exception {
         logger.info("home");
+        
+        List<Map<String, Object>> list = service.mainContent();
+        model.addAttribute("list", list);
         
         model.addAttribute("mainCategory", service.mainCategory());
         model.addAttribute("inquiry", service.inquiryCategory());

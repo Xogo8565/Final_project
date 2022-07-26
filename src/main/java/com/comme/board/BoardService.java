@@ -165,4 +165,7 @@ public class BoardService {
 		return dao.inquiryCategory();
 	}
 	
+	public List<Map<String, Object>> mainContent() throws Exception{
+		return dao.mainContent();
+	}
 }

@@ -272,4 +272,10 @@
 		    WHERE CATEGORY_NAME LIKE '%'|| '문의' ||'%'
 		    AND CATEGORY_PK IS NULL
 	</select>
+	
+	<!-- 메인 노출할 게시글 조회수 순 -->
+	<select id="mainContent" resultType="org.apache.commons.collections4.map.CaseInsensitiveMap"> 
+		select * from board b join board_files using(seq_board) 
+			where b.seq_category=2 order by view_count desc
+	</select>
 </mapper>

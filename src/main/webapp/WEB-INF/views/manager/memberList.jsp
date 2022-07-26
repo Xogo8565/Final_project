@@ -308,7 +308,7 @@ td{
 					</c:choose>
 				</span>
 				<form id="searchForm" action="/manager/toSearch" method="get">
-					<div class="col mt-5" id="inputDiv">
+					<div class="col m-5" id="inputDiv">
 						<div class="input-group mb-3" id="inputGroup">
 							<select class="form-select" name="category" id="selectKeyword">
   								<option value="all" selected>전체</option>
@@ -326,7 +326,7 @@ td{
 				</form>
 			</div>
 			<form id="list" action="/manager/toModify" method="get">
-				<div class="tblContainer mt-5">
+				<div class="tblContainer m-5">
 					<div class="col btnSpace d-flex justify-content-end">
 						<button class="btn" type="button" id="btnModify">수정</button>
 						<button class="btn d-none" type="button" id="btnSave">저장</button>
