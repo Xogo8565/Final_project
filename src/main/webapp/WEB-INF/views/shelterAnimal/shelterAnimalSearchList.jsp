@@ -62,7 +62,7 @@ body{
 	text-align: -webkit-right;
 }
 #inputGroup {
-	width: 20em;
+	width: 16em;
 	margin-right: 20px;
 }
 #iconNote {
@@ -87,8 +87,9 @@ body{
 	color: white;
 	background-color: rgb(207, 185, 136);
 }
-#logoImg {
-	width: 50px;
+#drawImg {
+	position: absolute;
+    width: 100px;
 }
 
 /* 카드 */
@@ -139,17 +140,18 @@ body{
 	<!-- header -->
 	<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
 	<div class="col d-flex justify-content-center mt-5">
-		<h4>
-			<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>&nbsp;&nbsp;&nbsp;
-			<img src="/resources/images/comme-md.png" id="logoImg">&nbsp;&nbsp;유기동물 소식
+		<h4 style="font-weight: bold;">
+			<span class="material-symbols-outlined" id="iconNote">speaker_notes</span>
+			&nbsp;&nbsp;유기동물 소식
 		</h4>
 	</div>
+	<img src="/resources/images/draw01.png" id="drawImg">
 	<form id="searchForm" action="/shelterAnimal/toSearch" method="get">
 		<div class="col mt-5" id="inputDiv">
 			<div class="input-group mb-3" id="inputGroup">
 				<span class="input-group-text material-symbols-outlined" id="iconSearch">search</span> 
 				<input type="search" id="inputSearch" name="keyword" class="form-control" placeholder="검색" aria-describedby="btnSearch">
-				<button class="btn" type="submit" id="btnSearch">검색</button>
+				<button class="btn" type="submit" id="btnSearch">찾기</button>
 			</div>
 			<input class="d-none" type="text" name="curPage" value="1">
 		</div>

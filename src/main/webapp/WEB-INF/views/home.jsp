@@ -84,6 +84,14 @@
     height: 20vw;
 }
 
+.card-body {
+	justify-content: center;
+	height: 200px;
+	display: flex;
+    align-items: center;
+    overflow-wrap: anywhere;
+}
+
 .card-body h4 {
 	text-align: center;
 }
