@@ -7,12 +7,17 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.comme.board.BoardDAO;
+import com.comme.category.CategoryDTO;
 import com.comme.member.BlackListDTO;
+import com.comme.utils.PagingVO;
 
 @Service
 public class ManagerService implements ManagerDAO {
 	@Autowired
 	private ManagerDAO dao;
+	@Autowired
+	private BoardDAO boardDao;
 	
 	public void insertBlackList(BlackListDTO dto) throws Exception {
 		dao.insertBlackList(dto);
@@ -184,5 +189,56 @@ public class ManagerService implements ManagerDAO {
 	public List<Map<String, Object>> selectAllBlackList(Map<String, Object> map) throws Exception {
 		return null;
 	}
+
+	public List<CategoryDTO> selectCategory(int seq_category) throws Exception{
+		return boardDao.selectCategory(seq_category);
+	}
+
+	@Override
+	public void addMainCategory(CategoryDTO dto) throws Exception {
+		dao.addMainCategory(dto);
+	}
+
+	@Override
+	public void deleteCategory(int seq_cateogry) throws Exception {
+		dao.deleteCategory(seq_cateogry);
+	}
+
+	@Override
+	public void modifyCategory(CategoryDTO dto) throws Exception {
+		dao.modifyCategory(dto);
+	}
+
+	@Override
+	public void addSubCategory(CategoryDTO dto) throws Exception {
+		dao.addSubCategory(dto);
+	}
+
+	public List<Map<String, Object>> userPayList(PagingVO vo, String search_type, String search_keyword) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("search_type", search_type);
+		map.put("search_keyword", search_keyword);
+		map.put("start", vo.getStart());
+		map.put("end", vo.getEnd());
+		return dao.userPayList(map);
+	}
+
+	public int countPay(String search_type , String search_keyword) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("search_type", search_type);
+		map.put("search_keyword", search_keyword);
+		return dao.countPay(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> userPayList(Map<String, Object> map) {
+		return null;
+	}
+
+	@Override
+	public int countPay(Map<String, Object> map) {
+		return 0;
+	}
+
 
 }

@@ -277,7 +277,8 @@ td{
 				<p>회원관리</p>
 				<div class="sideNav-A">
 					<a href="/manager/memberList?curPage=1">전체 회원 목록</a><br>
-					<a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a>
+					<a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a><br>
+					<a href="/manager/toInquiryList?seq_category=${inquiry.seq_category}">문의/신고</a>
 				</div>
 			</div>
 			<div class="d-none d-sm-block" id="btnNav1">

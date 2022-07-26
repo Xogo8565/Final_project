@@ -175,6 +175,17 @@
                                     <li><a href="/member/toMySupport">후원 글 조회</a></li>
                                     <li><a href="/member/toMyPay">후원 내역 조회</a></li>
                                </c:when>
+                               <c:when test="${loginSession.member_grade eq 4}">
+                                    <li><a href="/manager/memberList?curPage=1">전체 회원 목록</a></li>
+                                    <li><a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a></li>
+                                    <li><a href="/manager/toInquiryList?seq_category=${inquiry.seq_category}">문의/신고</a></li>
+                                    <li><a href="/manager/toCategoryCM">카테고리 관리</a></li>
+                                    <li><a href="/member/toMyBoard">내 글</a></li>
+                                    <li><a href="/member/toMyComment">내 댓글</a></li>
+                                    <li><a href="/manager/toAllPay">사용자 후원 내역 조회</a></li>
+                                    <li><a href="/manager/toMyPayList">보호소 후원 내역 조회</a></li>
+                               </c:when>
+                               
                                <c:otherwise>
                                     <li><a href="/member/toCheckVol">봉사 신청 확인</a></li>
                                     <li><a href="/member/toMyBoard">내 글</a></li>
@@ -182,7 +193,6 @@
                                     <li><a href="/member/toMyPayList">후원 내역 조회</a></li>
                                </c:otherwise>
                             </c:choose>
-                            <li><a href="/">홈으로</a></li>
                             <li><a href="javascript:history.back()">이전페이지</a></li>
                         </ul>
                     </div>
