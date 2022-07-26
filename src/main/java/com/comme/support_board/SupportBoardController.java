@@ -56,7 +56,7 @@ public class SupportBoardController {
         String path = httpSession.getServletContext().getRealPath("");
         supportBoardDTO.setSupport_bank(bank_category+ " " +supportBoardDTO.getSupport_bank());
         supportBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
-        supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_nickname());
         supportBoardDTO.setMember_brn(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_brn());
 
         int seq_board = supportBoardService.insert(supportBoardDTO);
@@ -123,7 +123,7 @@ public class SupportBoardController {
         String path = httpSession.getServletContext().getRealPath("files/support");
         supportBoardDTO.setSupport_bank(bank_category+ " " +supportBoardDTO.getSupport_bank());
         supportBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
-        supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_nickname());
 
         supportBoardService.update(supportBoardDTO);
         fileService.update_file(supportBoardDTO.getSeq_board(), files_name, temp_files, path,"support_files");

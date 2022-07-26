@@ -23,7 +23,7 @@ public class CommentController {
 	@PostMapping(value="/missingComment") // 실종게시판 댓글입력
 	public String missing_comment(CommentDTO dto) throws Exception{
 		dto.setComment_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
-		dto.setComment_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+		dto.setComment_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_nickname());
 		service.insertMissing(dto);
 		return "success";
 	}

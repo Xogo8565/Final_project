@@ -55,7 +55,7 @@ public class VolBoardController {
         String path = httpSession.getServletContext().getRealPath("");
         volBoardDTO.setBoard_title("["+area+"] "+volBoardDTO.getBoard_title());
         volBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
-        volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_nickname());
 
         int seq_board = volBoardService.insert(volBoardDTO);
 
@@ -115,7 +115,7 @@ public class VolBoardController {
         String path = httpSession.getServletContext().getRealPath("files/vol");
         volBoardDTO.setBoard_title("["+area+"]"+volBoardDTO.getBoard_title());
         volBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
-        volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_nickname());
 
         volBoardService.update(volBoardDTO);
         fileService.update_file(volBoardDTO.getSeq_board(), files_name, temp_files, path,"vol_files");
@@ -128,7 +128,6 @@ public class VolBoardController {
                            @RequestParam(value = "category") String category,
                            @RequestParam(value = "search") String search, Model model) throws Exception {
 
-        logger.info("검색요청  category" + category + "/    val" + search);
         Map<String, Object> map = volBoardService.search(curPage, category, search);
         map.put("category", category);
         map.put("search", search);
