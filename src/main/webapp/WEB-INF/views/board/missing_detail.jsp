@@ -28,6 +28,8 @@
 
         .content {
             margin-top: 50px;
+            padding-left: 90px;
+            padding-right: 90px;
         }
 
         .board-title {
@@ -40,40 +42,38 @@
             margin-top: 20px;
         }
 
-        .content-title h5 {
+        .content-title {
             margin-top: 20px;
         }
 
         .writer {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
+            gap: 20px;
+        }
+        .writer span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .writer > span:first-child {
-            grid-area: 1/1/2/1;
+            grid-area: 1/1/2/3;
         }
         .writer > span:nth-child(2) {
-            grid-area: 1/3/2/4;
+            grid-area: 1/5/2/7;
+            color: var(--sil);
         }
 
         .writer > span:nth-child(3) {
-            grid-area: 1/4/2/5;
-            color: var(--sil);
-        }
-
-        .writer > span:nth-child(4) {
-            grid-area: 1/5/2/6;
-            color: var(--sil);
-        }
-
-
-        .writer > span:nth-child(5) {
-            grid-area: 1/9/2/10;
+            grid-area: 1/8/2/9;
             color: var(--sil);
         }
 
         .writer > .writerBtn {
-            grid-area: 1/10/2/11;
+            grid-area: 1/9/2/11;
+            display: flex;
         }
 
         /* 글수정 / 삭제 커서*/
@@ -89,9 +89,39 @@
             margin-bottom: 20px;
         }
 
+        .content-box > div:first-child {
+            display: flex;
+            gap: 30px;
+            border : 1px solid var(--sil);
+            padding: 50px;
+            margin-bottom: 40px;
+            max-height: 500px;
+        }
+
+        .content-box > div:first-child > .imgContainer {
+            flex-basis: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid var(--sil);
+            padding : 20px;
+        }
+        .content-box > div:first-child > .explain {
+            flex-basis: 60%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+
+        }
+
+
+
+
         /* 글 내용 이미지 크기 조절 */
         .content-box img {
-            max-width: 100%;
+            max-width: 90%;
+            max-height: 90%;
         }
 
         .board_content {
@@ -102,6 +132,7 @@
         .comment-title, .board-title, .writer {
             border-bottom: 1px solid black;
         }
+
 
         .writingModify {
             margin-bottom: 10px;
@@ -217,17 +248,14 @@
         </div>
     </div>
     <div class="row content-body">
-        <div class="row content-title">
-            <div class="col">
-                <h5>[<c:out value="${map.MissingBoardDTO.miss_area}"/> ] <c:out
+        <div class="col content-title">
+            <div class="row">
+                <h5>[<c:out value="${map.MissingBoardDTO.miss_area}"/>] <c:out
                         value="${map.MissingBoardDTO.board_title}"/></h5>
             </div>
             <div class="row">
                 <div class="col writer">
                     <span><c:out value="${map.MissingBoardDTO.writer_nickname}"/> </span>
-                    <c:set var="TextValue" value="${map.MissingBoardDTO.miss_date}"/>
-                    <span>실종동물 : <c:out value="${map.MissingBoardDTO.animal_kind}"/> </span>
-                    <span>실종일 : ${fn:substring(TextValue, 0, 10)}</span>
                     <c:set var="TextDate" value="${map.MissingBoardDTO.written_date}"/>
                     <span>작성일 : ${fn:substring(TextDate, 0, 10)}</span>
                     <span>조회수 : ${map.MissingBoardDTO.view_count}</span>
@@ -235,8 +263,8 @@
                     <%-- <c:if test="${loginSession.member_id eq map.MissingBoardDTO.member_id}"> --%>
                     <div class="col writerBtn">
                         <c:if test="${loginSession.member_id eq map.MissingBoardDTO.member_id||loginSession.member_grade == '4'}">
-                            <span class="writingModify">글&nbsp수정</span>
-                            <span class="writingDelete">&nbsp/&nbsp삭제</span>
+                            <span class="writingModify">글 수정</span>
+                            <span class="writingDelete"> / 삭제</span>
                             <script>
                                 // 글 삭제
                                 $(".writingDelete").click(function () {
@@ -254,20 +282,28 @@
                     </div>
                     <%-- </c:if> --%>
                 </div>
-
             </div>
-            <div class="row content-box">
-                <div class="col">
-                    <c:if test="${map.fileDTO.size() > 0}">
-                        <c:forEach items="${map.fileDTO}" var="fileDTO">
-                            <img src="/mbFile/${fileDTO.files_sys}">
-                        </c:forEach>
+        </div>
+        <div class="row content-box">
+            <div>
+                <div class="imgContainer">
+                    <c:if test="${not empty map.files}">
+                        <img src="/mbFile/${map.files[0].files_sys}" alt="">
+                    </c:if>
+                    <c:if test="${empty map.files}">
+                        <img src="/resources/images/No_image.png" alt="">
                     </c:if>
                 </div>
-                <div class="row">
-                    <div class="col board_content">
-                        <c:out value="${map.MissingBoardDTO.board_content}" escapeXml="false"/>
-                    </div>
+                <div class="explain">
+                    <c:set var="date" value="${map.MissingBoardDTO.miss_date}"/>
+                    <span>실종일 : ${fn:substring(date, 0, 10)}</span>
+                    <span>실종지역 : <c:out value="${map.MissingBoardDTO.miss_area}"/></span>
+                    <span>실종동물 : <c:out value="${map.MissingBoardDTO.animal_kind}"/></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col board_content">
+                    <c:out value="${map.MissingBoardDTO.board_content}" escapeXml="false"/>
                 </div>
             </div>
         </div>

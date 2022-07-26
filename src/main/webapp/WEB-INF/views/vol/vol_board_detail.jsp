@@ -36,6 +36,9 @@
 
         .content {
             margin-top : 50px;
+            padding-left: 90px;
+            padding-right: 90px;
+
         }
 
         .content_header {
@@ -116,6 +119,7 @@
 
         /* 봉사자 */
         .volunteer {
+            margin-top: 50px;
             height: 65px;
             display: flex;
             flex-direction: column;
@@ -142,7 +146,6 @@
             height: 30px;
         }
 
-
         /* 목록 */
         .boardList {
             border-top: 1px solid var(--sil);
@@ -165,6 +168,10 @@
 
         .boardList a {
             color: black;
+            text-decoration: none;
+        }
+
+        .boardList a:hover {
             text-decoration: none;
         }
 

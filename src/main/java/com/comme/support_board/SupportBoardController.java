@@ -1,5 +1,6 @@
 package com.comme.support_board;
 
+import com.comme.board.BoardService;
 import com.comme.files.FileService;
 import com.comme.member.MemberDTO;
 import com.comme.vol.VolBoardController;
@@ -27,17 +28,26 @@ public class SupportBoardController {
     @Autowired
     private HttpSession httpSession;
 
+    @Autowired
+    private BoardService boardService;
+
     Logger logger = LoggerFactory.getLogger(VolBoardController.class);
 
     @GetMapping("/lists")
     public String volBoard(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
         Map<String, Object> map = supportBoardService.selectList(curPage);
         model.addAttribute("map", map);
+
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
         return "support/support_board_list";
     }
 
     @GetMapping("/write")
-    public String write() throws Exception {
+    public String write(Model model) throws Exception {
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
+
         return "support/support_board_write";
     }
 
@@ -46,7 +56,7 @@ public class SupportBoardController {
         String path = httpSession.getServletContext().getRealPath("");
         supportBoardDTO.setSupport_bank(bank_category+ " " +supportBoardDTO.getSupport_bank());
         supportBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
-        supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_nickname());
         supportBoardDTO.setMember_brn(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_brn());
 
         int seq_board = supportBoardService.insert(supportBoardDTO);
@@ -61,6 +71,8 @@ public class SupportBoardController {
         Map<String, Object> map = supportBoardService.select(seq_board);
         model.addAttribute("map", map);
 
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 
         return "support/support_board_detail";
     }
@@ -72,6 +84,9 @@ public class SupportBoardController {
         model.addAttribute("map", map);
         model.addAttribute("order_number", order_number);
         model.addAttribute("price", price);
+
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 
         return "pay/payment";
     }
@@ -97,6 +112,9 @@ public class SupportBoardController {
         map.put("support_bank", support_bank);
         model.addAttribute("map", map);
 
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
+
         return "support/support_board_modify";
     }
 
@@ -105,10 +123,9 @@ public class SupportBoardController {
         String path = httpSession.getServletContext().getRealPath("files/support");
         supportBoardDTO.setSupport_bank(bank_category+ " " +supportBoardDTO.getSupport_bank());
         supportBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
-        supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        supportBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_nickname());
 
         supportBoardService.update(supportBoardDTO);
-        logger.info("support:  " +supportBoardDTO);
         fileService.update_file(supportBoardDTO.getSeq_board(), files_name, temp_files, path,"support_files");
 
 
@@ -124,6 +141,9 @@ public class SupportBoardController {
         map.put("category", category);
         map.put("search", search);
         model.addAttribute("map", map);
+
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 
         return "vol/vol_board_list";
     }

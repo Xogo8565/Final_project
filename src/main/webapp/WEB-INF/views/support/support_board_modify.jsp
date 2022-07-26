@@ -28,6 +28,8 @@
         .content {
             margin-top : 50px;
             min-height: 1200px;
+            padding-left: 90px;
+            padding-right: 90px;
         }
 
 

@@ -26,6 +26,8 @@
             margin-top : 50px;
             height: 1px;
             min-height: 1200px;
+            padding-left: 90px;
+            padding-right: 90px;
         }
 
         .content_header {
@@ -53,9 +55,10 @@
         }
 
         #search_form {
-            flex-basis: 400px;
+            flex-basis: 300px;
             display: flex;
             align-items: center;
+            gap: 40px;
         }
 
         #search_form #category {
@@ -75,10 +78,10 @@
             transform: translateY(-50%);
             width: 100%;
             height: 40px;
-            z-index: 1;
             padding-left: 50px;
-            border-radius: 10px;
-            border : 1px solid var(--bro);
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border : 1px solid var(--sil);
         }
 
         #search_form #searchBtn {
@@ -86,20 +89,19 @@
             height: 40px;
             position: absolute;
             top: 50%;
-            left: 0;
+            left: -40px;
             transform: translate(0%, -50%);
-            background-color: var(--bro);
+            background-color: var(--sil);
             border: none;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2;
             border-top-left-radius: 10px;
             border-bottom-left-radius: 10px;
         }
 
         #searchBtn img {
-            background-color: var(--bro);
+            background-color: var(--sil);
             width: 30px;
             height: 30px;
         }
@@ -201,9 +203,9 @@
             background-color: var(--sil);
         }
 
-        @media screen and (max-width: 640px) {
-            .container {
-                min-height: 5500px;
+        @media screen and (max-width: 960px) {
+            .content {
+                min-height: 3600px;
             }
 
             .content_header {
@@ -315,7 +317,7 @@
                     <option value="writer_nickname">작성자</option>
                 </select>
                 <div class="search">
-                    <button type="submit" id="searchBtn"><img src="/resources/images/search.png"></button>
+                    <button type="submit" id="searchBtn"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></button>
                     <label for="search">
                         <input type="text" id="search" name="search" required
                                oninvalid="this.setCustomValidity('검색어를 입력해주세요')"
@@ -399,11 +401,14 @@
     page.forEach(target=>{
         target.style.color = "#999";
         target.style.textDecoration = "none"
-    })
-    page.forEach(target=>addEventListener('hover',()=>{
+    });
+    page.forEach(e => e.addEventListener('mouseover', (target) => {
         target.style.color = "#555";
         target.style.backgroundColor = "#f9f9f9";
         target.style.textDecoration = "none"
+        target.style.border = "1px solid #aaa";
+        target.style.borderRadius = "2px";
+
     }))
     document.querySelector("#write").addEventListener("click",()=>{
         let brn = "${loginSession.member_grade}";

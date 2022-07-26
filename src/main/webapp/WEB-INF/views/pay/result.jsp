@@ -29,6 +29,8 @@
             min-height: 500px;
             margin-top: 50px;
             margin-bottom: 50px;
+            padding-left: 90px;
+            padding-right: 90px;
         }
 
         .payment_header {

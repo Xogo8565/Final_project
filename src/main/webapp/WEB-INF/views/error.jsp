@@ -19,6 +19,8 @@
         align-items: center;
         gap: 30px;
         margin-top: 40px;
+        padding-left: 90px;
+        padding-right: 90px;
     }
 
     .imgContainer {

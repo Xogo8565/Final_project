@@ -1,5 +1,6 @@
 package com.comme.vol;
 
+import com.comme.board.BoardService;
 import com.comme.files.FileService;
 import com.comme.member.MemberDTO;
 import org.slf4j.Logger;
@@ -27,18 +28,25 @@ public class VolBoardController {
     @Autowired
     private HttpSession httpSession;
 
+    @Autowired
+    private BoardService boardService;
+
     Logger logger = LoggerFactory.getLogger(VolBoardController.class);
 
     @GetMapping("/lists")
     public String volBoard(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
 
         Map<String, Object> map = volBoardService.selectList(curPage);
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
         model.addAttribute("map", map);
         return "vol/vol_board_list";
     }
 
     @GetMapping("/write")
     public String write(Model model) throws Exception {
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
         return "vol/vol_board_write";
     }
 
@@ -47,7 +55,7 @@ public class VolBoardController {
         String path = httpSession.getServletContext().getRealPath("");
         volBoardDTO.setBoard_title("["+area+"] "+volBoardDTO.getBoard_title());
         volBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
-        volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_nickname());
 
         int seq_board = volBoardService.insert(volBoardDTO);
 
@@ -65,6 +73,9 @@ public class VolBoardController {
 
         List<Map<String, Object>> list = volBoardService.selectListByDistance(seq_board);
         model.addAttribute("list", list);
+
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 
         return "vol/vol_board_detail";
     }
@@ -93,6 +104,9 @@ public class VolBoardController {
         List<Map<String, Object>> list = volBoardService.selectListByDistance(seq_board);
         model.addAttribute("list", list);
 
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
+
         return "vol/vol_board_modify";
     }
 
@@ -101,7 +115,7 @@ public class VolBoardController {
         String path = httpSession.getServletContext().getRealPath("files/vol");
         volBoardDTO.setBoard_title("["+area+"]"+volBoardDTO.getBoard_title());
         volBoardDTO.setMember_id(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
-        volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_id());
+        volBoardDTO.setWriter_nickname(((MemberDTO)httpSession.getAttribute("loginSession")).getMember_nickname());
 
         volBoardService.update(volBoardDTO);
         fileService.update_file(volBoardDTO.getSeq_board(), files_name, temp_files, path,"vol_files");
@@ -114,11 +128,13 @@ public class VolBoardController {
                            @RequestParam(value = "category") String category,
                            @RequestParam(value = "search") String search, Model model) throws Exception {
 
-        logger.info("검색요청  category" + category + "/    val" + search);
         Map<String, Object> map = volBoardService.search(curPage, category, search);
         map.put("category", category);
         map.put("search", search);
         model.addAttribute("map", map);
+
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 
         return "vol/vol_board_list";
     }

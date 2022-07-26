@@ -69,13 +69,15 @@ public class BoardController {
 		
 		int total = 0; // 뿌려줄 게시물의 총 개수 계산하는거 검색 유무에 따라서 뿌려줄 게시물에 개수가 달라짐 소분류 카테고리 처리 유무는 위에서 0으로 처리해서 매퍼에 예외처리해줫음
 		if(search_keyword == null) {
+			System.out.println(seq_category);
+			System.out.println(small_category);
+			System.out.println(category_name);
 			total = service.countBoard(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name, memberId);
 		}else {
 			total = service.countBySearch(Integer.parseInt(seq_category), Integer.parseInt(small_category), category_name , memberId ,search_type, search_keyword);
 		}
 		
 		
-		System.out.println(total);
 		if (nowPage == null && cntPerPage == null) { // 처음 게시판에 접속하면 얻게 되는 기본 페이지 값 cntPerPage 조절하면 몇개뿌릴지 선택가능함
 			nowPage = "1";
 			cntPerPage = "20";
