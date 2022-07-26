@@ -26,6 +26,8 @@
             margin-top : 50px;
             height: 1px;
             min-height: 1200px;
+            padding-left: 90px;
+            padding-right: 90px;
         }
 
         .content_header {
@@ -78,7 +80,7 @@
             z-index: 1;
             padding-left: 50px;
             border-radius: 10px;
-            border : 1px solid var(--bro);
+            border : 1px solid var(--sil);
         }
 
         #search_form #searchBtn {
@@ -88,7 +90,7 @@
             top: 50%;
             left: 0;
             transform: translate(0%, -50%);
-            background-color: var(--bro);
+            background-color: var(--sil);
             border: none;
             display: flex;
             justify-content: center;
@@ -99,7 +101,7 @@
         }
 
         #searchBtn img {
-            background-color: var(--bro);
+            background-color: var(--sil);
             width: 30px;
             height: 30px;
         }
@@ -315,7 +317,7 @@
                     <option value="writer_nickname">작성자</option>
                 </select>
                 <div class="search">
-                    <button type="submit" id="searchBtn"><img src="/resources/images/search.png"></button>
+                    <button type="submit" id="searchBtn"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"></button>
                     <label for="search">
                         <input type="text" id="search" name="search" required
                                oninvalid="this.setCustomValidity('검색어를 입력해주세요')"
@@ -399,11 +401,14 @@
     page.forEach(target=>{
         target.style.color = "#999";
         target.style.textDecoration = "none"
-    })
-    page.forEach(target=>addEventListener('hover',()=>{
+    });
+    page.forEach(e => e.addEventListener('mouseover', (target) => {
         target.style.color = "#555";
         target.style.backgroundColor = "#f9f9f9";
         target.style.textDecoration = "none"
+        target.style.border = "1px solid #aaa";
+        target.style.borderRadius = "2px";
+
     }))
     document.querySelector("#write").addEventListener("click",()=>{
         let brn = "${loginSession.member_grade}";

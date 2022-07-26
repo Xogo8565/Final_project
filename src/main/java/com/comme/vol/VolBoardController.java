@@ -1,5 +1,6 @@
 package com.comme.vol;
 
+import com.comme.board.BoardService;
 import com.comme.files.FileService;
 import com.comme.member.MemberDTO;
 import org.slf4j.Logger;
@@ -27,18 +28,25 @@ public class VolBoardController {
     @Autowired
     private HttpSession httpSession;
 
+    @Autowired
+    private BoardService boardService;
+
     Logger logger = LoggerFactory.getLogger(VolBoardController.class);
 
     @GetMapping("/lists")
     public String volBoard(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
 
         Map<String, Object> map = volBoardService.selectList(curPage);
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
         model.addAttribute("map", map);
         return "vol/vol_board_list";
     }
 
     @GetMapping("/write")
     public String write(Model model) throws Exception {
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
         return "vol/vol_board_write";
     }
 
@@ -65,6 +73,9 @@ public class VolBoardController {
 
         List<Map<String, Object>> list = volBoardService.selectListByDistance(seq_board);
         model.addAttribute("list", list);
+
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 
         return "vol/vol_board_detail";
     }
@@ -93,6 +104,9 @@ public class VolBoardController {
         List<Map<String, Object>> list = volBoardService.selectListByDistance(seq_board);
         model.addAttribute("list", list);
 
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
+
         return "vol/vol_board_modify";
     }
 
@@ -119,6 +133,9 @@ public class VolBoardController {
         map.put("category", category);
         map.put("search", search);
         model.addAttribute("map", map);
+
+        model.addAttribute("mainCategory", boardService.mainCategory());
+        model.addAttribute("inquiry", boardService.inquiryCategory());
 
         return "vol/vol_board_list";
     }

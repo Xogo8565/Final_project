@@ -38,6 +38,8 @@
             min-height: 1000px;
             margin-top: 50px;
             margin-bottom: 50px;
+            padding-left: 90px;
+            padding-right: 90px;
         }
 
         .content > div {

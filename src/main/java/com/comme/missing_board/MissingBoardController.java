@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import com.comme.board.BoardService;
 import com.comme.member.MemberDTO;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,16 @@ public class MissingBoardController {
 	@Autowired
 	private HttpSession httpSession;
 
+	@Autowired
+	private BoardService boardService;
+
 	@RequestMapping(value = "/toMissing") // 실종게시판 요청 -> 이미지 꺼내기..?
 	public String toMissing(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
 		Map<String, Object> map = service.selectAllMissing(curPage);
 	    model.addAttribute("map", map);
+
+		model.addAttribute("mainCategory", boardService.mainCategory());
+		model.addAttribute("inquiry", boardService.inquiryCategory());
 		return "/board/missing_board";
 	}
 
@@ -59,7 +66,10 @@ public class MissingBoardController {
 	}
 
 	@RequestMapping(value = "/toWrite") // 글쓰기 페이지 요청
-	public String toWrite() throws Exception {
+	public String toWrite(Model model) throws Exception {
+		model.addAttribute("mainCategory", boardService.mainCategory());
+		model.addAttribute("inquiry", boardService.inquiryCategory());
+
 		return "/board/write_missing";
 	}
 
@@ -165,8 +175,12 @@ public class MissingBoardController {
 	public String toDeatil(int seq_board, Model model) throws Exception {
 		service.updateView_count(seq_board);
 		Map<String, Object> map= service.selectOne(seq_board);
+		System.out.println(map.toString());
 
 		model.addAttribute("map", map);
+
+		model.addAttribute("mainCategory", boardService.mainCategory());
+		model.addAttribute("inquiry", boardService.inquiryCategory());
 		return "/board/missing_detail";
 	}
 

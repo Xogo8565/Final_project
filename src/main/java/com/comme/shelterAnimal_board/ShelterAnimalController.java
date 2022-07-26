@@ -3,6 +3,7 @@ package com.comme.shelterAnimal_board;
 import java.util.List;
 import java.util.Map;
 
+import com.comme.board.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ShelterAnimalController {
 	@Autowired
 	private ShelterAnimalService service;
+	@Autowired
+	private BoardService boardService;
 	
 	@RequestMapping(value="/toShelterAnimal") // 유기동물 게시판 리스트 호출
 	public String shelterAnimalBoard(Model model, @RequestParam(value="curPage", required=false) int curPage) throws Exception {
@@ -35,6 +38,10 @@ public class ShelterAnimalController {
 		model.addAttribute("data", map);
 		
 		model.addAttribute("pageNum", curPage);
+
+		model.addAttribute("mainCategory", boardService.mainCategory());
+		model.addAttribute("inquiry", boardService.inquiryCategory());
+
 		return "/shelterAnimal/shelterAnimal_board";
 	}
 	
@@ -47,6 +54,10 @@ public class ShelterAnimalController {
 		model.addAttribute("data", list);
 		
 		model.addAttribute("pageNum", curPage);
+
+		model.addAttribute("mainCategory", boardService.mainCategory());
+		model.addAttribute("inquiry", boardService.inquiryCategory());
+
 		return "/shelterAnimal/shelterAnimalSearchList";
 	}
 	
@@ -60,6 +71,9 @@ public class ShelterAnimalController {
 
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("pageNum", curPage);
+
+		model.addAttribute("mainCategory", boardService.mainCategory());
+		model.addAttribute("inquiry", boardService.inquiryCategory());
 		return "/shelterAnimal/shelterAnimalSearchList";
 	}
 	
@@ -72,6 +86,11 @@ public class ShelterAnimalController {
 		model.addAttribute("upkind", upkind);
 		ShelterAnimalDTO map = service.selectDetail(desertionNo);
 		model.addAttribute("data", map);
+
+
+		model.addAttribute("mainCategory", boardService.mainCategory());
+		model.addAttribute("inquiry", boardService.inquiryCategory());
+
 		return "/shelterAnimal/shelterAnimal_detail";
 	}
 	
@@ -98,6 +117,9 @@ public class ShelterAnimalController {
 		
 		model.addAttribute("upkind", upkind);
 		model.addAttribute("pageNum", curPage);
+
+		model.addAttribute("mainCategory", boardService.mainCategory());
+		model.addAttribute("inquiry", boardService.inquiryCategory());
 		
 		return "/shelterAnimal/shelterAnimal_board";
 	}

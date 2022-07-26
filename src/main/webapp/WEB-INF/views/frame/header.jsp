@@ -30,11 +30,11 @@
 	<div class="mainP-Header">
 		<!--비반응형 logo-->
 		<div class="row">
-			<div class="col-2 d-none d-sm-block Header-logo-md">
+			<div class="col-2 d-none d-md-block Header-logo-md">
 				<a href="/"><img src="/resources/mainImg/comme-md-Logo.png"></a>
 			</div>
 			<!-- 비반응형 네비바-->
-			<div id="mainP-nav" class="col-8 d-none d-sm-block">
+			<div id="mainP-nav" class="col-8 d-none d-md-block">
 				<ul class="mainP-nav">
 					<a id="community"><li>커뮤니티</li></a>
 					<a href="/volBoard/lists"><li>봉사</li></a>
@@ -55,10 +55,10 @@
 			</div>
 
 			<!--비반응형 소셜 아이콘 / 마이페이지 아이콘-->
-			<div class="col-2 d-none d-sm-block Header-Img-md p-0">
+			<div class="col-2 d-none d-md-block Header-Img-md p-0">
 				<c:choose>
 					<c:when test="${not empty loginSession}">
-						<a href="/myPage"><img src="/resources/mainImg/user.png"></a>
+						<a href="/member/toMyPage"><img src="/resources/mainImg/user.png"></a>
 					</c:when>
 					<c:otherwise>
 						<a href="/member/toLoginPage"><img src="/resources/mainImg/user.png"></a>
@@ -78,11 +78,16 @@
 					<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 					<!-- 사이드 네비 메뉴-->
 					<div class="row search-menuH">
-						<span>Comme</span> <a href=""><span>Comme에 대하여</span></a>
-						<span>Community</span><a href=""><span>자유게시판</span></a>
-						<span>봉사신청</span></a> <a href="/volBoard/lists">
-						<span>봉사후기</span></a>
-						<span>support</span>
+						<span>Comme</span>
+						<span>Community</span>
+						<c:forEach items="${mainCategory}" var="dto">
+							<a href="/board/toBoard?seq_category=${dto.seq_category}">
+								<span>${dto.category_name}</span>
+							</a>
+						</c:forEach>
+						<span>Volunteer</span>
+						<a href="/volBoard/lists"><span>봉사신청</span></a>
+						<span>Support</span>
 						<a href="/supportBoard/lists"><span>후원신청</span></a>
 					</div>
 				</div>

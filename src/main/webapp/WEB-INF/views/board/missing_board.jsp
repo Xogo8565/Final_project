@@ -29,6 +29,8 @@
 
 .content {
 	margin-top: 50px;
+	padding-left: 90px;
+	padding-right: 90px;
 }
 /*실종 게시판 타이틀*/
 .title {
@@ -147,7 +149,7 @@
 						<div class="col shMissing">
 							<input type="text" name="keywordMissing" id="keywordMissing" class="form-control"
 								placeholder="검색어 입력">
-								<img class="lookup" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+							<img class="lookup" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 						</div>	
 					</div>
 					</form>
