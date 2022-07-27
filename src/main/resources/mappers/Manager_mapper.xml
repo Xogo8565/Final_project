@@ -130,4 +130,66 @@
 	<delete id="deleteBlackList" parameterType="String">
 		delete from blacklist where member_id=#{member_id}
 	</delete>
+	
+	<!-- 상위 카테고리 추가 -->
+	<insert id="addMainCategory" parameterType="CategoryDTO">
+		<selectKey order="BEFORE" keyProperty="seq_category" resultType="int">
+			select seq_category.nextval from dual
+		</selectKey>
+		insert into category values(#{seq_category}, #{category_name}, null)
+	</insert>
+	
+	<!-- 하위 카테고리 추가 -->
+	<insert id="addSubCategory" parameterType="CategoryDTO">
+		<selectKey order="BEFORE" keyProperty="seq_category" resultType="int">
+			select seq_category.nextval from dual
+		</selectKey>
+		insert into category values(#{seq_category}, #{category_name}, #{category_pk})
+	</insert>
+	
+	<!-- 카테고리 삭제 -->
+	<delete id="deleteCategory" parameterType="int">
+		delete from category where seq_category = #{seq_category}
+	</delete>
+	
+	<!-- 카테고리 이름 수정 -->
+	<update id="modifyCategory" parameterType="CategoryDTO">
+		update category set category_name = #{category_name} where seq_category = #{seq_category}
+	</update>
+	
+	<!-- 총 후원 갯수 세기 -->
+	<select id="countPay" parameterType="map" resultType="int">
+		select count(seq_pay) FROM pay P, support_board S WHERE P.seq_board = S.seq_BOARD
+		<if test="search_keyword != null ">
+         	<if test="search_type == 'MEMBER_ID' or search_type == 'writer_nickname' ">
+         		and s.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+         	</if>
+         	<if test="search_type == 'member_id' ">
+         		and p.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+         	</if>
+        </if>
+	</select>
+	
+	<!-- 사용자가 후원한 후원내역 -->
+	<select id="userPayList" parameterType="map" resultType="map">
+		SELECT * 
+		FROM (
+		SELECT A.*, ROWNUM RN
+		FROM  (
+		    SELECT  p.seq_pay, p.seq_board, s.board_title, p.member_id, s.member_id as shelter_id, s.writer_nickname ,p.pay_money, p.pay_date
+		    FROM pay P, support_board S
+		        WHERE P.seq_board = S.seq_BOARD
+        <if test="search_type == 'MEMBER_ID' or search_type == 'writer_nickname' ">
+         		and s.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+        </if>
+        <if test="search_type == 'member_id' or search_type == 'seq_board'">
+         		and p.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+         </if>
+        order by P.seq_pay desc 
+		    ) A
+		)
+         WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+	
+	
 </mapper>

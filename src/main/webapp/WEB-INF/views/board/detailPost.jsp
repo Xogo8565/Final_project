@@ -329,7 +329,7 @@
                 </div>
 
                 <div class="row" style="margin: 0 10vw 0 10vw;" id>
-                    <c:if test="${loginSession.member_id eq post.member_id}" >
+                    <c:if test="${loginSession.member_id eq post.member_id || loginSession.member_grade eq 4}" >
                         <div class="col"> <!-- 게시물 수정 삭제 버튼 -->
                             <button type="button" id="removePost"><i class="fa-solid fa-xmark"></i>  삭제</button>
                             <button type="button" id="modifyPost"><i class="fa-solid fa-pen"></i>  수정</button>
@@ -355,7 +355,7 @@
                         <c:forEach items="${comment}" var="list">
                                 <div class="col-12 commentBox">
                                     <p class="comment_Nk">${list.comment_nickname}   <span class="comment_Date" >${list.comment_date}</span> 
-                                        <c:if test="${loginSession.member_id eq list.comment_id}" >
+                                        <c:if test="${loginSession.member_id eq list.comment_id || loginSession.member_grade eq 4}" >
                                             <button type="button" class="comment_delete" value="${list.seq_comment}"><i class="fa-solid fa-eraser"></i> 삭제</button>
                                             <button type="button" class="comment_modify" value="${list.seq_comment}"><i class="fa-solid fa-pen"></i>  수정</button> 
                                         </c:if>
@@ -712,7 +712,7 @@
 
 
                         let div = $('<div>').attr('class', 'col-12 commentBox');
-                        let p1 =  $('<p>').attr('class', 'comment_Nk').append('${loginSession.member_id}');
+                        let p1 =  $('<p>').attr('class', 'comment_Nk').append('${loginSession.member_nickname}');
                         let p2 =  $('<p>').attr('class', 'comment_content').append($('#comment_content').val());
                         let span = $('<span>').attr('class', 'comment_Date').append(' 방금 전');
                         let button1 = $('<button>').attr({

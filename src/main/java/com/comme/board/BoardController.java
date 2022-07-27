@@ -345,7 +345,6 @@ public class BoardController {
 			nickName = (((MemberDTO)session.getAttribute("loginSession")).getMember_nickname());
 		}
 		
-//		dto.setSeq_comment(0);
 		dto.setComment_id(memberId); // 나중에 세션값으로 세팅
 		dto.setComment_nickname(nickName); // 나중에 세션값으로 세팅
 		service.commentInsert(dto); // 댓글 디비에 저장
