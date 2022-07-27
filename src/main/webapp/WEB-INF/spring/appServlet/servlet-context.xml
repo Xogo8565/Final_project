@@ -43,5 +43,51 @@
       </property>
       
    </bean>
+   
+   <!-- 로그인 검사 인터셉터 등록 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/"/>
+			<mvc:exclude-mapping path="/error"/>
+			<mvc:exclude-mapping path="/resources/**"/>
+			<mvc:exclude-mapping path="/files/**"/>
+			
+			<mvc:exclude-mapping path="/member/toLoginPage"/> <!-- 로그인페이지 -->
+			<mvc:exclude-mapping path="/member/loginProc"/> <!-- 로그인 -->
+			<mvc:exclude-mapping path="/member/toSignupPage"/> <!-- 회원가입 페이지 -->
+			<mvc:exclude-mapping path="/member/toSingup_general"/> <!-- 일반회원가입 페이지 -->
+			<mvc:exclude-mapping path="/member/toSignup_business"/> <!-- 기관회원가입 페이지 -->
+			<mvc:exclude-mapping path="/member/idCheck"/> <!-- 아이디 중복확인 -->
+			<mvc:exclude-mapping path="/member/emailCheck"/> <!-- 이메일 중복확인 -->
+			<mvc:exclude-mapping path="/member/signupGeneral"/> <!-- 일반회원 회원가입 -->
+			<mvc:exclude-mapping path="/member/signupBusiness"/> <!-- 기관회원 회원가입 -->
+			<mvc:exclude-mapping path="/member/toFindIdPage"/> <!-- 아이디 찾기 -->
+			<mvc:exclude-mapping path="/member/findToEmail"/> <!-- 아이디찾기 (이메일) -->
+			<mvc:exclude-mapping path="/member/findToPhone"/> <!-- 아이디찾기 (전화번호) -->
+			<mvc:exclude-mapping path="/member/toFindPwPage"/> <!-- 비밀번호 찾기 -->
+			
+			<mvc:exclude-mapping path="/board/toBoard"/> <!-- 게시판 목록 -->
+			<mvc:exclude-mapping path="/board/detailPost"/> <!-- 상세보기페이지 -->
+			
+			<mvc:exclude-mapping path="/miss/toMissing"/> <!-- 실종게시판 목록 -->
+			<mvc:exclude-mapping path="/miss/toDetail"/> <!-- 상세보기페이지 -->
+			
+			<mvc:exclude-mapping path="/shelterAnimal/toShelterAnimal"/> <!-- 유기동물게시판 목록 -->
+			<mvc:exclude-mapping path="/shelterAnimal/toSearch"/> <!-- 검색 -->
+			<mvc:exclude-mapping path="/shelterAnimal/toSelectUpkind"/> <!-- 축종 목록 -->
+			<mvc:exclude-mapping path="/shelterAnimal/toSelectUpkind2"/> <!-- 축종 목록 -->
+			<mvc:exclude-mapping path="/shelterAnimal/toDetail"/> <!-- 상세보기페이지 -->
+			
+			<mvc:exclude-mapping path="/supportBoard/lists"/> <!-- 후원게시판 목록 -->
+			<mvc:exclude-mapping path="/supportBoard/view"/> <!-- 상세보기페이지 -->
+			
+			<mvc:exclude-mapping path="/volBoard/lists"/> <!-- 봉사게시판 목록 -->
+			<mvc:exclude-mapping path="/volBoard/view"/> <!-- 상세보기페이지 -->
+			
+			
+			<bean class="com.comme.utils.AuthLoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors> 
       
 </beans>

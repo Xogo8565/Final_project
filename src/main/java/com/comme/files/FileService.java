@@ -55,7 +55,7 @@ public class FileService implements FileDAO {
     // 테이블 저장
     public void insert_file(int seq_board, List<String> files_name, String[] temp_files, String path, String table_name) throws Exception {
         List<String> list = convertFileUrlToPath.convertTofullPath(files_name);
-
+        System.out.println(list);
         for(String filename : list){
             String[] strings = filename.split(File.separator);
             System.out.println(strings[1]+":"+strings[2]);

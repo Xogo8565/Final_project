@@ -43,14 +43,8 @@
 		document.getElementById('shelterAnimalBtn').addEventListener('click', function(){
 			location.href = "/shelterAnimal/toShelterAnimal?curPage=1";
 		})
-
-
-
 	});
 
-  
-  
-	
   </script>
 <style>
 /*콘텐츠 시작*/
@@ -79,8 +73,32 @@
 	padding-right: 50px;
 }
 
+.cardImg {
+    border: none;
+    border-radius: 5px;
+    background-color: #f6f6f6;
+}
+
+.cardImg img{
+	width: 100%;
+    height: 20vw;
+}
+
+.card-body {
+	justify-content: center;
+	height: 200px;
+	display: flex;
+    align-items: center;
+    overflow-wrap: anywhere;
+}
+
 .card-body h4 {
 	text-align: center;
+}
+
+.fa-solid{
+	font-size: medium;
+	vertical-align: super;
 }
 
 /*멀리서도 마음만은 늘 가까이 사진*/
@@ -209,10 +227,8 @@
 <body style="overflow-x: hidden">
 	<!--main container-->
 	<div class="mainP-Container">
-
 		<!-- header -->
 		<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
-		
 		<!--body 컨텐츠 영역-->
 		<div class="mainP-Body">
 			<!--비반응형(md) 첫번째 콘텐츠(강아지발가락튀어나온사진) 봉사-->
@@ -256,27 +272,16 @@
 			<div class="row">
 				<div class="col d-none d-sm-block">
 					<div class="card-deck">
-						<div class="card">
-							<a href=""><img class="card-img-top" src="/resources/mainImg/shelter10.png"
+						<c:forEach items="${list}" var="list" begin="0" end="2">
+						<div class="card cardImg">
+							<a href="/board/detailPost?nowPage=1&seq_board=${list.seq_board}&seq_category=1&small_category=2"><img class="card-img-top" src="/files/${list.files_sys}"
 								alt="Card image cap"></a>
 							<div class="card-body">
-								<h4 class="card-title">OOO보호소 다녀왔습니다~</h4>
+								<h4 class="card-title"><i class="fa-solid fa-quote-left"></i>&nbsp;${list.board_title}&nbsp;<i class="fa-solid fa-quote-right"></i></h4>
+								
 							</div>
 						</div>
-						<div class="card">
-							<a href=""><img class="card-img-top" src="/resources/mainImg/shelter4.png"
-								alt="Card image cap"></a>
-							<div class="card-body">
-								<h4 class="card-title">오늘도 아이들 만나고 왔어요</h4>
-							</div>
-						</div>
-						<div class="card">
-							<a href=""><img class="card-img-top" src="/resources/mainImg/shelter9.png"
-								alt="Card image cap"></a>
-							<div class="card-body">
-								<h4 class="card-title">항상 즐거운 주말봉사!</h4>
-							</div>
-						</div>
+						</c:forEach>
 					</div>
 				</div>
 
