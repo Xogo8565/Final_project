@@ -3,7 +3,6 @@ package com.comme.support_board;
 import com.comme.board.BoardService;
 import com.comme.files.FileService;
 import com.comme.member.MemberDTO;
-import com.comme.vol.VolBoardController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,6 @@ public class SupportBoardController {
 
     @Autowired
     private BoardService boardService;
-
-    Logger logger = LoggerFactory.getLogger(VolBoardController.class);
 
     @GetMapping("/lists")
     public String volBoard(@RequestParam(value = "curPage", defaultValue = "1") int curPage, Model model) throws Exception {
@@ -97,7 +94,7 @@ public class SupportBoardController {
         String path = httpSession.getServletContext().getRealPath("");
         fileService.delete_file(file_name, path);
 
-        return "redirect:/volBoard/lists";
+        return "redirect:/supportBoard/lists";
     }
 
     @GetMapping("/modify")
@@ -145,7 +142,7 @@ public class SupportBoardController {
         model.addAttribute("mainCategory", boardService.mainCategory());
         model.addAttribute("inquiry", boardService.inquiryCategory());
 
-        return "vol/vol_board_list";
+        return "support/support_board_list";
     }
 
 
