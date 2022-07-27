@@ -392,9 +392,17 @@
     const select = document.querySelectorAll(".select input[type=checkbox]");
 
     selectAll.addEventListener("click", function () {
-        if (this.checked) select.forEach((e) => {
-            e.checked = true;
-        });
+        if(!this.check){
+            let modal = document.querySelector("#myPerInfoModal");
+            console.log(modal)
+        }
+
+        if (this.checked) {
+            select.forEach((e) => {
+                e.checked = true;
+            });
+        }
+
         else select.forEach((e) => {
             e.checked = false;
         });
