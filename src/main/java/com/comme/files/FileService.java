@@ -55,11 +55,14 @@ public class FileService implements FileDAO {
     // 테이블 저장
     public void insert_file(int seq_board, List<String> files_name, String[] temp_files, String path, String table_name) throws Exception {
         List<String> list = convertFileUrlToPath.convertTofullPath(files_name);
-        System.out.println(list);
+
         for(String filename : list){
-            String[] strings = filename.split(File.separator);
-            System.out.println(strings[1]+":"+strings[2]);
-            insert_file(new FileDTO(0,seq_board,path+strings[1]+File.separator+strings[2],null, strings[3]), table_name);
+            int idx = filename.lastIndexOf(File.separator);
+            path += filename.substring(1, idx);
+            System.out.println(path);
+            String file_sys = filename.substring(idx+1);
+            System.out.println(file_sys);
+            insert_file(new FileDTO(0,seq_board,path,null, file_sys), table_name);
         }
 
         for(String temp : temp_files){
