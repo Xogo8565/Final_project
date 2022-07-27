@@ -189,6 +189,26 @@
             height: auto;
         }
 
+        @media screen and (max-width: 960px) {
+            .patronage_container {
+                grid-area : 1/1/4/10;
+            }
+            .patronage {
+                flex-direction: column;
+            }
+            .patron_container {
+                grid-area : 4/1/7/10;
+            }
+            .payment_container {
+                grid-area : 7/1/9/10;
+            }
+            .img_container {
+                display: none;
+            }
+            .content {
+                min-height: 1500px;
+            }
+        }
 
     </style>
 </head>
@@ -205,15 +225,16 @@
 <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- jQuery -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <!-- iamport.payment.js -->
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 <body>
 
 <div class="content">
@@ -282,6 +303,89 @@
         <img src="/resources/images/animals.jpeg" alt="">
     </div>
 </div>
+<!--개인정보처리방침 Modal-->
+<div class="modal" id="myPerInfoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal header -->
+            <div class="modal-header">
+                <h4 class="modal-title">개인정보처리방침</h4>
+                <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                <button type="button" class="btn-close" data-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                Comme(이하 ‘회사’라 한다)는 개인정보 보호법 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리지침을 수립․공개합니다.
+                <br><br>
+                제1조 (개인정보의 처리목적)<br>
+                회사는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 개인정보보호법 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.
+                <br><br>
+                1. 홈페이지 회원 가입 및 관리
+                회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별․인증, 회원자격 유지․관리, 제한적 본인확인제 시행에 따른 본인확인, 서비스 부정이용 방지, 만 14세 미만 아동의 개인정보처리시 법정대리인의 동의여부 확인, 각종 고지․통지, 고충처리 등을 목적으로 개인정보를 처리합니다.
+                <br><br>
+                2. 재화 또는 서비스 제공
+                물품배송, 서비스 제공, 계약서․청구서 발송, 콘텐츠 제공, 맞춤서비스 제공, 본인인증, 연령인증, 요금결제․정산, 채권추심 등을 목적으로 개인정보를 처리합니다.
+                <br><br>
+                3. 고충처리
+                민원인의 신원 확인, 민원사항 확인, 사실조사를 위한 연락․통지, 처리결과 통보 등의 목적으로 개인정보를 처리합니다.
+                <br><br>
+                제2조 (개인정보의 처리 및 보유기간)<br>
+                ① 회사는 법령에 따른 개인정보 보유․이용기간 또는 정보주체로부터 개인정보를 수집시에 동의받은 개인정보 보유․이용기간 내에서 개인정보를 처리․보유합니다.
+                ② 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다.
+                <br><br>
+                1. 홈페이지 회원 가입 및 관리 : 사업자/단체 홈페이지 탈퇴시까지
+                다만, 다음의 사유에 해당하는 경우에는 해당 사유 종료시까지
+                1) 관계 법령 위반에 따른 수사․조사 등이 진행중인 경우에는 해당 수사․조사 종료시까지
+                2) 홈페이지 이용에 따른 채권․채무관계 잔존시에는 해당 채권․채무관계 정산시까지
+                <br><br>
+                2. 재화 또는 서비스 제공 : 재화․서비스 공급완료 및 요금결제․정산 완료시까지
+                다만, 다음의 사유에 해당하는 경우에는 해당 기간 종료시까지
+                1) 「전자상거래 등에서의 소비자 보호에 관한 법률」에 따른 표시․광고, 계약내용 및 이행 등 거래에 관한 기록
+                - 표시․광고에 관한 기록 : 6월
+                - 계약 또는 청약철회, 대금결제, 재화 등의 공급기록 : 5년
+                - 소비자 불만 또는 분쟁처리에 관한 기록 : 3년
+                2) 「통신비밀보호법」제41조에 따른 통신사실확인자료 보관
+                - 가입자 전기통신일시, 개시․종료시간, 상대방 가입자번호, 사용도수, 발신기지국 위치추적자료 : 1년
+                - 컴퓨터통신, 인터넷 로그기록자료, 접속지 추적자료 : 3개월
+                <br><br>
+                제3조(정보주체의 권리․의무 및 행사방법)<br>
+                ① 정보주체는 회사에 대해 언제든지 다음 각 호의 개인정보 보호 관련 권리를 행사할 수 있습니다.
+                1. 개인정보 열람요구
+                2. 오류 등이 있을 경우 정정 요구
+                3. 삭제요구
+                4. 처리정지 요구
+                ② 제1항에 따른 권리 행사는 회사에 대해 서면, 전화, 전자우편, 모사전송(FAX) 등을 통하여 하실 수 있으며 회사는 이에 대해 지체없이 조치하겠습니다.
+                ③ 정보주체가 개인정보의 오류 등에 대한 정정 또는 삭제를 요구한 경우에는 회사는 정정 또는 삭제를 완료할 때까지 당해 개인정보를 이용하거나 제공하지 않습니다.
+                ④ 제1항에 따른 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을 통하여 하실 수 있습니다. 이 경우 개인정보 보호법 시행규칙 별지 제11호 서식에 따른 위임장을 제출하셔야 합니다.
+                ⑤ 정보주체는 개인정보 보호법 등 관계법령을 위반하여 회사가 처리하고 있는 정보주체 본인이나 타인의 개인정보 및 사생활을 침해하여서는 아니됩니다.
+                <br><br>
+                제4조(처리하는 개인정보 항목)<br>
+                회사는 다음의 개인정보 항목을 처리하고 있습니다.
+                <br><br>
+                1. 홈페이지 회원 가입 및 관리
+                필수항목 : <예) 성명, 생년월일, 아이디, 비밀번호, 주소, 전화번호, 성별, 이메일주소, 아이핀번호, 암호화된 이용자 확인값(CI)>
+                선택항목 : <예) 결혼여부, 관심분야>
+                <br><br>
+                2. 재화 또는 서비스 제공
+                필수항목 : <예) 성명, 생년월일, 아이디, 비밀번호, 주소, 전화번호, 이메일주소, 아이핀번호, 신용카드번호, 은행계좌정보, 암호화된 이용자 확인값(CI) 등 결제정보>
+                선택항목 : <관심분야, 과거 구매내역>
+                <br><br>
+                3. 인터넷 서비스 이용과정에서 아래 개인정보 항목이 자동으로 생성되어 수집될 수 있습니다.
+                IP주소, 쿠키, MAC주소, 서비스 이용기록, 방문기록, 불량 이용기록 등
+                <br><br>
+                제5조(개인정보의 파기)<br>
+                ① 회사는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체없이 해당 개인정보를 파기합니다.
+                ② 정보주체로부터 동의받은 개인정보 보유기간이 경과하거나 처리목적이 달성되었음에도 불구하고 다른 법령에 따라 개인정보를 계속 보존하여야 하는 경우에는, 해당 개인정보를 별도의 데이터베이스(DB)로 옮기거나 보관장소를 달리하여 보존합니다.
+                ③ 개인정보 파기의 절차 및 방법은 다음과 같습니다.
+                1. 파기절차
+                회사는 파기 사유가 발생한 개인정보를 선정하고, 회사의 개인정보 보호책임자의 승인을 받아 개인정보를 파기합니다.
+                2. 파기방법
+                회사는 전자적 파일 형태로 기록․저장된 개인정보는 기록을 재생할 수 없도록 로우레밸포멧(Low Level Format) 등의 방법을 이용하여 파기하며, 종이 문서에 기록․저장된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다.
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     const selectAll = document.querySelector("#selectAll");
