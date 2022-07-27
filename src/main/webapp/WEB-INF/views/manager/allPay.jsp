@@ -15,7 +15,7 @@
                 integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
                 crossorigin="anonymous"></script>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-            <title>후원 내역 조회 - Comme</title>
+            <title>전체 후원 내역 - Comme</title>
         </head>
         <style>
             #profileTap {
@@ -49,7 +49,7 @@
             }
             #boardBox table{
                 text-align: center;
-                font-size: 13px;
+                font-size: 12px;
             }
 
             #boardBox a{
@@ -168,17 +168,20 @@
                     <div class="col">
                         <ul id="profileTap">
                             <li><a href="/member/toMyPage">회원정보</a></li>
-                            <li><a href="/member/toCheckVol">봉사 신청 확인</a></li>
+                            <li><a href="/manager/memberList?curPage=1">전체 회원 목록</a></li>
+                            <li><a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a></li>
+                            <li><a href="/manager/toInquiryList?seq_category=${inquiry.seq_category}">문의/신고</a></li>
+                            <li><a href="/manager/toCategoryCM">카테고리 관리</a></li>
                             <li><a href="/member/toMyBoard">내 글</a></li>
                             <li><a href="/member/toMyComment">내 댓글</a></li>
-                            <li><a href="/member/toMyPayList">후원 내역 조회</a></li>
-                            <li><a href="/">홈으로</a></li>
+                            <li><a href="/manager/toAllPay">사용자 후원 내역 조회</a></li>
+                            <li><a href="/manager/toMyPayList">보호소 후원 내역 조회</a></li>
                             <li><a href="javascript:history.back()">이전페이지</a></li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="row mt-3 mb-5" id="boardBox">
+                <div class="row mt-3" id="boardBox">
                     <div class="col">
 
                         <h3>
@@ -188,10 +191,12 @@
                         <table class="table table-hover">
                             <thead style="border-top: 1px solid lightgray;">
                                 <tr>
-                                    <th scope="col" class="col-2">결제 번호</th>
-                                    <th scope="col" class="col-2">글 번호</th>
-                                    <th scope="col" class="col-4">제목</th>
+                                    <th scope="col" class="col-1">결제 번호</th>
+                                    <th scope="col" class="col-1">글 번호</th>
+                                    <th scope="col" class="col-2">회원아이디</th>
                                     <th scope="col" class="col-2">금액</th>
+                                    <th scope="col" class="col-2">보호소명</th>
+                                    <th scope="col" class="col-2">보호소아이디</th>
                                     <th scope="col" class="col-2">날짜</th>
                                 </tr>
                             </thead>
@@ -199,7 +204,7 @@
                                 <c:choose>
                                    <c:when test="${empty list}">
                                     <tr>
-                                        <td colspan="5">후원 내역이 없습니다.</td>
+                                        <td colspan="7">후원 내역이 없습니다.</td>
                                     </tr>
                                    </c:when>
                                 
@@ -207,9 +212,11 @@
                                         <c:forEach items="${list}" var="dto">
                                             <tr>
                                                 <td class="seq_pay">${dto.SEQ_PAY}</td>
-                                                <td class="seq_board">${dto.SEQ_BOARD}</td>
-                                                <td><a class="tap" href="/supportBoard/view?nowPage=1&seq_board=${dto.SEQ_BOARD}">${dto.BOARD_TITLE}</a></td>
+                                                <td><a class="tap" href="/supportBoard/view?nowPage=1&seq_board=${dto.SEQ_BOARD}">${dto.SEQ_BOARD}</a></td>
+                                                <td class="member_id">${dto.MEMBER_ID}</td>
                                                 <td>&#8361;<fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.PAY_MONEY}" /></td>
+                                                <td class="member_id">${dto.WRITER_NICKNAME}</td>
+                                                <td class="member_id">${dto.SHELTER_ID}</td>
                                                 <td class="pay_date"><fmt:formatDate value="${dto.PAY_DATE}" pattern="yyyy-MM-dd"/></td>
                                             </tr>
                                         </c:forEach>
@@ -221,36 +228,55 @@
                     </div>
                 </div>
 
+                <div class="row" id="searchBox">
+                    <!-- 검색박스부분 -->
+                    <div class="col">
+                        <form action="/manager/toAllPay" method="get">
+                        <span class="searchBox">
+                            <input type="text" name="search_keyword" id="search" value="${etcMap.search_keyword}">
+                            <button type="submit" id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </span>
+                        <span class="searchBox">
+                            <select name="search_type" id="search_type">
+                                <option value="seq_board">글 번호</option>
+                                <option value="member_id">회원아이디</option>
+                                <option value="MEMBER_ID">보호소아이디</option>
+                                <option value="writer_nickname">보호소명</option>
+                            </select>
+                        </span>
+                        </form>
+                    </div>
+                </div>
 
                 <div class="page_wrap mb-5">
                     <div  class="page_nation">	
                         <c:choose>
                            <c:when test="${etcMap.search_type eq null}">
                                 <c:if test="${paging.startPage!=1}" >
-                                    <a id="first" href="/member/toMyPayList?nowPage=1">첫 페이지</a>
-                                    <a class="arrow left" href="/member/toMyPayList?nowPage=${paging.startPage-1}">&lt;</a>
+                                    <a id="first" href="/manager/toAllPay?nowPage=1">첫 페이지</a>
+                                    <a class="arrow left" href="/manager/toAllPay?nowPage=${paging.startPage-1}">&lt;</a>
                                 </c:if>	
                                 <c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p" step="1">
-                                    <a href="/member/toMyPayList?nowPage=${p}"
+                                    <a href="/manager/toAllPay?nowPage=${p}"
                                         class="paging">${p}</a>
                                 </c:forEach>
                                 <c:if test="${paging.endPage != paging.lastPage}">
-                                    <a class="arrow right" href="/member/toMyPayList?nowPage=${paging.endPage+1}">&gt;</a>
-                                    <a id="last" href="/member/toMyPayList?nowPage=${paging.lastPage}">끝 페이지</a>
+                                    <a class="arrow right" href="/manager/toAllPay?nowPage=${paging.endPage+1}">&gt;</a>
+                                    <a id="last" href="/manager/toAllPay?nowPage=${paging.lastPage}">끝 페이지</a>
                                 </c:if>
                            </c:when>
                            <c:otherwise>
                                 <c:if test="${paging.startPage!=1}" >
-                                    <a id="first" href="/member/toMyPayList?nowPage=1&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">첫 페이지</a>
-                                    <a class="arrow left" href="/member/toMyPayList?nowPage=${paging.startPage-1}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">&lt;</a>
+                                    <a id="first" href="/manager/toAllPay?nowPage=1&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">첫 페이지</a>
+                                    <a class="arrow left" href="/manager/toAllPay?nowPage=${paging.startPage-1}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">&lt;</a>
                                 </c:if>	
                                 <c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p" step="1">
-                                    <a href="/member/toMyPayList?nowPage=${p}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}"
+                                    <a href="/manager/toAllPay?nowPage=${p}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}"
                                         class="paging">${p}</a>
                                 </c:forEach>
                                 <c:if test="${paging.endPage != paging.lastPage}">
-                                    <a class="arrow right" href="/member/toMyPayList?nowPage=${paging.endPage+1}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">&gt;</a>
-                                    <a id="last" href="/member/toMyPayList?nowPage=${paging.lastPage}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">끝 페이지</a>
+                                    <a class="arrow right" href="/manager/toAllPay?nowPage=${paging.endPage+1}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">&gt;</a>
+                                    <a id="last" href="/manager/toAllPay?nowPage=${paging.lastPage}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">끝 페이지</a>
                                 </c:if>
                            </c:otherwise>
                         </c:choose>

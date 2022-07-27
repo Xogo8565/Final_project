@@ -54,6 +54,11 @@
 
             #boardBox a{
                 color: black;
+                text-decoration: none;
+            }
+
+            #boardBox a:hover{
+                text-decoration: underline;
             }
 
             .pay_date,
@@ -185,8 +190,8 @@
                             <thead style="border-top: 1px solid lightgray;">
                                 <tr>
                                     <th scope="col" class="col-2">결제 번호</th>
-                                    <th scope="col" class="col-2">글 번호</th>
                                     <th scope="col" class="col-4">제목</th>
+                                    <th scope="col" class="col-2">금액</th>
                                     <th scope="col" class="col-2">아이디</th>
                                     <th scope="col" class="col-2">날짜</th>
                                 </tr>
@@ -203,8 +208,8 @@
                                         <c:forEach items="${list}" var="dto">
                                             <tr>
                                                 <td class="seq_pay">${dto.SEQ_PAY}</td>
-                                                <td class="seq_board">${dto.SEQ_BOARD}</td>
                                                 <td><a class="tap" href="/supportBoard/view?nowPage=1&seq_board=${dto.SEQ_BOARD}">${dto.BOARD_TITLE}</a></td>
+                                                <td>&#8361;<fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.PAY_MONEY}" /></td>
                                                 <td class="member_id">${dto.MEMBER_ID}</td>
                                                 <td class="pay_date"><fmt:formatDate value="${dto.PAY_DATE}" pattern="yyyy-MM-dd"/></td>
                                             </tr>
