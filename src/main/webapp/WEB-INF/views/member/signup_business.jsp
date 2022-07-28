@@ -150,11 +150,14 @@
                             <div class="col-3 align-self-center">
                                 <label for="nickname">
                                     <span class="cls-required">*</span>
-                                    <span class="cls-labelTitle">보호소명</span>
+                                    <span class="cls-labelTitle">닉네임</span>
                                 </label>        
                             </div>
-                            <div class="col-9">
+                            <div class="col-7">
                                 <input type="text" class="form-control" id="nickname" name="member_nickname">
+                            </div>
+                            <div class="col-2">
+                                <button type="button" id="nicknameCheck" class="btn btn-secondary">중복확인</button>
                             </div>
                         </div>
                         <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
@@ -174,9 +177,24 @@
                                     <div class="col-4">
                                         <select class="form-select" id="phone1">
                                             <option value="010">010</option>
-                                            <option value="011">011</option>
-                                            <option value="017">017</option>
-                                            <option value="018">018</option>
+                                            <option value="070">070</option>
+                                            <option value="02">02</option>
+                                            <option value="031">031</option>
+                                            <option value="032">032</option>
+                                            <option value="033">033</option>
+                                            <option value="041">041</option>
+                                            <option value="042">042</option>
+                                            <option value="043">043</option>
+                                            <option value="044">044</option>
+                                            <option value="051">051</option>
+                                            <option value="052">052</option>
+                                            <option value="053">053</option>
+                                            <option value="054">054</option>
+                                            <option value="055">055</option>
+                                            <option value="061">061</option>
+                                            <option value="062">062</option>
+                                            <option value="063">063</option>
+                                            <option value="064">064</option>
                                         </select>        
                                     </div>
                                     <div class="col-4">
@@ -273,7 +291,7 @@
 	
 	// 아이디 조건 밑에 뜨게
 	$("#id").focus(function(){
-		if($("#checkId").html() !== "사용가능한 아이디 입니다."){
+		if($("#checkId").html() !== "사용가능한 아이디입니다."){
 			$("#checkId").html("소문자와 숫자로 5~12자 이내로 작성해주세요.");
     		$("#checkId").css("color", "green");
     		$("#id").blur(function(){
@@ -288,7 +306,7 @@
 		// 아이디 유효성 검사
 		let regexId = /^[a-z0-9]{5,12}$/;
 		if(!regexId.test($("#id").val())){
-			$("#checkId").html("형식에 맞지않는 아이디 입니다. 다시 입력해주세요.");
+			$("#checkId").html("형식에 맞지않는 아이디입니다. 다시 입력해주세요.");
 			$("#checkId").css("color", "red");
 			$("#id").val("");
 			return;
@@ -302,11 +320,11 @@
 			, success: function(data){
 				console.log(data);
 				if(data === "nope"){
-					$("#checkId").html("이미 사용중인 아이디 입니다.");
+					$("#checkId").html("이미 사용중인 아이디입니다.");
 					$("#checkId").css("color", "red");
 					$("#id").val("");
 				}else if(data === "ok"){
-					$("#checkId").html("사용가능한 아이디 입니다.");
+					$("#checkId").html("사용가능한 아이디입니다.");
 					$("#checkId").css("color", "green");
 				}
 			}
@@ -324,7 +342,7 @@
 		let regexEmail = /^[a-zA-z0-9][\w]+@[a-zA-z]+\.(com|net|co\.kr|or\.kr)$/;
 		
 		if(!regexEmail.test($("#email").val())){
-			$("#checkEmail").html("형식에 맞지않는 이메일 입니다. 다시 입력해주세요.");
+			$("#checkEmail").html("형식에 맞지않는 이메일입니다. 다시 입력해주세요.");
 			$("#checkEmail").css("color", "red");
 			$("#email").val("");
 			return;
@@ -338,11 +356,11 @@
 			, success: function(data){
 				console.log(data);
 				if(data === "nope"){
-					$("#checkEmail").html("이미 사용중인 이메일 입니다.");
+					$("#checkEmail").html("이미 사용중인 이메일입니다.");
 					$("#checkEmail").css("color", "red");
 					$("#email").val("");
 				}else if(data === "ok"){
-					$("#checkEmail").html("사용가능한 이메일 입니다.");
+					$("#checkEmail").html("사용가능한 이메일입니다.");
 					$("#checkEmail").css("color", "green");
 				}
 			}
@@ -355,11 +373,47 @@
 	
 	// 닉네임 조건 밑에 뜨게
 	$("#nickname").focus(function(){
-		$("#checkNickname").html("대소문자, 한글, 숫자를 이용해서 3~6자 이내로 작성해 주세요.");
-		$("#checkNickname").css("color", "green");
+		if($("#checkNickname").html() !== "사용가능한 닉네임입니다."){
+			$("#checkNickname").html("한글 및 숫자, 영문으로 2~8자 이내로 작성해주세요.");
+    		$("#checkNickname").css("color", "green");
+    		$("#nickname").blur(function(){
+	    		$("#checkNickname").html("");
+	    	});
+		}
 	});
-	$("#nickname").blur(function(){
-		$("#checkNickname").html("");
+
+    // 닉네임 중복 검사
+    $("#nicknameCheck").on("click", function(){
+        // 닉네임 유효성 검사
+        let regexNickname = /^[a-zA-z0-9ㄱ-흫]{2,8}$/;
+        
+        if(!regexNickname.test($("#nickname").val())){
+            $("#checkNickname").html("형식에 맞지않는 닉네임입니다. 다시 입력해주세요.");
+            $("#checkNickname").css("color", "red");
+            $("#nickname").val("");
+            return;
+        }
+        // ajax로 중복값 검사
+        $.ajax({
+            url: "/member/nicknameCheck"
+            , type: "post"
+            , data: {nickname: $("#nickname").val()}
+            , dataType: "text"
+            , success: function(data){
+                console.log(data);
+                if(data === "nope"){
+                    $("#checkNickname").html("이미 사용중인 닉네임입니다.");
+                    $("#checkNickname").css("color", "red");
+                    $("#nickname").val("");
+                }else if(data === "ok"){
+                    $("#checkNickname").html("사용가능한 닉네임입니다.");
+                    $("#checkNickname").css("color", "green");
+                }
+            }
+            , error: function(e){
+                console.log(e);
+            }
+        })
 	});
 	
 	
@@ -385,13 +439,14 @@
 	$("#btn-signup").on("click", function(){
 		let regexName = /[a-zA-Z가-힣]{2,6}$/;
 		let regexId = /^[a-z0-9]{5,12}$/;
-		let regexNickname = /^[a-zA-z0-9ㄱ-흫]{2,6}$/;
+		let regexNickname = /^[a-zA-z0-9ㄱ-흫]{2,8}$/;
 		let regexPw = /^[a-zA-z0-9~!@#$]{6,12}$/;
 		let regexEmail = /^[a-zA-z0-9][\w]+@[a-zA-z]+\.(com|net|co\.kr|or\.kr)$/;
-		let regexPhone = /^[0-9]{11}$/;
+		let regexPhone = /^[0-9-]{13}$/;
 
         //사업자 등록번호 검사
         // bizID는 숫자만 10자리로 해서 문자열로 넘긴다.
+        let regexBrn = /\s/g;
         let checkID = [1, 3, 7, 1, 3, 7, 1, 3, 5, 1];
         let tmpBizID, i, chkSum=0, c2, remander;
         let bizID = document.querySelector("#business").value;
@@ -406,7 +461,7 @@
 		// phone번호 합쳐주는 작업
 		// select박스에서 선택된 값을 가져오는 방법
 		//console.log($("#phone1 option:selected").val());
-		let phone = $("#phone1 option:selected").val() + $("#phone2").val() + $("#phone3").val();
+		let phone = $("#phone1 option:selected").val() + '-' + $("#phone2").val() + '-' + $("#phone3").val();
 		$("#phone").val(phone);
 		
 		if($("#name").val() === ""){
@@ -417,7 +472,7 @@
 			alert("이름은 한글 및 영문으로 2~10자 이내로 작성해주세요.");
 			$("#name").focus();
 			return;
-		} else if (Math.floor(bizID.charAt(9)) !== remander){
+		} else if (Math.floor(bizID.charAt(9)) !== remander || isNaN(bizID) || bizID.match(regexBrn) || bizID.length < 10){
             alert("사업자 번호가 유효하지 않습니다");
             $("#business").focus();
             return;
@@ -426,16 +481,20 @@
 			alert("아이디는 영어소문자와 숫자로 5~12자 이내로 작성해주세요.");
 			$("#id").focus();
 			return;
-		}else if($("#checkId").html() !== "사용가능한 아이디 입니다."){
+		}else if($("#checkId").html() !== "사용가능한 아이디입니다."){
 			alert("아이디 중복확인을 해주세요.");
 			$("#id").focus();
 			return;
-		}else if($("#checkEmail").html() !== "사용가능한 이메일 입니다."){
+		}else if($("#checkEmail").html() !== "사용가능한 이메일입니다."){
 			alert("이메일 중복확인을 해주세요.");
 			$("#email").focus();
 			return;
 		}else if(!regexNickname.test($("#nickname").val())){
-			alert("닉네임은 영어대소문자 또는 한글 또는 숫자를 이용해서 2 ~ 6자 이내로 작성해 주세요.");
+			alert("닉네임은 영어대소문자 또는 한글 또는 숫자를 이용해서 2 ~ 8자 이내로 작성해 주세요.");
+			$("#nickname").focus();
+			return;
+		}else if($("#checkNickname").html() !== "사용가능한 닉네임입니다."){
+			alert("닉네임 중복확인을 해주세요.");
 			$("#nickname").focus();
 			return;
 		}else if(!regexPw.test($("#pw").val())){
@@ -454,6 +513,12 @@
 			return;
 		}
 		
+        let brn1 = bizID.substr(0,3);
+        let brn2 = bizID.substr(3,2);
+        let brn3 = bizID.substr(5);
+            
+        document.querySelector("#business").value = brn1 + '-' + brn2 + '-' + brn3;
+        
 		$("#signupForm").submit();
 		alert("회원가입이 완료되었습니다.");
 	});

@@ -145,6 +145,12 @@
 
     </div>
 <script>
+	// 이전에 있던 페이지에 대한 세션값 셋팅
+	if(!sessionStorage.getItem('referrer')){
+		sessionStorage.setItem("referrer", document.referrer);
+	}
+	
+
 
 	// 일반 로그인
 	$("#btnLogin").on("click", ()=>{
@@ -157,7 +163,7 @@
 			if(a.keyCode===13){
 				login();
 			}
-		}
+		} 
 	})
 
 
@@ -173,9 +179,11 @@
 			, type: "post"
 			, data: {member_id: $("#id").val(), member_pw: $("#pw").val()}
 			, success: function (data) {
-				if (data == "success") {
-					location.href = "/";
-				} else if (data == "fail") {
+				if (data === 'success') {
+					const referrer = sessionStorage.getItem('referrer');
+					sessionStorage.removeItem("referrer"); 
+					location.href = referrer || '/';
+				} else if (data === "fail") {
 					alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
 				} else if (data === "await") {
 					alert("관리자의 승인이 필요합니다.");
@@ -186,8 +194,9 @@
 		});
 	}
 
+	
 	//쿠키 가져오기
-	$(document).ready(function() {
+	$(function() {
 		
          let key = getCookie("key");
          $("#id").val(key);
@@ -240,6 +249,8 @@
 	    }
 	    return unescape(cookieValue);
 	}
+
+	
 
 </script>
 </body>

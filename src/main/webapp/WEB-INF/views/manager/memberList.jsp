@@ -324,7 +324,7 @@ td{
 								<li><a href="/manager/toCategoryCM">카테고리 관리</a></li>
 								<li><a href="/member/toMyBoard">내 글</a></li>
 								<li><a href="/member/toMyComment">내 댓글</a></li>
-								<li><a href="javascript:history.back()">이전페이지</a></li>
+								<li><a href="#" id="return">돌아가기</a></li>
 						</ul>
 				</div>
 		</div>
@@ -709,6 +709,16 @@ td{
 			}else{
 				location.href="/manager/memberList?curPage=1";
 			}
+		})
+
+		if (!sessionStorage.getItem('referrer')){
+				sessionStorage.setItem("referrer", document.referrer);
+		}
+
+		document.getElementById('return').addEventListener('click', () =>{
+				const referrer = sessionStorage.getItem('referrer');
+				sessionStorage.removeItem("referrer"); 
+				location.href = referrer || '/';
 		})
 	</script>
 </body>

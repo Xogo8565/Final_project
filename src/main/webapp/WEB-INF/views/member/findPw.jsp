@@ -78,6 +78,12 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     width: 100%;
 }
 
+#btnChangePw,
+#returnBtn2{
+	width: 116px;
+	margin-right: 10px;
+}
+
 </style>
 <body>
     <div class="">
@@ -120,6 +126,12 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
                                     <button type="button" class="btn btn-warning cls-inputBtn" id="proofOk" disabled>확인</button>
                                 </div>
                             </div>
+
+														<div class="row buttonRow">
+																<div class="col d-flex justify-content-center">
+																		<button type="button" class="btn btn-light" id="returnBtn">돌아가기</button>
+																</div>
+														</div>
                             <div class="row">
                             	<div class="col d-none">
                             		<input type="text" id="proofNum">
@@ -154,6 +166,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 					<div class="row buttonRow">
 	                    <div class="col d-flex justify-content-center">
 	                        <button type="button" class="btn btn-light" id="btnChangePw">비밀번호 변경</button>
+													<button type="button" class="btn btn-light" id="returnBtn2">돌아가기</button>
 	                    </div>
 	                </div>
 				</div>
@@ -251,6 +264,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 				$("#proofOk").attr("disabled", true);
 				
 				$(".newPw").removeClass("d-none");
+				$("#returnBtn").addClass(" d-none");
 				
 				alert("인증이 완료되었습니다. 새로운 비밀번호를 설정해주세요.");
 			} else {
@@ -290,11 +304,14 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 				
 			}
 			
-
-			
-			
-			
 		});
+
+		document.addEventListener('click', function(e){
+				if(e.target.id == "returnBtn" || e.target.id == "returnBtn2"){
+					location.href = "javascript:history.back()";
+				}
+
+			})
 		
 
     </script>
