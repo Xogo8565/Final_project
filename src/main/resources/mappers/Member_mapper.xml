@@ -308,4 +308,9 @@
 	<update id="changePw" parameterType="map">
 		update member set member_pw = #{member_pw} where member_email = #{member_email}
 	</update>
+	
+	<!-- 회원탈퇴 -->
+	<delete id="deleteMember" parameterType="String">
+		delete from member where member_id = #{member_id}
+	</delete>
 </mapper>

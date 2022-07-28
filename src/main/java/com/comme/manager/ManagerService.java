@@ -240,5 +240,18 @@ public class ManagerService implements ManagerDAO {
 		return 0;
 	}
 
+	
+	public int searchMoney(String search_type, String search_keyword) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("search_type", search_type);
+		map.put("search_keyword", search_keyword);
+		return dao.searchMoney(map);
+	}
+
+	@Override
+	public int searchMoney(Map<String, Object> map) {
+		return 0;
+	}
+
 
 }

@@ -105,7 +105,6 @@
                                     <li><a href="/member/toMyBoard">내 글</a></li>
                                     <li><a href="/member/toMyComment">내 댓글</a></li>
                                     <li><a href="/manager/toAllPay">사용자 후원 내역 조회</a></li>
-                                    <li><a href="/manager/toMyPayList">보호소 후원 내역 조회</a></li>
                                </c:when>
                                
                                <c:otherwise>
@@ -204,7 +203,13 @@
 
         </body>
         <script>
-
+            document.getElementById('deleteBtn').addEventListener('click', function(){
+                let check = confirm('사이트를 탈퇴하시겠습니까?');
+                if(check){
+                    alert('그동안 사이트를 이용해 주셔서 감사합니다.');
+                    location.href = "/member/deleteMember";
+                }
+            })
         </script>
 
         </html>

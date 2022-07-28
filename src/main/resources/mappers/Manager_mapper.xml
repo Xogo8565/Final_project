@@ -188,8 +188,19 @@
         order by P.seq_pay desc 
 		    ) A
 		)
-         WHERE RN BETWEEN #{start} AND #{end}
+		WHERE RN BETWEEN #{start} AND #{end}
 	</select>
 	
+	<!-- 조회 된 결과에 따른 총 금액 -->
+	<select id="searchMoney" parameterType="map" resultType="int">
+		select sum(pay_money) from pay p, support_board S
+	    where P.seq_board = S.seq_BOARD
+	    <if test="search_type == 'MEMBER_ID' or search_type == 'writer_nickname' ">
+         		and s.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+        </if>
+        <if test="search_type == 'member_id' or search_type == 'seq_board'">
+         		and p.${search_type} LIKE '%'|| #{search_keyword} ||'%'
+         </if>
+	</select>
 	
 </mapper>

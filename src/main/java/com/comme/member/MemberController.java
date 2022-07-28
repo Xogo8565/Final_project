@@ -57,6 +57,15 @@ public class MemberController {
     	System.out.println("로그아웃");
     	return "redirect:/";
     }
+    
+    @RequestMapping(value = "/deleteMember") // 회원탈퇴
+    public String deleteMember() throws Exception{
+    	String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+    	service.deleteMember(memberId);
+    	session.invalidate();
+    	System.out.println("회원탈퇴");
+    	return "redirect:/";
+    }
 
     @RequestMapping(value = "/toSignupPage") // 회원가입 페이지 요청
     public String toSignup(Model model) throws Exception {

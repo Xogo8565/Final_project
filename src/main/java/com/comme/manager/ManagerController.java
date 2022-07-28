@@ -266,6 +266,7 @@ public class ManagerController {
 		Map<String, Object> etcMap = new HashMap<>();
 		etcMap.put("search_keyword", search_keyword); // 검색 키워드
 		etcMap.put("search_type", search_type); // 검색 타입
+		etcMap.put("searchMoney", service.searchMoney(search_type, search_keyword)); // 검색 타입
 		
 		model.addAttribute("mainCategory", boardService.mainCategory());
 		model.addAttribute("inquiry", boardService.inquiryCategory());

@@ -189,7 +189,6 @@
                             <li><a href="/member/toMyBoard">내 글</a></li>
                             <li><a href="/member/toMyComment">내 댓글</a></li>
                             <li><a href="/manager/toAllPay">사용자 후원 내역 조회</a></li>
-                            <li><a href="/manager/toMyPayList">보호소 후원 내역 조회</a></li>
                             <li><a href="javascript:history.back()">이전페이지</a></li>
                         </ul>
                     </div>

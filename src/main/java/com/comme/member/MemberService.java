@@ -253,4 +253,8 @@ public class MemberService {
 		dao.changePw(map);
 		
 	}
+	
+	public void deleteMember(String member_id) throws Exception{
+		dao.deleteMember(member_id);
+	}
 }
