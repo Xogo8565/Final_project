@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ErrorController {
     @Autowired
     private BoardService boardService;
+    
     @GetMapping("/error")
     public String error(Model model) throws Exception {
         model.addAttribute("mainCategory", boardService.mainCategory());

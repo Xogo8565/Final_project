@@ -105,7 +105,6 @@
                                     <li><a href="/member/toMyBoard">내 글</a></li>
                                     <li><a href="/member/toMyComment">내 댓글</a></li>
                                     <li><a href="/manager/toAllPay">사용자 후원 내역 조회</a></li>
-                                    <li><a href="/manager/toMyPayList">보호소 후원 내역 조회</a></li>
                                </c:when>
                                
                                <c:otherwise>
@@ -115,7 +114,7 @@
                                     <li><a href="/member/toMyPayList">후원 내역 조회</a></li>
                                </c:otherwise>
                             </c:choose>
-                            <li><a href="javascript:history.back()">이전페이지</a></li>
+                            <li><a href="#" id="return">돌아가기</a></li>
                         </ul>
                     </div>
                 </div>
@@ -204,7 +203,31 @@
 
         </body>
         <script>
+            document.getElementById('deleteBtn').addEventListener('click', function(){
+                let check = confirm('사이트를 탈퇴하시겠습니까?');
+                if(check){
+                    alert('그동안 사이트를 이용해 주셔서 감사합니다.');
+                    location.href = "/member/deleteMember";
+                }
+            })
 
+            document.getElementById('updatePwBtn').addEventListener('click', function(){
+                location.href = "/member/toModifyPw";
+            })
+
+            document.getElementById('modifyBtn').addEventListener('click', function(){
+                location.href = "/member/toModifyMember";
+            })
+
+            if (!sessionStorage.getItem('referrer')){
+                sessionStorage.setItem("referrer", document.referrer);
+            }
+
+            document.getElementById('return').addEventListener('click', () =>{
+                const referrer = sessionStorage.getItem('referrer');
+                sessionStorage.removeItem("referrer"); 
+                location.href = referrer || '/';
+            })
         </script>
 
         </html>

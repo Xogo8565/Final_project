@@ -143,6 +143,18 @@
                 border-radius: 3px;
                 padding: 5px;
             }
+
+            #loginComment{
+                width: 100%;
+                height: 85px;
+                border: 1px solid lightgray;
+                background-color: #e7e7e9;
+                color: #999;
+                border-radius: 3px;
+                padding: 5px;
+                cursor: pointer;
+            }
+
             #modify_content{
                 width: 60vw;
                 height: 85px;
@@ -377,7 +389,15 @@
                     <div class="col-11">
                         <form id="commentForm">
                             <input type="hidden" id="seq_board" name="seq_board" value="${post.seq_board}">
-                            <textarea name="comment_content" id="comment_content" placeholder="회원 간의 불편함을 주는 댓글은 자제해주시고 따뜻한 댓글 부탁드립니다."></textarea>
+                            <c:choose>
+                               <c:when test="${empty loginSession}">
+                                    <p id="loginComment">댓글 작성 하시려면 로그인 해주세요. 로그인 하시겠습니까?</p>
+                               </c:when>
+                            
+                               <c:otherwise>
+                                    <textarea name="comment_content" id="comment_content" placeholder="회원 간의 불편함을 주는 댓글은 자제해주시고 따뜻한 댓글 부탁드립니다."></textarea>
+                               </c:otherwise>
+                            </c:choose>
                         </form>
                     </div>
                     <div class="col-1"  style="text-align: center; padding: 0; ">
@@ -673,6 +693,12 @@
                             console.log(e);
                         }
                     })
+                }else if(e.target.id === 'loginComment'){
+                    let check = confirm('로그인 하시겠습니까?');
+                    if(check){
+                        location.href = "/member/toLoginPage";
+                        return;
+                    }
                 }
                 
             })
@@ -807,6 +833,7 @@
                     option.selected = true;
                 }
             })
+            
         </script>
 
         </html>

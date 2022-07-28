@@ -72,6 +72,7 @@
 .input-group > .form-select {
 	flex: 1;
 	border: 1px solid rgb(207, 185, 136);
+	font-size: 13px;
 }
 
 .input-group > .form-select:focus {
@@ -88,6 +89,7 @@ option {
 #inputSearch{
 	width: 40%;
 	border: 1px solid rgb(207, 185, 136);
+	font-size: 13px;
 }
 
 #inputSearch:focus {
@@ -193,7 +195,8 @@ option {
 }
 .table{
 	table-layout: fixed;
-    word-wrap: break-word;
+  word-wrap: break-word;
+	font-size: 13px;
 }
 thead {
 	border-bottom: 2px solid rgb(207, 147, 111);
@@ -236,6 +239,7 @@ td{
 .blacklist_content {
 	width: 100%;
 	border: none;
+	text-align: center;
 }
 .form-check-input:checked {
 	background-color: #bf2525;
@@ -247,11 +251,18 @@ td{
 	border-color: rgba(0,0,0,.25);
 }
 
+#btnModify,
+#btnSave,
+#btnCancle{
+	font-size: 13px;
+}
+
 
 /* 페이징 */
 .page-item>a {
 	color: white;
 	background-color: rgb(207, 185, 136);
+	font-size: 13px;
 }
 
 .page-item>a:hover {
@@ -265,33 +276,61 @@ td{
 	outline: none !important;
 	box-shadow: none;
 }
+
+#tapBox{
+		margin: 0 10.5vw 0 10.5vw;
+}
+
+#profileTap {
+		list-style: none;
+		font-size: 15px;
+		padding: 0;
+}
+
+#profileTap li{
+		text-align: center;
+		float: left;
+		border: 1px solid lightgray;
+}
+
+#profileTap li a{
+		color: black;
+		display: inline-block;
+		padding: 7px 7px 7px 7px;
+		min-width: 70px;
+		text-decoration: none;
+}
+
+#profileTap li a:hover{
+		background-color: rgb(98, 188, 240);
+		color: white;
+		text-decoration: none;
+}
+
 </style>
 </head>
 <body>
 	<!-- header -->
 	<jsp:include page="/WEB-INF/views/frame/header.jsp"></jsp:include>
 	<div class="wrapper">
-		<div class="row" id="sidNavWrapper">
-			<%-- 반응형 웹 --%>
-			<div class="sideNav justify-content-center">
-				<p>회원관리</p>
-				<div class="sideNav-A">
-					<a href="/manager/memberList?curPage=1">전체 회원 목록</a><br>
-					<a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a><br>
-					<a href="/manager/toInquiryList?seq_category=${inquiry.seq_category}">문의/신고</a>
+
+		<div class="row mt-5" id="tapBox">
+				<div class="col">
+						<ul id="profileTap">
+								<li><a href="/member/toMyPage">회원정보</a></li>
+								<li><a href="/manager/memberList?curPage=1">전체 회원 목록</a></li>
+								<li><a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a></li>
+								<li><a href="/manager/toInquiryList?seq_category=${inquiry.seq_category}">문의/신고</a></li>
+								<li><a href="/manager/toCategoryCM">카테고리 관리</a></li>
+								<li><a href="/member/toMyBoard">내 글</a></li>
+								<li><a href="/member/toMyComment">내 댓글</a></li>
+								<li><a href="#" id="return">돌아가기</a></li>
+						</ul>
 				</div>
-			</div>
-			<div class="d-none d-sm-block" id="btnNav1">
-				<span id="btnNav">
-				<span class="material-symbols-outlined" style="vertical-align: sub;">edit_note</span>
-				관리자 메뉴</span>
-				<div id="line"> </div>			
-			</div>
-			<%-- 반응형 모바일 --%>
-			<div class="topNav d-sm-none justify-content-center">
-				<a id="aTitle" href="/manager/memberList?curPage=1">회원목록</a>&nbsp;&nbsp;
-				<a href="/manager/toBlackList?curPage=1">블랙리스트 관리</a>	
-			</div>
+		</div>
+
+		<div class="row" id="sidNavWrapper" style="margin: 0 7.5vw 0 7.5vw;">
+			
 			<div class="col listContainer m-2">
 			<div class="col listHeader text-center mt-5">
 				<span id="titleSpan">
@@ -670,6 +709,16 @@ td{
 			}else{
 				location.href="/manager/memberList?curPage=1";
 			}
+		})
+
+		if (!sessionStorage.getItem('referrer')){
+				sessionStorage.setItem("referrer", document.referrer);
+		}
+
+		document.getElementById('return').addEventListener('click', () =>{
+				const referrer = sessionStorage.getItem('referrer');
+				sessionStorage.removeItem("referrer"); 
+				location.href = referrer || '/';
 		})
 	</script>
 </body>

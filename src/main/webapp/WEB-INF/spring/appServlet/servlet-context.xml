@@ -60,12 +60,14 @@
 			<mvc:exclude-mapping path="/member/toSignup_business"/> <!-- 기관회원가입 페이지 -->
 			<mvc:exclude-mapping path="/member/idCheck"/> <!-- 아이디 중복확인 -->
 			<mvc:exclude-mapping path="/member/emailCheck"/> <!-- 이메일 중복확인 -->
+			<mvc:exclude-mapping path="/member/nicknameCheck"/> <!-- 닉네임 중복확인 -->
 			<mvc:exclude-mapping path="/member/signupGeneral"/> <!-- 일반회원 회원가입 -->
 			<mvc:exclude-mapping path="/member/signupBusiness"/> <!-- 기관회원 회원가입 -->
 			<mvc:exclude-mapping path="/member/toFindIdPage"/> <!-- 아이디 찾기 -->
 			<mvc:exclude-mapping path="/member/findToEmail"/> <!-- 아이디찾기 (이메일) -->
 			<mvc:exclude-mapping path="/member/findToPhone"/> <!-- 아이디찾기 (전화번호) -->
 			<mvc:exclude-mapping path="/member/toFindPwPage"/> <!-- 비밀번호 찾기 -->
+			<mvc:exclude-mapping path="/member/mailCheck"/> <!-- 인증메일 보내기 -->
 			
 			<mvc:exclude-mapping path="/board/toBoard"/> <!-- 게시판 목록 -->
 			<mvc:exclude-mapping path="/board/detailPost"/> <!-- 상세보기페이지 -->

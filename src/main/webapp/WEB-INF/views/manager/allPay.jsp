@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
         <!DOCTYPE html>
         <html>
 
@@ -157,6 +158,8 @@
                 margin: 0 12vw 0 12vw;
             }
 
+            
+
         </style>
 
         <body>
@@ -175,8 +178,7 @@
                             <li><a href="/member/toMyBoard">내 글</a></li>
                             <li><a href="/member/toMyComment">내 댓글</a></li>
                             <li><a href="/manager/toAllPay">사용자 후원 내역 조회</a></li>
-                            <li><a href="/manager/toMyPayList">보호소 후원 내역 조회</a></li>
-                            <li><a href="javascript:history.back()">이전페이지</a></li>
+                            <li><a href="#" id="return">돌아가기</a></li>
                         </ul>
                     </div>
                 </div>
@@ -214,7 +216,7 @@
                                                 <td class="seq_pay">${dto.SEQ_PAY}</td>
                                                 <td><a class="tap" href="/supportBoard/view?nowPage=1&seq_board=${dto.SEQ_BOARD}">${dto.SEQ_BOARD}</a></td>
                                                 <td class="member_id">${dto.MEMBER_ID}</td>
-                                                <td>&#8361;<fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.PAY_MONEY}" /></td>
+                                                <td data-value="${dto.PAY_MONEY}" class="payMoney">&#8361;<fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.PAY_MONEY}" /></td>
                                                 <td class="member_id">${dto.WRITER_NICKNAME}</td>
                                                 <td class="member_id">${dto.SHELTER_ID}</td>
                                                 <td class="pay_date"><fmt:formatDate value="${dto.PAY_DATE}" pattern="yyyy-MM-dd"/></td>
@@ -222,11 +224,17 @@
                                         </c:forEach>
                                    </c:otherwise>
                                 </c:choose>
-                                
+
+                                <c:if test="${fn:length(etcMap.search_keyword) > '0' && !empty list}" >
+                                    <tr style="border-top: 2px solid black;">
+                                        <td colspan="7" id="totalMoney">총 금액&nbsp; : &nbsp; &#8361;</td>
+                                    </tr>
+                                </c:if>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
 
                 <div class="row" id="searchBox">
                     <!-- 검색박스부분 -->
@@ -251,7 +259,7 @@
                 <div class="page_wrap mb-5">
                     <div  class="page_nation">	
                         <c:choose>
-                           <c:when test="${etcMap.search_type eq null}">
+                        <c:when test="${etcMap.search_type eq null}">
                                 <c:if test="${paging.startPage!=1}" >
                                     <a id="first" href="/manager/toAllPay?nowPage=1">첫 페이지</a>
                                     <a class="arrow left" href="/manager/toAllPay?nowPage=${paging.startPage-1}">&lt;</a>
@@ -264,8 +272,8 @@
                                     <a class="arrow right" href="/manager/toAllPay?nowPage=${paging.endPage+1}">&gt;</a>
                                     <a id="last" href="/manager/toAllPay?nowPage=${paging.lastPage}">끝 페이지</a>
                                 </c:if>
-                           </c:when>
-                           <c:otherwise>
+                        </c:when>
+                        <c:otherwise>
                                 <c:if test="${paging.startPage!=1}" >
                                     <a id="first" href="/manager/toAllPay?nowPage=1&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">첫 페이지</a>
                                     <a class="arrow left" href="/manager/toAllPay?nowPage=${paging.startPage-1}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">&lt;</a>
@@ -278,10 +286,11 @@
                                     <a class="arrow right" href="/manager/toAllPay?nowPage=${paging.endPage+1}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">&gt;</a>
                                     <a id="last" href="/manager/toAllPay?nowPage=${paging.lastPage}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}">끝 페이지</a>
                                 </c:if>
-                           </c:otherwise>
+                        </c:otherwise>
                         </c:choose>
                     </div>
                 </div>
+                
 
                 <!-- footer -->
 	            <jsp:include page="/WEB-INF/views/frame/footer.jsp"></jsp:include>
@@ -305,6 +314,24 @@
                     active[i].style.cssText = "background-color: #f9f9f9; color: #555; border: 1px solid #aaa; border-radius: 2px";
                 }
             };
+
+            let payMoney = document.querySelectorAll('.payMoney');
+            let totalMoney = 0;
+            payMoney.forEach(e=>{
+                totalMoney += parseInt(e.getAttribute('data-value'));
+            })
+
+            document.getElementById('totalMoney').innerText += parseInt('${etcMap.searchMoney}').toLocaleString('en-US');
+            
+            if (!sessionStorage.getItem('referrer')){
+                sessionStorage.setItem("referrer", document.referrer);
+            }
+
+            document.getElementById('return').addEventListener('click', () =>{
+                const referrer = sessionStorage.getItem('referrer');
+                sessionStorage.removeItem("referrer"); 
+                location.href = referrer || '/';
+            })
         </script>
 
         </html>

@@ -174,7 +174,7 @@
                             <li><a href="/member/toMySupport">후원 글 조회</a></li>
                             <li><a href="/member/toMyPay">후원 내역 조회</a></li>
                             <li><a href="/">홈으로</a></li>
-                            <li><a href="javascript:history.back()">이전페이지</a></li>
+                            <li><a href="#" id="return">돌아가기</a></li>
                         </ul>
                     </div>
                 </div>
@@ -297,6 +297,16 @@
                     active[i].style.cssText = "background-color: #f9f9f9; color: #555; border: 1px solid #aaa; border-radius: 2px";
                 }
             };
+
+            if (!sessionStorage.getItem('referrer')){
+                sessionStorage.setItem("referrer", document.referrer);
+            }
+
+            document.getElementById('return').addEventListener('click', () =>{
+                const referrer = sessionStorage.getItem('referrer');
+                sessionStorage.removeItem("referrer"); 
+                location.href = referrer || '/';
+            })
         </script>
 
         </html>

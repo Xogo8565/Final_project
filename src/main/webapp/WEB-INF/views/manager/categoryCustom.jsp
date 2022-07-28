@@ -142,8 +142,7 @@
                             <li><a href="/member/toMyBoard">내 글</a></li>
                             <li><a href="/member/toMyComment">내 댓글</a></li>
                             <li><a href="/manager/toAllPay">사용자 후원 내역 조회</a></li>
-                            <li><a href="/manager/toMyPayList">보호소 후원 내역 조회</a></li>
-                            <li><a href="javascript:history.back()">이전페이지</a></li>
+                            <li><a href="#" id="return">돌아가기</a></li>
                         </ul>
                     </div>
                 </div>
@@ -250,10 +249,11 @@
                             value: data
                         })
                         let i1 = $('<i>').attr('class', 'fa-solid fa-pen');
+                        let i3 = $('<i>').attr('class', 'fa-solid fa-pen');
                         let i2 = $('<i>').attr('class', 'fa-solid fa-eraser');
                         button1.append(i1, ' 수정&nbsp;');
                         button2.append(i2, ' 삭제');
-                        button3.append(i1, ' 완료&nbsp;');
+                        button3.append(i3, ' 완료&nbsp;');
                         th.append(input);
                         td.append(button1, button3 ,button2);
                         tr.append(th, td);
@@ -382,6 +382,7 @@
                         alert('내용을 입력해주세요.');
                         return;
                     }
+                    addSubCategory(e);
                 }else if(e.target.className === 'subCategory_delete'){
                     let check = confirm('해당 카테고리를 삭제하시겠습니까?');
                     if(check){
@@ -435,6 +436,15 @@
                 }
             })
 
+            if (!sessionStorage.getItem('referrer')){
+                sessionStorage.setItem("referrer", document.referrer);
+            }
+
+            document.getElementById('return').addEventListener('click', () =>{
+                const referrer = sessionStorage.getItem('referrer');
+                sessionStorage.removeItem("referrer"); 
+                location.href = referrer || '/';
+            })
         </script>
 
         </html>

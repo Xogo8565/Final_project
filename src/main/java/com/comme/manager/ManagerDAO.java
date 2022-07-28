@@ -47,4 +47,6 @@ public interface ManagerDAO {
 	
 	int countPay(Map<String, Object> map);
 	
+	int searchMoney(Map<String, Object> map);
+	
 }

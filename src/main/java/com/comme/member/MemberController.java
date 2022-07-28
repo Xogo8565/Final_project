@@ -3,12 +3,12 @@ package com.comme.member;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -57,6 +57,15 @@ public class MemberController {
     	System.out.println("로그아웃");
     	return "redirect:/";
     }
+    
+    @RequestMapping(value = "/deleteMember") // 회원탈퇴
+    public String deleteMember() throws Exception{
+    	String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+    	service.deleteMember(memberId);
+    	session.invalidate();
+    	System.out.println("회원탈퇴");
+    	return "redirect:/";
+    }
 
     @RequestMapping(value = "/toSignupPage") // 회원가입 페이지 요청
     public String toSignup(Model model) throws Exception {
@@ -78,6 +87,43 @@ public class MemberController {
 		model.addAttribute("mainCategory", boardService.mainCategory());
 		model.addAttribute("inquiry", boardService.inquiryCategory());
         return "member/signup_business";
+    }
+    
+    @RequestMapping(value = "/toModifyPw") // 비밀번호 변경 페이지 이동
+    public String toModifyPw(Model model) throws Exception {
+    	model.addAttribute("mainCategory", boardService.mainCategory());
+    	model.addAttribute("inquiry", boardService.inquiryCategory());
+    	return "member/modifyPw";
+    }
+    
+    @RequestMapping(value = "/toModifyMember") // 회원 정보 변경 페이지 이동
+    public String toModifyMember(Model model) throws Exception {
+    	model.addAttribute("mainCategory", boardService.mainCategory());
+    	model.addAttribute("inquiry", boardService.inquiryCategory());
+    	return "member/modifyMember";
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/modifyPw") // 비밀번호 변경
+    public String modifyPw(String member_pw) throws Exception {
+    	String member_email = (((MemberDTO)session.getAttribute("loginSession")).getMember_email());
+    	
+    	service.changePw(member_email, member_pw);
+    	
+    	return "success";
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/checkPw") // 기존 비밀번호 체크
+    public String checkPw(String member_pw) throws Exception {
+    	String memberId = (((MemberDTO)session.getAttribute("loginSession")).getMember_id());
+    	
+    	MemberDTO dto = service.loginProc(memberId, member_pw);
+    	if (dto != null) {
+    		return "success";
+    	}
+    	
+    	return "fail";
     }
 
     @ResponseBody
@@ -104,6 +150,17 @@ public class MemberController {
             return "nope";
         }
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/nicknameCheck") // 닉네임 중복확인
+    public String nicknameCheck(String nickname) throws Exception {
+    	int rs = service.nicknameCheck(nickname);
+    	if (rs == 0) {
+    		return "ok";
+    	} else {
+    		return "nope";
+    	}
+    }
 
 
     @RequestMapping(value = "/signupGeneral") // 일반회원 회원가입
@@ -117,6 +174,15 @@ public class MemberController {
     public String signupBusiness(MemberDTO dto) throws Exception {
         service.signupBusiness(dto);
         return "redirect:/member/toLoginPage";
+    }
+    
+    @RequestMapping(value = "/updateMember") // 회원 정보 변경
+    public String updateMember(MemberDTO dto) throws Exception {
+    	service.updateMember(dto);
+    	String grade = (((MemberDTO)session.getAttribute("loginSession")).getMember_grade());
+    	dto.setMember_grade(grade);
+    	session.setAttribute("loginSession", dto);
+    	return "redirect:/member/toMyPage";
     }
 
 
@@ -136,9 +202,13 @@ public class MemberController {
 
     @ResponseBody
     @RequestMapping(value = "/findToPhone") // 아이디찾기 (전화번호)
-    public String findToPhone(String member_phone) throws Exception {
+    public String findToPhone(String member_phone, HttpServletResponse response) throws Exception {
         System.out.println(member_phone);
         String member_id = service.findToPhone(member_phone);
+        
+        if (member_id == null) {
+        	response.setStatus( HttpServletResponse.SC_BAD_REQUEST  );
+        }
         return member_id;
     }
 

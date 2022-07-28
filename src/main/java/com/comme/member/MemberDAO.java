@@ -48,9 +48,13 @@ public interface MemberDAO {
 	
 	int emailCheck(String email); // 이메일 중복확인
 	
+	int nicknameCheck(String nickname); // 닉네임 중복확인
+	
 	void signupGeneral(MemberDTO dto); // 일반회원 회원가입
 	
 	void signupBusiness(MemberDTO dto); // 기관회원 회원가입
+	
+	void updateMember(MemberDTO dto); // 회원 정보 수정
 	
 	MemberDTO loginProc(Map<String, Object> map); // 로그인
 	
@@ -59,4 +63,6 @@ public interface MemberDAO {
 	String findToPhone(String member_phone); // 아이디찾기 (전화번호)
 	
 	void changePw(Map<String, Object> map); // 비밀번호찾기 -> 비밀번호변경
+	
+	void deleteMember(String member_id); // 회원탈퇴
 }

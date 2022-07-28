@@ -78,6 +78,12 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 	margin-bottom: 50px;
 }
 
+#btnFindId,
+#returnBtn{
+    width: 200px;
+    margin-right: 10px;
+}
+
 </style>
 <body>
     <div class="">
@@ -132,9 +138,24 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
                                 <div class="col-4">
                                     <select class="form-select" id="phone1">
                                         <option value="010">010</option>
-                                        <option value="011">011</option>
-                                        <option value="017">017</option>
-                                        <option value="018">018</option>
+                                        <option value="070">070</option>
+                                        <option value="02">02</option>
+                                        <option value="031">031</option>
+                                        <option value="032">032</option>
+                                        <option value="033">033</option>
+                                        <option value="041">041</option>
+                                        <option value="042">042</option>
+                                        <option value="043">043</option>
+                                        <option value="044">044</option>
+                                        <option value="051">051</option>
+                                        <option value="052">052</option>
+                                        <option value="053">053</option>
+                                        <option value="054">054</option>
+                                        <option value="055">055</option>
+                                        <option value="061">061</option>
+                                        <option value="062">062</option>
+                                        <option value="063">063</option>
+                                        <option value="064">064</option>
                                     </select>        
                                 </div>
                                 <div class="col-4">
@@ -158,6 +179,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
                 <div class="row buttonRow">
                     <div class="col d-flex justify-content-center">
                         <button type="button" class="btn btn-light" id="btnFindId">아이디 찾기</button>
+                        <button type="button" class="btn btn-light" id="returnBtn">돌아가기</button>
                     </div>
                 </div>
                 
@@ -195,7 +217,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     		// phone번호 합쳐주는 작업
     		// select박스에서 선택된 값을 가져오는 방법
     		//console.log($("#phone1 option:selected").val());
-    		let phone = $("#phone1 option:selected").val() + $("#phone2").val() + $("#phone3").val();
+    		let phone = $("#phone1 option:selected").val() + '-' + $("#phone2").val() + '-' + $("#phone3").val();
     		// console.log(phone);
     		$("#phone").val(phone);
 			
@@ -229,7 +251,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     		} else if (radio == 'findToPhone') { // 전화번호로 찾기
     			
     			// 전화번호 유효성검사
-    			let regexPhone = /^[0-9]{11}$/;
+    			let regexPhone = /^[0-9-]{13}$/;
     			if(!regexPhone.test($("#phone").val())){
     				alert("휴대폰번호는 각각 4자리의 숫자로 입력해주세요.");
     				return;
@@ -243,9 +265,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     					console.log(data);
     					$("#clsResultTitle").html("회원님의 아이디");
     					$("#clsResultId").html(data);
-
     				}, error : function(e) {
-    					console.log(e);
+    					$("#clsResultTitle").html("아이디가 존재하지 않습니다.");
     				}
     			});
 
@@ -254,7 +275,9 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     		
 		});
         
-        
+        document.getElementById('returnBtn').addEventListener('click', function(){
+            location.href = document.referrer;
+        })
         
         
     </script>    
