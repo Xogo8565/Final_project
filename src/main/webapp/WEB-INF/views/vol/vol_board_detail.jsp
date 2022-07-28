@@ -258,7 +258,7 @@
                 <c:out value="${map.board_content}" escapeXml="false"/>
             </div>
             <div class="volunteer">
-                <span>♥ 총인원 <c:out value="${map.vol_count}"/> / 신청 인원 <c:out value="${map.applicants}"/> / 선발 인원 <c:out value="${map.accepted}"/> / 봉사활동 날짜 <fmt:formatDate value="${map.vol_deadLine}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+                <span>♥ 총인원 <c:out value="${map.vol_count}"/> / 신청 인원 <c:out value="${map.applicants}"/> / 선발 인원 <c:out value="${map.accepted}"/> / 봉사활동 날짜 <fmt:formatDate value="${map.vol_deadLine}" pattern="yyyy-MM-dd"/></span>
                 <div>
                     <input type="hidden" name="seq_board" value="${map.seq_board}" id="seq_board">
                     <input type="tel" name="writer_phone" placeholder="전화 번호 입력(형식 : 010-1234-1234)" id="tel">
@@ -389,7 +389,7 @@
             data: {seq_board: document.querySelector("#seq_board").value},
             success: function (data) {
                 document.querySelector(".volunteer>span:nth-child(1)").innerHTML =
-                    "♥ 총인원 <c:out value="${map.vol_count}"/> / 현재 인원 " + data;
+                    "♥ 총인원 <c:out value="${map.vol_count}"/> / 신청 인원 "+ data +" / 선발 인원 <c:out value="${map.accepted}"/> / 봉사활동 날짜 <fmt:formatDate value="${map.vol_deadLine}" pattern="yyyy-MM-dd"/>"
             },
             error: function (e) {
                 console.log(e);
