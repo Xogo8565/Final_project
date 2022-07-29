@@ -28,6 +28,10 @@
 	text-decoration: none !important;
 }
 
+.mainP-Header a:hover {
+	text-decoration: none;
+}
+
 /*비반응형 네비바*/
 .mainP-nav, .mainP-navLg, .mainP-navMd{
 	display: flex;

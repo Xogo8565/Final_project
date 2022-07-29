@@ -270,10 +270,10 @@
             </div>
             <div class="select">
                 <label for="selectAll">
-                    <input type="checkbox" id="selectAll"><span>전체 동의</span>
+                    <input type="checkbox" id="selectAll"><span data-toggle="modal" data-target="#myPerInfoModal">전체 동의</span>
                 </label>
                 <label for="select1">
-                    <input type="checkbox" id="select1"><span>개인정보처리방침</span>
+                    <input type="checkbox" id="select1"><span data-toggle="modal" data-target="#myPerInfoModal">개인정보처리방침</span>
                 </label>
                 <label for="select2">
                     <input type="checkbox" id="select2"><span>구매 조건 확인 및 결제 진행 동의</span>
@@ -303,7 +303,6 @@
         <img src="/resources/images/animals.jpeg" alt="">
     </div>
 </div>
-<!--개인정보처리방침 Modal-->
 <div class="modal" id="myPerInfoModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -386,17 +385,11 @@
     </div>
 </div>
 
-
 <script>
     const selectAll = document.querySelector("#selectAll");
     const select = document.querySelectorAll(".select input[type=checkbox]");
 
     selectAll.addEventListener("click", function () {
-        if(!this.check){
-            let modal = document.querySelector("#myPerInfoModal");
-            console.log(modal)
-        }
-
         if (this.checked) {
             select.forEach((e) => {
                 e.checked = true;

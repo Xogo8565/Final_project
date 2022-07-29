@@ -235,8 +235,8 @@
 			<div class="row content-1">
 				<div class="col d-none d-sm-block mainContent-1">
 					<img src="/resources/mainImg/content-md-1.png">
-					<button type="button">
-						&nbsp;&nbsp; <strong>봉사 신청하기</strong> &nbsp;&nbsp;
+					<button type="button" class = "volunteer">
+						&nbsp;&nbsp; <strong >봉사 신청하기</strong> &nbsp;&nbsp;
 					</button>
 				</div>
 				<!--반응형(sm) 첫번째 콘텐츠(캐로셀 사진들) 이미지-->
@@ -293,7 +293,7 @@
 				</div>
 				<div class="row">
 					<div class="col d-block d-sm-none mainContent-sm-2">
-						<button type="button">시작하기</button>
+						<button type="button" class="volunteer">시작하기</button>
 					</div>
 				</div>
 
@@ -303,7 +303,7 @@
 				<!--비반응형 멀리서도 마음만은 늘 가까이~ 후원-->
 				<div class="col d-none d-sm-block mainContent-2">
 					<img src="/resources/mainImg/content-md-2.png">
-					<button id="shelterAnimalBtn" type="button">
+					<button id="shelterAnimalBtn" type="button" class = "patron">
 						&nbsp;&nbsp; <strong>자세히 알아보기</strong> &nbsp;&nbsp;
 					</button>
 				</div>
@@ -318,14 +318,14 @@
 				<!--일생을 함께할 또하나의가족 ~입양-->
 				<div class="col d-none d-sm-block mainContent-3">
 					<img src="/resources/mainImg/content-md-3.png">
-					<button type="button">
+					<button type="button" class="adopt">
 						&nbsp;&nbsp; <strong>자세히 알아보기</strong> &nbsp;&nbsp;
 					</button>
 				</div>
 				<!---반응형 멀리서도 마음만은 늘 가까이~ 후원 -->
 				<div class="col d-block d-sm-none mainContent-sm-3">
 					<img src="/resources/mainImg/content-sm-3.png">
-					<button type="button">자세히 알아보기</button>
+					<button type="button" class="patron">자세히 알아보기</button>
 				</div>
 			</div>
 			<div class="row">
@@ -340,7 +340,7 @@
 					<img src="/resources/mainImg/content-sm-5.png">
 				</div>
 				<div class="col-12 d-block d-sm-none">
-					<button type="button">자세히 알아보기</button>
+					<button type="button" class="adopt">자세히 알아보기</button>
 				</div>
 			</div>
 		</div>
@@ -353,6 +353,17 @@
 
 	<!--top버튼-->
 	<a id="topBtn"><img src="/resources/mainImg/DIEALRIGHT.png"></a>
+	<script>
+		document.querySelector(".volunteer").addEventListener("click", ()=>{
+			location.href = "/volBoard/lists";
+		})
+		document.querySelector(".patron").addEventListener("click", ()=>{
+			location.href = "/supportBoard/lists";
+		})
+		document.querySelector(".adopt").addEventListener("click", ()=>{
+			location.href = "/shelterAnimal/toShelterAnimal?curPage=1";
+		})
+	</script>
 
 </body>
 </html>
