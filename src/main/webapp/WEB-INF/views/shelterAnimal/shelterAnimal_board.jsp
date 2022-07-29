@@ -71,9 +71,12 @@ body{
 	color: white;
 	background-color: rgb(207, 185, 136);
 	border: none;
+	height: 30px;
+	padding: 2px 10px;
 }
 #inputSearch {
 	border: 1px solid rgb(207, 185, 136);
+	height: 30px;
 }
 #inputSearch:focus {
 	color: black;
@@ -84,6 +87,8 @@ body{
 #btnSearch {
 	color: white;
 	background-color: rgb(207, 185, 136);
+	height: 30px;
+	padding: 1px 10px;
 }
 
 #drawImg {
@@ -149,7 +154,7 @@ body{
 		<div class="col mt-5" id="inputDiv">
 			<div class="input-group mb-3" id="inputGroup">
 				<span class="input-group-text material-symbols-outlined" id="iconSearch">search</span> 
-				<input type="search" id="inputSearch" name="keyword" class="form-control" placeholder="검색" aria-describedby="btnSearch">
+				<input type="search" id="inputSearch" name="keyword" class="form-control" placeholder="" aria-describedby="btnSearch">
 				<button class="btn" type="submit" id="btnSearch">검색</button>
 			</div>
 			<input class="d-none" type="text" name="curPage" value="1">
@@ -158,7 +163,7 @@ body{
 	<div class="col mb-5">
 		<ul class="nav nav-tabs justify-content-center">
 			<li class="nav-item">
-				<a class="nav-link active" href="/shelterAnimal/toShelterAnimal?curPage=1">전체</a></li>
+				<a class="nav-link active" id="toShelter" href="/shelterAnimal/toShelterAnimal?curPage=1">전체</a></li>
 			<li class="nav-item">
 				<a class="nav-link linkAjax" id="dogList">개</a> 
 				<input class="linkAjax d-none" type="text" value="417000">
@@ -269,6 +274,10 @@ body{
     		getAjax(1, upkind);
     	})
     	
+    	$("#toShelter").on("click", function(){
+    		setTimeout(function(){loadingSpinner('Spinner')}, 0);
+    	})
+    	
     	function getAjax(pageNum, upkind){ // 축종탭, 페이징
 			$.ajax({
 			url: "/shelterAnimal/toSelectUpkind?curPage="+pageNum+"&upkind="+upkind,
@@ -344,8 +353,33 @@ body{
 				
 			},error: function(e){
 				console.log(e);
-			}
-		})
+			}, beforeSend: function () {              
+				let maskHeight = $(document).height();    
+	    		let maskWidth  = window.document.body.clientWidth;        
+	    		  
+	    		let mask       = "<div id='mask' style='position:absolute; z-index:9000; background-color: #e9e9e9; display:none; left:0; top:0;'></div>";    
+	    		let loadingImg = "<img src='/resources/images/Spinner.gif' id='loadingImg' style='position: absolute; display: block; top: 200px;'/>";     
+	    		   
+	    		$('body').append(mask);  
+	    		   
+	    		$('#mask').css({            
+	    			'width' : maskWidth,            
+	    			'height': maskHeight,            
+	    			'opacity' : '0.3',
+	    			'display': 'flex',
+	    		    'justify-content' : 'center'
+	    			});       
+	    		   
+	    		$('#mask').show();      
+	    		
+	    		$('#mask').append(loadingImg);    
+	    		$('#loadingImg').show();             
+					
+			    }, complete: function () {                     
+					$('#mask, #loadingImg').hide();    
+	    			$('#mask, #loadingImg').empty();  
+				}
+			})
 		}
     	
     	function cardAjax(data, upkind, pageNum){
@@ -369,6 +403,7 @@ body{
 				a.appendTo(".card-group");
 			}
     	}
+    	
     </script>
 </body>
 </html>

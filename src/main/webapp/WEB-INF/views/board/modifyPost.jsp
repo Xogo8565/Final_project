@@ -111,12 +111,19 @@
 
         if(category.value == 0){
             alert('카테고리를 지정해주세요');
+            setTimeout(function(){category.focus();}, 1);  // focus, 제목오버조건 추가
             return;
         }else if(title.value.replace(/\s/g, "") == ''){
             alert('제목을 입력해주세요.');
+            setTimeout(function(){title.focus();}, 1);  // focus, 제목오버조건 추가
+            return;
+        }else if(title.value.length > 33){  // focus, 제목오버조건 추가
+            alert('제목은 한글기준 33자 이내로 입력해주세요.');
+            setTimeout(function(){title.focus();}, 1);
             return;
         }else if(!content.innerText && imgSrc.length == 0){
             alert('내용을 입력해주세요.');
+            content.focus();
             return;
         }else if(content.children.length > 0 && imgSrc.length == 0){
             for(let e of content.children){
@@ -124,6 +131,7 @@
             }
             if(str == ''){
                 alert('내용을 입력해주세요');
+                content.focus();
                 return;
             }
         }

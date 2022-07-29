@@ -226,25 +226,35 @@
 
         if(check){
             const content = document.querySelector(".board_content .note-editable");
+            const title = document.getElementById("board_title"); // focus, 제목오버조건 추가
+            const support_bank = document.querySelector("#support_bank"); // focus, 제목오버조건 추가
             let imgs = document.querySelectorAll(".board_content img");
             let str = '';
             let bank_regex = /[0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-]/;
-            if(!bank_regex.test(document.querySelector("#support_bank").value)){
+            if(!bank_regex.test(support_bank.value)){
                 alert("계좌 번호를 잘못 입력하셨습니다");
+                setTimeout(function(){support_bank.focus();}, 1);
                 e.preventDefault();
                 return;
             }
-            if(!content.innerText && imgs.length === 0){
-                alert('내용을 입력해주세요.');
+            
+            if(title.value.length > 33){  // focus, 제목오버조건 추가
+                alert('제목은 한글기준 33자 이내로 입력해주세요.');
+                setTimeout(function(){title.focus();}, 1);
                 e.preventDefault();
                 return;
-
+            }else if(!content.innerText && imgs.length === 0){
+                alert('내용을 입력해주세요.');
+                setTimeout(function(){content.focus();}, 1);  // focus, 제목오버조건 추가
+                e.preventDefault();
+                return;
             }else if(content.children.length > 0 && imgs.length === 0){
                 for(let e of content.children){
                     str += e.innerText.replace(/\s/g, "");
                 }
                 if(str === ''){
                     alert('내용을 입력해주세요');
+                    setTimeout(function(){content.focus();}, 1);  // focus, 제목오버조건 추가
                     e.preventDefault();
                     return;
                 }

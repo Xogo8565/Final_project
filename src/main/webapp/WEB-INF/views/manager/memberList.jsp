@@ -594,18 +594,18 @@ td{
 						let blackListCtt = blackList[3].value;
 						let member_grade = selectGrade[i].value;
 						let member_id = listTr[i].firstElementChild.innerHTML;
-						
+
 						if(arrGrade[i] === member_grade){
-							if(blackListChk === true && blackListCtt === ""){
-								alert("블랙리스트 사유를 입력해주세요");
+							if(blackListChk === true && blackListCtt === "" || blackListCtt.length > 33){
+								alert("블랙리스트 사유를 한글기준 33글자 이내로 입력해주세요");
 								return;
 							}else if(blackListChk === false){
 								blackListDate.innerHTML = "";
 								blackList[3].setAttribute("value", "");
 							}
 						}else if(arrGrade[i] !== member_grade){
-							if(blackListChk === true && blackListCtt === ""){
-								alert("블랙리스트 사유를 입력해주세요");
+							if(blackListChk === true && blackListCtt === "" || blackListCtt.length > 33){
+								alert("블랙리스트 사유를 한글기준 33글자 이내로 입력해주세요");
 								return;
 							}else if(blackListChk === false){
 								blackListDate.innerHTML = "";

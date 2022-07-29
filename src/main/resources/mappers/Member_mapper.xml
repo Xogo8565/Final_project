@@ -273,7 +273,10 @@
 		SELECT COUNT(*) FROM MEMBER WHERE MEMBER_EMAIL = #{email}
 	</select>
 
-	
+	<!-- 사업자번호 중복확인 -->
+	<select id="brnCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM MEMBER WHERE MEMBER_BRN = #{member_brn}
+	</select>
 	
 	<!-- 일반회원가입 -->
 	<insert id="signupGeneral" parameterType="com.comme.member.MemberDTO">

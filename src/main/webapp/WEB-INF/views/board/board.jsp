@@ -48,6 +48,16 @@
                 font-size: 13px;
                 text-align: center;
             }
+            
+            table { /* 반응형 */
+            	table-layout: fixed;
+            }
+            
+            table .titleTd { /* 반응형 */
+            	text-overflow: ellipsis;
+    			overflow: hidden;
+    			white-space: nowrap;
+            }
 
             td a, #head{
                 text-decoration: none;
@@ -57,7 +67,6 @@
             #head:hover, .title:hover{
                 text-decoration: underline;
             }
-
 
             /* 페이지네이션 */
             .page_wrap {
@@ -201,13 +210,13 @@
                                                     <!-- 검색어가 존재하는지에 대한 여부에 따라 타이틀에 넘겨주는 정보를 달리함 이렇게 안하고 편하게 갈 수 잇엇을거 같은데 실수한듯 돌이키기는 좀 그럼 -->
                                                     <c:choose> 
                                                         <c:when test="${etcMap.search_type eq null}">
-                                                                <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
+                                                                <td class="titleTd"><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
                                                                 <c:if test="${dto.CM_COUNT != 0}" > <!-- 댓글 수 체크해서 0개 보다 많을 때만 게시물 옆에 추가해줌 -->
                                                                 <span style="font-size: 6px; font-weight: bold;">&nbsp;&nbsp;${dto.CM_COUNT}</span>
                                                                 </c:if> </td>
                                                         </c:when>
                                                         <c:otherwise>
-                                                                <td><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
+                                                                <td class="titleTd"><a href="/board/detailPost?nowPage=${paging.nowPage}&seq_board=${dto.SEQ_BOARD}&seq_category=${etcMap.category}&small_category=${etcMap.small_category}&search_type=${etcMap.search_type}&search_keyword=${etcMap.search_keyword}&category_name=${etcMap.category_name}" class="title">${dto.BOARD_TITLE}</a> 
                                                                 <c:if test="${dto.CM_COUNT != 0}" >
                                                                 <span style="font-size: 6px; font-weight: bold;">&nbsp;&nbsp;${dto.CM_COUNT}</span>
                                                                 </c:if> </td>

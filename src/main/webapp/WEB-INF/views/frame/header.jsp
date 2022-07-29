@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
 	crossorigin="anonymous">
@@ -22,6 +23,7 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"> -->
 <link href="${pageContext.request.contextPath}/resources/css/header.css"
 	rel="stylesheet" type="text/css">
+<script src="/resources/js/utils/loading.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <title>Header</title> 
 </head>
@@ -41,7 +43,7 @@
 					<li><a href="/volBoard/lists">봉사</a></li>
 					<li><a href="/supportBoard/lists">후원</a></li>
 					<li><a href="/miss/toMissing">실종동물</a></li>
-					<li><a href="/shelterAnimal/toShelterAnimal?curPage=1">유기동물</a></li>
+					<li><a class="toShelter" href="/shelterAnimal/toShelterAnimal?curPage=1">유기동물</a></li>
 					<li><a href="/board/toBoard?seq_category=${inquiry.seq_category}&category_name=${inquiry.category_name}">문의/신고</a></li>
 				</ul>
 			</div>
@@ -51,7 +53,7 @@
 					<li><a href="/volBoard/lists">봉사</a></li>
 					<li><a href="/supportBoard/lists">후원</a></li>
 					<li><a href="/miss/toMissing">실종동물</a></li>
-					<li><a href="/shelterAnimal/toShelterAnimal?curPage=1">유기동물</a></li>
+					<li><a class="toShelter" href="/shelterAnimal/toShelterAnimal?curPage=1">유기동물</a></li>
 					<li><a href="/board/toBoard?seq_category=${inquiry.seq_category}&category_name=${inquiry.category_name}">문의/신고</a></li>
 				</ul>
 			</div>
@@ -70,24 +72,32 @@
 			<div class="col-2 d-none d-md-block Header-Img-md p-0">
 				<c:choose>
 					<c:when test="${not empty loginSession}">
-						<i class="fa-solid fa-right-from-bracket" id="logout" title="로그아웃"></i>
-						<div class="col" id="iconBox">
-							<a href="/member/toMyPage"><i class="fa-solid fa-user-check userIcon" id="logIn-Y"></i></a>
-						</div>
 						<div class="col" id="helloBox">
-							<p>${loginSession.member_nickname} 님,<br> 안녕하세요 
-							<i class="fa-solid fa-paw" id="msgIcon"></i></p>
+							<label>
+								<%-- <i class="fa-solid fa-paw" id="msgIcon"></i> --%>
+								${loginSession.member_nickname}님 
+								<i class="fa-solid fa-user-check userIcon" id="logIn-Y"></i>
+							</label>
+						</div>
+						<div class="col" id="mypageBox">
+							<a href="/member/toMyPage">
+								<label id="mypageLabel">마이페이지</label>
+							</a>
+								<label id="logout">로그아웃</label>
 						</div>
 					</c:when>
 					<c:otherwise>
-						<a href="/member/toLoginPage"><i class="fa-regular fa-user userIcon"></i></a>
+						<a href="/member/toLoginPage">
+							<label id="loginLabel">로그인</label>
+						</a>
+						<i class="fa-regular fa-user userIcon"></i>
 					</c:otherwise>
 				</c:choose>
 			</div>
 		</div>
 		<!--반응형 헤더-->
 		<div class="row">
-			<div class="col-1 d-md-none header-side">
+			<div class="col-2 d-md-none header-side">
 				<div id="mySidenav" class="sidenav">
 					<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 					<!-- 사이드 네비 메뉴-->
@@ -108,13 +118,18 @@
 				<span style="font-size: 20px; cursor: pointer" onclick="openNav()">&#9776;</span>
 			</div>
 			<!--반응형 중앙 로고 -->
-			<div class="col-10 d-md-none header-small-logo">
+			<div class="col-8 d-md-none header-small-logo">
 				<a href="/"><img src="/resources/mainImg/comme-sm-Logo.png"></a>
 			</div>
-			<div class="col-1 d-md-none header-myIcon">
+			<div class="col-2 d-md-none header-myIcon">
 				<c:choose>
-					<c:when test="${not empty loginSession}">
-						<a href="/member/toMyPage"><i class="fa-solid fa-user-check userIconSm" id="logIn-Y"></i></a>
+					<c:when test="${loginSession.member_grade eq '1'}">
+						<a href="/member/toMyPage"><i class="fa-solid fa-user-check userIconSm" id="logIn-Y" title="마이페이지"></i></a>
+						<i class="fa-solid fa-right-from-bracket logoutIcon" title="로그아웃" id="logoutM"></i>
+					</c:when>
+					<c:when test="${loginSession.member_grade eq '4'}">
+						<a href="/manager/memberList?curPage=1"><i class="fa-solid fa-user-check userIconSm" id="logIn-Y" title="마이페이지"></i></a>
+						<i class="fa-solid fa-right-from-bracket logoutIcon" title="로그아웃" id="logoutM"></i>
 					</c:when>
 					<c:otherwise>
 						<a href="/member/toLoginPage"><i class="fa-regular fa-user userIconSm"></i></a>
@@ -142,6 +157,14 @@
 				}else{
 					document.getElementById('drop-ul').className = 'd-none';
 				}
+			}
+		}
+		
+		// 유기동물 클릭 시 로딩 이미지 띄움
+		let toShelter = document.getElementsByClassName("toShelter");
+		for(let i=0; i<toShelter.length; i++){
+			toShelter[i].onclick = function(){
+				setTimeout(function(){loadingSpinner('Spinner')}, 0000);
 			}
 		}
 		

@@ -13,6 +13,7 @@
 	box-sizing: border-box;
 	font-family: 'IBMPlexSansKR-Regular';
 }
+
 /*메인 헤더*/
 .mainP-Header {
 	padding: 10px;
@@ -23,8 +24,8 @@
 	margin-left: 20px;
 }
 .mainP-Header a {
-	color: black;
-	text-decoration: none;
+	color: black !important;
+	text-decoration: none !important;
 }
 
 .mainP-Header a:hover {
@@ -78,44 +79,52 @@
 /*비반응형 인스타그램,유튜브,유저 로고*/
 .Header-Img-md {
 	text-align: center;
-	align-self: center;
 }
 .Header-Img-md .userIcon {
-	width: 30px;
-	font-size: x-large;
+	padding: 10px;
+	font-size: medium;
 }
-.Header-Img-md .userIcon:hover {
+#loginLabel, #mypageLabel, #logout {
+	cursor: pointer;
+	width: 80px;
+	font-size: 13px;
+	text-align: end;
+}
+
+#mypageLabel, #logout {
+	width: 60px;
+	margin: 0px;
+}
+
+#loginLabel:hover, #mypageLabel:hover, #logout:hover {
 	color: #ca673c;
 }
-.Header-Img-md #logout {
-	position: absolute;
-    right: 20px;
-    cursor: pointer;
-	z-index: 99;
-}
-.Header-Img-md #logout:hover {
-	color: #ca673c;
-}
-#iconBox {
+#mypageBox {
 	text-align: center;
+	padding: 0px 3px 0px 0px;
 }
 #helloBox {
 	text-align: center;
+	padding:0px;
 }
-#helloBox p {
+#helloBox label {
 	margin-bottom: 0px;
-	font-size: 14px;
+	margin-top: 5px;
+	font-size: 13px;
 }
 #helloBox #msgIcon {
 	color: #ca673c;
 	vertical-align: baseline;
 }
+#logIn-Y, #logIn-Y-md {
+	color: #7bc3ac;
+	padding: 0px 10xp;
+	vertical-align: baseline;
+}
 i {
 	color: black;
 }
-#logIn-Y {
-	color: #7bc3ac;
-}
+
 /*반응형 헤더 영역*/
 /*상단바 sm에서 생기는 navbar*/
 .sidenav {
@@ -213,7 +222,18 @@ i {
 /*반응형 유저 아이콘*/
 .header-myIcon{
 	padding-left:0px;
-	padding-right:20px;
+	padding-right:0px;
+	text-align: end;
+}
+.header-myIcon i{
+	vertical-align: baseline;
+	font-size: larger;
+    padding-left: 10px;
+}
+.header-myIcon i:hover{
+	vertical-align: baseline;
+	color: #ca673c;
+	cursor: pointer;
 }
 
 .header-myIcon img {

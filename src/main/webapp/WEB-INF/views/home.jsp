@@ -44,7 +44,7 @@
 			location.href = "/shelterAnimal/toShelterAnimal?curPage=1";
 		})
 	});
-
+	
   </script>
 <style>
 /*콘텐츠 시작*/

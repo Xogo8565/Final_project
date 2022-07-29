@@ -51,7 +51,8 @@
 			<mvc:exclude-mapping path="/"/>
 			<mvc:exclude-mapping path="/error"/>
 			<mvc:exclude-mapping path="/resources/**"/>
-			<mvc:exclude-mapping path="/files/**"/>
+			<mvc:exclude-mapping path="/files/**"/> <!-- 게시판 파일경로 -->
+			<mvc:exclude-mapping path="/mbFile/**"/> <!-- 실종게시판 파일경로 -->
 			
 			<mvc:exclude-mapping path="/member/toLoginPage"/> <!-- 로그인페이지 -->
 			<mvc:exclude-mapping path="/member/loginProc"/> <!-- 로그인 -->
@@ -60,12 +61,16 @@
 			<mvc:exclude-mapping path="/member/toSignup_business"/> <!-- 기관회원가입 페이지 -->
 			<mvc:exclude-mapping path="/member/idCheck"/> <!-- 아이디 중복확인 -->
 			<mvc:exclude-mapping path="/member/emailCheck"/> <!-- 이메일 중복확인 -->
+			<mvc:exclude-mapping path="/member/brnCheck"/> <!-- 사업자번호 중복확인 -->
 			<mvc:exclude-mapping path="/member/signupGeneral"/> <!-- 일반회원 회원가입 -->
 			<mvc:exclude-mapping path="/member/signupBusiness"/> <!-- 기관회원 회원가입 -->
 			<mvc:exclude-mapping path="/member/toFindIdPage"/> <!-- 아이디 찾기 -->
 			<mvc:exclude-mapping path="/member/findToEmail"/> <!-- 아이디찾기 (이메일) -->
 			<mvc:exclude-mapping path="/member/findToPhone"/> <!-- 아이디찾기 (전화번호) -->
 			<mvc:exclude-mapping path="/member/toFindPwPage"/> <!-- 비밀번호 찾기 -->
+			<mvc:exclude-mapping path="/member/mailCheck"/> <!-- 비밀번호찾기 인증메일 -->
+			<mvc:exclude-mapping path="/member/existEmail"/> <!-- 비밀번호찾기 -->
+			<mvc:exclude-mapping path="/member/changePw"/> <!-- 비밀번호찾기 -> 비밀번호 변경 -->
 			
 			<mvc:exclude-mapping path="/board/toBoard"/> <!-- 게시판 목록 -->
 			<mvc:exclude-mapping path="/board/detailPost"/> <!-- 상세보기페이지 -->
