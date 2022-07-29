@@ -95,10 +95,29 @@
                                     <span class="cls-labelTitle">사업자 등록번호</span>
                                 </label>
                             </div>
-                            <div class="col-9">
-                                <input type="text" class="form-control" id="business" name="member_brn">
+                            <div class="col-7">
+                                <input type="text" class="form-control" id="business" name="member_brn"
+                                		oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </div>
+                            <div class="col-2">
+                            	<button type="button" class="btn btn-secondary" id="brnCheck">사업자확인</button>
                             </div>
                         </div>
+                        <div class="row clsCheckInfo"> <!-- 입력안내문뜨는칸 -->
+                        	<div class="col-3"></div>
+                        	<div class="col-9"><span id="checkBrn"></span></div>
+                        </div>
+                       <%-- <div class="row cls-inputRow">
+                            <div class="col-3 align-self-center">
+                                <label for="name">
+                                    <span class="cls-required">*</span>
+                                    <span class="cls-labelTitle">개업일자</span>
+                                </label>
+                            </div>
+                            <div class="col-9">
+                                <input type="text" class="form-control" id="start_dt" name="start_dt">
+                            </div>
+                        </div> --%>
                         <div class="row cls-inputRow">
                             <div class="col-3 align-self-center">
                                 <label for="id">
@@ -233,7 +252,6 @@
                         	<div class="col-9"><span id="checkLicense"></span></div>
                         </div>
 						-->
-
                         <div class="row cls-btnRow">
                             <div class="col d-flex justify-content-center">
                                 <!-- <button class="btn btn-secondary" id="btn-cancel">취소</button> -->
@@ -318,7 +336,6 @@
 	
 	
 	// 이메일 중복 검사
-	
 		$("#emailCheckBtn").on("click", function(){
 		// 이메일 유효성 검사
 		let regexEmail = /^[a-zA-z0-9][\w]+@[a-zA-z]+\.(com|net|co\.kr|or\.kr)$/;
@@ -373,7 +390,62 @@
 		$("#checkPw").html("");
 	});
 	
-	
+	// 국세청 사업자 확인 API
+	$("#brnCheck").on("click", function(){
+		let business = $("#business").val();
+		//let start_dt = $("#start_dt").val();
+		let data = {"b_no": [business]};  // 사업자 상태만 확인 시
+		
+		/* let data = {"businesses": [{	// 진위확인 시
+							"b_no": business, // 사업자번호 필수
+	    					"p_nm": "곽동진",   // 대표자명 필수
+	    					"start_dt" : "20020101" }] // 개업일 필수
+						}; */
+			   
+			$.ajax({   // 진위확인시 서비스키 앞 주소 validate 로 변경
+			  url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=Fc6DTpA8Yu57vCWOu4bErC49Kd89spOL6F2x8Cq9EtEvZPHFNlg%2BfBrhYa2D7PwsXoVABtrP7Spf153fRqx0%2Fw%3D%3D",
+			  type: "POST",
+			  data: JSON.stringify(data), // json 을 string으로 변환하여 전송
+			  dataType: "JSON",
+			  contentType: "application/json",
+			  accept: "application/json",
+			  success: function(result) {
+				  console.log(result.data[0]);
+				  
+				  if(result.data[0].b_stt_cd !== "01"){
+						$("#checkBrn").html("유효하지 않은 사업자 번호 입니다.");
+						$("#checkBrn").css("color", "red");
+						$("#business").val("");
+						
+					}else if(result.data[0].b_stt_cd === "01"){
+						
+						// ajax로 중복값 검사
+						$.ajax({
+							url: "/member/brnCheck"
+							, type: "post"
+							, data: {member_brn: $("#business").val()}
+							, dataType: "text"
+							, success: function(data){
+								console.log(data);
+								if(data === "nope"){
+									$("#checkBrn").html("이미 등록된 사업자번호 입니다.");
+									$("#checkBrn").css("color", "red");
+								}else if(data === "ok"){
+									$("#checkBrn").html("사용가능한 사업자번호 입니다.");
+									$("#checkBrn").css("color", "green");
+								}
+							}
+							, error: function(e){
+								console.log(e);
+							}
+						});
+					}
+			  },
+			  error: function(result) {
+			      console.log(result.responseText); //responseText의 에러메세지 확인
+			  }
+			});
+	})
 	
 
 	// 취소 버튼을 눌렀을때
@@ -453,6 +525,10 @@
 			$("#email").focus();
 			return;
 		}
+		
+		
+		
+		
 		
 		$("#signupForm").submit();
 		alert("회원가입이 완료되었습니다.");

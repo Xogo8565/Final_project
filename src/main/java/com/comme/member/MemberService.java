@@ -168,6 +168,11 @@ public class MemberService {
 		return dao.emailCheck(email);
 	}
 	
+	// 사업자번호 중복확인
+	public int brnCheck(String member_brn) throws Exception {
+		return dao.brnCheck(member_brn);
+	}
+	
 	// 일반회원 회원가입
 	public void signupGeneral(MemberDTO dto) throws Exception {
 		dto.setMember_pw(EncryptionUtils.getSHA512(dto.getMember_pw()));

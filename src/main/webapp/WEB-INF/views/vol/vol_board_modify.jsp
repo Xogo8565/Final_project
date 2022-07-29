@@ -305,11 +305,18 @@
 
     document.querySelector("#form").addEventListener("submit", (e) => {
         const content = document.querySelector(".board_content .note-editable");
+        const title = document.getElementById("board_title");  // focus, 제목오버조건 추가
         let imgs = document.querySelectorAll(".board_content img");
         let str = "";
 
-        if (!content.innerText && imgs.length === 0) {
+        if(title.value.length > 33){  // focus, 제목오버조건 추가
+            alert('제목은 한글기준 33자 이내로 입력해주세요.');
+            setTimeout(function(){title.focus();}, 1);
+            e.preventDefault();
+            return;
+        }else if (!content.innerText && imgs.length === 0) {
             alert('내용을 입력해주세요.');
+            setTimeout(function(){content.focus();}, 1);  // focus, 제목오버조건 추가
             e.preventDefault();
             return;
         } else if (content.children.length > 0 && imgs.length === 0) {
@@ -318,6 +325,7 @@
             }
             if (str === '') {
                 alert('내용을 입력해주세요');
+                setTimeout(function(){content.focus();}, 1);  // focus, 제목오버조건 추가
                 e.preventDefault();
                 return;
             }

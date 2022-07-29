@@ -9,6 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- 부트스트랩 -->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
@@ -29,8 +30,7 @@
 
 .content {
 	margin-top: 50px;
-	padding-left: 90px;
-	padding-right: 90px;
+	padding: 0 7%;
 }
 /*실종 게시판 타이틀*/
 .title {
@@ -39,10 +39,21 @@
 	align-items: center;
 }
 
+/* 굴쓰기버튼 */
+.writeBtn {
+	background-color: #cfb988;
+	color: white;
+	padding: 1px 8px;
+}
+
 /* 검색 select */
 .selectMissing {
-	margin-top:2px;
-	width: 100%;
+	width: 80px;
+    padding: 2px 10px;
+    font-size: 14px;
+    float: right;
+    height: 28px;
+    border-radius: 8px;
 }
 .searchDiv{
  margin-top : 20px;
@@ -51,24 +62,24 @@
 /* 검색 input 창 감싸는 div */
 .shMissing {
 	position: relative;
-	width: 300px;
+	width: 200px;
 }
 /* 검색 input */
 #keywordMissing {
-	width: 100%;
-	border: 1px solid #bbb;
-	border-radius: 8px;
-	padding: 10px 12px;
-	font-size: 14px;
+	width: 200px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    height: 28px;
+    padding: 1px 10px;
 }
 /* 돋보기 이미지 */
 .lookup {
 	position: absolute;
-	width: 17px;
-	top: 12px;
-	right: 12px;
-	margin-right: 15px;
-	cursor: pointer;
+    width: 17px;
+    top: 5px;
+    right: -16px;
+    margin-right: 15px;
+    cursor: pointer;
 }
 
 .missingContent {
@@ -83,24 +94,49 @@
 	margin-bottom: 30px;
 }
 
+.card a{
+	height: 300px;
+}
+
 .cardMissing {
 	margin: 10px;
 }
 
-.card-title {
-	font-size: 30px;
+#cardTitleMd {
 	font-weight: bold;
+	height: 150px;
+	display: flex;
+    align-items: center;
+}
+
+#cardInfo p {
+	margin-bottom: 3px;
+}
+
+#cardInfo {
+	margin-top: 2px;
 }
 /*반응형 실종 목록 */
 .resMissing {
 	padding: 10px;
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid #ced4da;
+}
+.resMissing p {
+	margin: 0px;
 }
 
 .missingContent img {
 	width: 100%;
 	height: 100%;
 }
+
+#cardTitleSm {
+	font-weight: bold;
+	display: flex;
+    align-items: center;
+    height: 200px;
+}
+
 /* 페이징 */
 .page {
 	display: flex;
@@ -127,18 +163,18 @@
 </head>
 <body>
 	<div class="content">
-		<div class="row body">
+		<div class="row body justify-content-center">
 			<div class="row title">
-				<div class="col-7">
+				<div class="col-5 d-none d-md-flex">
 					<h3>실종 게시판</h3>
 				</div>
-				<div class="col-12 col-sm-5 searchDiv">
+				<div class="col d-md-none text-center">
+					<h3>실종 게시판</h3>
+				</div>
+				<div class="col-12 col-md-7 searchDiv">
 				<form id="searchForm">
 					<div class="row d-flex justify-content-end">
-						<div class="col d-block d-sm-none d-flex justify-content-end">
-							<button type="button" class="btn btn-outline-light writeBtn" style="background-color: #cfb988;">글쓰기</button>
-						</div>
-						<div class="col-3 p-0">
+						<div class="col p-0">
 						<select name="category" class="form-select selectMissing">
 							<option value="title" selected>제목</option>
 							<option value="content">내용</option>
@@ -146,11 +182,13 @@
 							<option value="area">지역</option>
 						</select>
 						</div>
-						<div class="col shMissing">
-							<input type="text" name="keywordMissing" id="keywordMissing" class="form-control"
-								placeholder="검색어 입력">
+						<div class="shMissing">
+							<input type="text" name="keywordMissing" id="keywordMissing" placeholder="검색어 입력">
 							<img class="lookup" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
 						</div>	
+					</div>
+					<div class="col d-flex d-md-none justify-content-end mt-3">
+						<button type="button" class="btn writeBtn">글쓰기</button>
 					</div>
 					</form>
 				</div>
@@ -163,7 +201,7 @@
 				</c:if>
 				<c:if test="${map.list.size() > 0}">
 					<c:forEach items="${map.list}" var="dto">
-						<div class="col-6 d-none d-sm-flex justify-content-center">
+						<div class="col-6 d-none d-md-flex justify-content-center">
 							<div class="card" style="width: 19rem;">
 								<a href="/miss/toDetail?seq_board=${dto.seq_board}">
 							<c:if test="${empty dto.files_sys}">
@@ -173,17 +211,19 @@
                            		 <img src="/mbFile/${dto.files_sys}">
                         	</c:if></a>
 								<div class="card-body">
-									<h5 class="card-title">${dto.board_title}</h5>
-									<p>실종지역 : <strong>${dto.miss_area}</strong></p>
-									<p> 동물 종류 : <strong>${dto.animal_kind}</strong></p>
-									<c:set var="TextValue" value="${dto.miss_date}" />
-									<p class="card-text">실종일 : <strong>${fn:substring(TextValue, 0, 10)}</strong></p>
-									<c:set var="TextDate" value="${dto.written_date}" />
-									<p class="card-text">작성일 : <strong>${fn:substring(TextDate, 0, 10)}</strong></p>						
+									<h4 class="card-title" id="cardTitleMd">${dto.board_title}</h4>
+									<div id="cardInfo">
+										<p>실종 지역&nbsp;:&nbsp;&nbsp;<strong>${dto.miss_area}</strong></p>
+										<p>동물 종류&nbsp;:&nbsp;&nbsp;<strong>${dto.animal_kind}</strong></p>
+										<c:set var="TextValue" value="${dto.miss_date}" />
+										<p class="card-text">&nbsp;실&nbsp;종&nbsp;일&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;<strong>${fn:substring(TextValue, 0, 10)}</strong></p>
+										<c:set var="TextDate" value="${dto.written_date}" />
+										<p class="card-text">&nbsp;작&nbsp;성&nbsp;일&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;<strong>${fn:substring(TextDate, 0, 10)}</strong></p>						
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-12 d-sm-none">
+						<div class="col-12 d-md-none m-0">
 							<div class="row resMissing">
 								<div class="col">
 									<a href="/miss/toDetail?seq_board=${dto.seq_board}">
@@ -195,7 +235,7 @@
                         			</c:if></a>
 								</div>
 								<div class="col">
-									<h5 class="card-title">${dto.board_title}</h5>
+									<h4 class="card-title" id="cardTitleSm">${dto.board_title}</h4>
 									<p>실종 지역 : <strong>${dto.miss_area}</strong></p> 
 									<p>동물 종류 : <strong>${dto.animal_kind}</strong></p>
 									<c:set var="TextValue" value="${dto.miss_date}" />
@@ -214,8 +254,7 @@
 				  <c:if test="${empty map.category}">
                 <c:if test="${map.pagingVO.startPage!=1}">
                     <a id="first"
-                       href="/miss/toMissing?curPage=1">첫
-                        페이지</a>
+                       href="/miss/toMissing?curPage=1">첫페이지</a>
                     <a class="arrow left"
                        href="/miss/toMissing?curPage=${map.pagingVO.startPage-1}">&lt;</a>
                 </c:if>
@@ -224,32 +263,27 @@
                 </c:forEach>
                 <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
                     <a class="arrow right"
-                       href="/miss/toMissing?curPage=${map.pagingVO.endPage+1}">&lt></a>
+                       href="/miss/toMissing?curPage=${map.pagingVO.endPage+1}">&gt;</a>
                     <a id="last"
                        href="/miss/toMissing?curPage=${map.pagingVO.lastPage}">끝페이지</a>
                 </c:if>
             </c:if>
             <c:if test="${not empty map.category}">
                 <c:if test="${map.pagingVO.startPage!=1}">
-                    <a id="first"
-                       href="/miss/search?category=${map.category}&search=${map.search}">첫
-                        페이지</a>
-                    <a class="arrow left"
-                       href="/miss/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.startPage-1}">&lt;</a>
+                    <a id="first" href="/miss/search?category=${map.category}&search=${map.search}">첫페이지</a>
+                    <a class="arrow left" href="/miss/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.startPage-1}">&lt;</a>
                 </c:if>
                 <c:forEach begin="${map.pagingVO.startPage}" end="${map.pagingVO.endPage }" var="p" step="1">
                     <a href="/miss/search?category=${map.category}&search=${map.search}&curPage=${p}">${p}</a>
                 </c:forEach>
                 <c:if test="${map.pagingVO.endPage != map.pagingVO.lastPage}">
-                    <a class="arrow right"
-                       href="/miss/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.endPage+1}">&lt></a>
-                    <a id="last"
-                       href="/miss/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.lastPage}">끝페이지</a>
+                    <a class="arrow right" href="/miss/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.endPage+1}">&gt;</a>
+                    <a id="last" href="/miss/search?category=${map.category}&search=${map.search}&curPage=${map.pagingVO.lastPage}">끝페이지</a>
                 </c:if>
             </c:if>
 				</div>
-				<div class="col d-none d-sm-flex justify-content-end">
-					<button type="button" class="btn btn-outline-light writeBtn" style="background-color: #cfb988;">글쓰기</button>
+				<div class="col d-none d-md-flex justify-content-end">
+					<button type="button" class="btn writeBtn">글쓰기</button>
 				</div>
 			</div>
 		</div>

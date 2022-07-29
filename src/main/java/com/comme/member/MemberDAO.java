@@ -48,6 +48,8 @@ public interface MemberDAO {
 	
 	int emailCheck(String email); // 이메일 중복확인
 	
+	int brnCheck(String member_brn); // 사업자번호 중복확인
+	
 	void signupGeneral(MemberDTO dto); // 일반회원 회원가입
 	
 	void signupBusiness(MemberDTO dto); // 기관회원 회원가입
